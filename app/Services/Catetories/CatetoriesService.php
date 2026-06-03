@@ -3,7 +3,9 @@
 namespace App\Services\Catetories;
 
 use App\Repository\CategoriesRepository;
-
+use App\Http\Traits\General;
+use Illuminate\Support\Facades\Auth;
+use Str;
 // use App\Repositories\categoriesRepository;
 
 
@@ -27,18 +29,33 @@ class CatetoriesService
     }
 
     public function create($data)
-    {
+    {        
+        if(empty($data['code'])) {
+            $data['code'] = Str::slug($data['name']);
+        }        
         return $this->categoriesRepo->create($data);
     }
 
-    public function create_multiple($data)
-    {
+    public function create_multiple($params) {        
+        $data = [];        
+        foreach ($params['name'] as $item) {
+            $data [] = [
+                'name' => $item,
+                'code' => Str::slug($item),
+                'created_by' => Auth::user()->id ?? null,
+                'created_at' => now(),                
+            ];
+        }        
         return $this->categoriesRepo->create_multiple($data);
     }
 
-    public function update($params, $id)
-    {
-        return $this->categoriesRepo->update($params, $id);
+    public function update($data, $id) {      
+        if(empty($data['code'])) {            
+            $data['code'] = Str::slug($data['name']);            
+        }     
+        $data['updated_by'] = Auth::user()->id ?? null;
+        $data['updated_at'] = now();
+        return $this->categoriesRepo->update($data, $id);
     }
 
     public function delete($id)

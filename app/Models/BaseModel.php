@@ -10,8 +10,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-abstract class BaseModel extends Model implements BaseModelInterface
-{
+abstract class BaseModel extends Model implements BaseModelInterface {
     public static function getAll(array $columns = ['*']): Collection
     {
         return static::select($columns)->get();

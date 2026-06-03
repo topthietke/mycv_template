@@ -71,8 +71,8 @@ class CategoriesRepository {
         return $this->categories->insert($data);
     }
 
-    public function update($params, $id) {
-        $record = $this->categories->findById($id);
+    public function update($params, $id) {        
+        $record = $this->categories->findById($id);        
         if (empty($record)) {
             return [
                 'code' => 404,
@@ -82,7 +82,9 @@ class CategoriesRepository {
 
         $updateData = [
             'name'       => $params['name'] ?? $record->name,
+            'code'       => $params['code'] ?? $record->code,
             'updated_by' => Auth::user()->id ?? null,
+            'updated_at' => now(),
         ];
 
         if ($this->categories->updateById($id, $updateData)) {

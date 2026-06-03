@@ -22,4 +22,7 @@ Route::post('/forgot-password', [LoginController::class, 'forgotPassword'])->nam
 
 Route::resource('/candidate', CandidateController::class);
 Route::resource('/categories', CategoriesController::class);
+Route::prefix('categories')->group(function () {
+    Route::post('/create-multiple', [CategoriesController::class, 'create_multiple']);
+});
 Route::resource('/contents', ContentsController::class);
