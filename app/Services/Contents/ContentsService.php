@@ -1,12 +1,11 @@
 <?php
 
-namespace App\Services;
+namespace App\Services\Contents;
 
-use App\Repositories\content_repositorysitory;
-use App\Repositories\ContentsRepository;
+use App\Repository\ContentsRepository;
+use Illuminate\Support\Facades\Auth;
 
-class ContentsService
-{
+class ContentsService {
     protected $content_repository;
 
     public function __construct(ContentsRepository $content_repository)
@@ -24,13 +23,17 @@ class ContentsService
         return $this->content_repository->edit($id);
     }
 
-    public function create($data)
-    {
+    public function create($data) {        
         return $this->content_repository->create($data);
     }
 
-    public function create_multiple($data)
-    {
+    public function create_multiple($params) {
+        $data = [];
+        foreach ($params as $value) {
+            $value['created_by'] = Auth::user()->id ?? null;
+            $value['created_at'] = now();            
+            $data [] = $value;
+        }
         return $this->content_repository->create_multiple($data);
     }
 

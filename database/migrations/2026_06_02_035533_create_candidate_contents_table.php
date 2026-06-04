@@ -13,10 +13,14 @@ return new class extends Migration
     {
         Schema::create('candidate_contents', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('candidate_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
-            $table->text('content'); // Lưu nội dung chi tiết dạng chuỗi hoặc JSON tùy thuộc nhu cầu mở rộng
+            $table->bigInteger('candidate_id')->nullable()->default(null);
+            $table->bigInteger('category_id')->nullable()->default(null);
+            $table->longText('content'); // Lưu nội dung chi tiết dạng chuỗi hoặc JSON tùy thuộc nhu cầu mở rộng
+            $table->bigInteger('created_by')->nullable()->default(null);
+            $table->bigInteger('updated_by')->nullable()->default(null);
+            $table->bigInteger('deleted_by')->nullable()->default(null);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

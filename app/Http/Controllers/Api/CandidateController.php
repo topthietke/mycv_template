@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Candidate\StoreCandidateRequest;
 use App\Http\Requests\Candidate\UpdateCandidateRequest;
 use App\Services\Candidate\CandidateService;
@@ -16,6 +17,7 @@ class CandidateController extends Controller {
     }
     public function store(StoreCandidateRequest $request): JsonResponse {        
         try {
+            dd($request->validated());
             $candidate = $this->can_service->create($request->validated());
             return response()->json([
                 'success' => true,

@@ -1,13 +1,8 @@
 <?php
 
 namespace App\Repository;
-
-use App\Models\Activities;
 use App\Models\CandidateContent;
-use App\Models\Categories;
-use App\Models\Contents;
 use Illuminate\Support\Facades\Auth;
-
 class ContentsRepository {
     private $contents;
     public function __construct(CandidateContent $contents)
