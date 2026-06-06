@@ -17,7 +17,6 @@ class CandidateController extends Controller {
     }
     public function store(StoreCandidateRequest $request): JsonResponse {        
         try {
-            dd($request->validated());
             $candidate = $this->can_service->create($request->validated());
             return response()->json([
                 'success' => true,

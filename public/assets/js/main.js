@@ -1,4 +1,4 @@
-;document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () {
     const form = document.getElementById("multiStepForm");
     const steps = Array.from(document.querySelectorAll(".form-step"));
     const nextBtns = document.querySelectorAll(".next-step");

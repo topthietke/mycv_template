@@ -1,15 +1,12 @@
 <?php
-
-use App\Http\Controllers\CandidateController;
-use App\Http\Controllers\CategoriesController;
-use App\Http\Controllers\ContentsController;
-use App\Http\Controllers\LoginController;
+// use App\Http\Controllers\LoginController;
+use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index']);
 
-// Route::get('/login', [LoginController::class, 'form_login'])->name('login');
+Route::get('/login', [LoginController::class, 'form_login'])->name('login');
 
 // Route::post('/login', [LoginController::class, 'login']);
 
