@@ -4,16 +4,14 @@
   --text-main: #333333;
   --text-muted: #6c757d;
   --border-color: #dee2e6;
-  --bg-body: #f4f6f8;
+  --bg-body: #cccc;
   --bg-card: #ffffff;
   --bg-section: #f8f9fa;
 }
 
 body {
   background-color: var(--bg-body);
-  font-family:
-    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: var(--text-main);
 }
 
@@ -85,7 +83,7 @@ body {
   flex-direction: column;
   align-items: center;
   background: var(--bg-card);
-  width: 120px;
+  width: 150px;
 }
 
 .step .icon {
@@ -94,7 +92,7 @@ body {
   border-radius: 50%;
   background-color: var(--bg-card);
   border: 2px solid var(--border-color);
-  color: var(--border-color);
+  color: var(--text-muted);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,22 +109,23 @@ body {
 }
 
 /* Trạng thái đang Active */
-.step.active .icon {
-  background-color: var(--primary-color);
+.step.active .icon {  
   border-color: var(--primary-color);
-  color: white;
-  box-shadow: 0 0 0 4px var(--primary-light);
+  color: var(--primary-color);
+  box-shadow: 0 0 0 4px var(--primary-light);  
+  border-width:1px;
 }
 
 .step.active p {
   color: var(--primary-color);
-  font-weight: 600;
+  font-weight: 600;  
 }
 
 /* Trạng thái đã hoàn thành (Completed) */
 .step.completed .icon {
   border-color: var(--primary-color);
-  color: var(--primary-color);
+  color: var(--text-muted);
+  border-color: var(--text-muted);
 }
 
 /* Custom Inputs */
@@ -137,8 +136,7 @@ body {
   margin-bottom: 6px;
 }
 
-.form-control,
-.form-select {
+.form-control, .form-select {
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 10px 14px;
@@ -276,4 +274,23 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+/* ========================================= Custom CSS cho trang đăng ký tài khoản ứng viên ========================================= */ */
+.label-back-login {
+  text-decoration: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+
+.remove-category-btn {
+  padding: 8.5px 14px;
+}
+
+#addCategoryFieldBtn {
+  border: 1px dashed var(--text-muted);
 }

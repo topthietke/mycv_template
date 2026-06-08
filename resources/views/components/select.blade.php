@@ -58,7 +58,7 @@
     >
         {{-- Placeholder option --}}
         @if ($placeholder && !$multiple)
-            <option value="" {{ !$oldValue ? 'selected' : '' }} disabled>
+            <option value="" {{ !$oldValue ? 'selected' : '' }}>
                 {{ $placeholder }}
             </option>
         @endif
