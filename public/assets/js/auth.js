@@ -86,6 +86,15 @@ $(document).ready(function () {
             success: function (res) {
                 if (res && res.success == true) {
                     alert(res.message || 'Thông tin đã được lưu thành công!');
+                    
+                    
+                    // Lấy giá trị id từ response.data
+                    const candidate_id = res.data.id;
+                    sessionStorage.setItem('candidate_id', candidate_id);
+                    // document.cookie = `candidate_id=${candidate_id}; path=/`;
+
+                    // console.log("ID trong Session:", sessionStorage.getItem('candidate_id'));
+                
                     goToStep(2); // Chuyển sang bước 2
                 } else {
                     alert(res.message);
@@ -204,6 +213,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // 2. Chức năng gửi API khi bấm nút "Thêm mới"
     saveCategoryBtn.addEventListener('click', async function () {
+        let candidate_id = sessionStorage.getItem('candidate_id');
+        console.log(candidate_id);
+        return;
+
         // Thu thập tất cả các giá trị từ các input có name="categories_name[]"
         const inputs = categoriesForm.querySelectorAll('input[name="categories_name[]"]');
         const categories = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== '');
