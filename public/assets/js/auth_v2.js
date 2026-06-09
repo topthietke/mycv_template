@@ -86,15 +86,15 @@ $(document).ready(function () {
             success: function (res) {
                 if (res && res.success == true) {
                     alert(res.message || 'Thông tin đã được lưu thành công!');
-
-
+                    
+                    
                     // Lấy giá trị id từ response.data
                     const candidate_id = res.data.id;
                     sessionStorage.setItem('candidate_id', candidate_id);
                     // document.cookie = `candidate_id=${candidate_id}; path=/`;
 
                     // console.log("ID trong Session:", sessionStorage.getItem('candidate_id'));
-
+                
                     goToStep(2); // Chuyển sang bước 2
                 } else {
                     alert(res.message);
@@ -152,15 +152,7 @@ $(document).ready(function () {
 
 document.addEventListener('DOMContentLoaded', function () {
     const categoryFields = document.getElementById('category_fields');
-    const categoryList = document.getElementById('category_list');
     const addBtn = document.getElementById('addCategoryFieldBtn');
-    const saveCategoryBtn = document.getElementById('saveCategoryBtn');
-    const categoriesForm = document.getElementById('categories_form');
-
-    // Lấy instance của Bootstrap Modal để đóng sau khi lưu thành công
-    const categoryModalEl = document.getElementById('categoryModal');
-    const categoryModal = bootstrap.Modal.getOrCreateInstance(categoryModalEl);
-
 
     // Lắng nghe sự kiện click vào nút Thêm (+)
     addBtn.addEventListener('click', function () {
@@ -168,10 +160,10 @@ document.addEventListener('DOMContentLoaded', function () {
         const newGroup = document.createElement('div');
         newGroup.className = 'category-field-group mb-3 d-flex align-items-end gap-2';
 
-        // // Đoạn HTML cấu trúc input thuần (thay cho x-input) và nút xóa
+        // Đoạn HTML cấu trúc input thuần (thay cho x-input) và nút xóa
         newGroup.innerHTML = `
             <div class="flex-grow-1">
-                <label class="form-label fw-bold">Tên danh mục</label>
+                <label class="form-label">Tên danh mục</label>
                 <input name="categories_name[]" type="text" class="form-control" placeholder="Nhập tên danh mục">
             </div>
             <button type="button" class="btn btn-danger remove-category-btn">
@@ -194,7 +186,17 @@ document.addEventListener('DOMContentLoaded', function () {
             fieldGroup.remove();
         }
     });
+});
 
+// ==============================================  Thêm mới danh mục ===============================================
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryFields = document.getElementById('category_fields');    
+    const saveCategoryBtn = document.getElementById('saveCategoryBtn');
+    const categoriesForm = document.getElementById('categories_form');
+    
+    // Lấy instance của Bootstrap Modal để đóng sau khi lưu thành công
+    const categoryModalEl = document.getElementById('categoryModal');
+    const categoryModal = bootstrap.Modal.getOrCreateInstance(categoryModalEl); 
 
     // Chức năng xóa bớt ô nhập (Ủy quyền sự kiện - Event Delegation)
     categoryFields.addEventListener('click', function (e) {
@@ -209,12 +211,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-
-    // ==============================================  Thêm mới danh mục ===============================================
     // 2. Chức năng gửi API khi bấm nút "Thêm mới"
     saveCategoryBtn.addEventListener('click', async function () {
         let candidate_id = sessionStorage.getItem('candidate_id');        
+
         // Thu thập tất cả các giá trị từ các input có name="categories_name[]"
         const inputs = categoriesForm.querySelectorAll('input[name="categories_name[]"]');
         const categories = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== '');
@@ -227,11 +227,8 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Lấy Token CSRF từ Blade template (nếu có dùng Laravel)
         const csrfToken = categoriesForm.querySelector('input[name="_token"]')?.value;
-        // Chuẩn bị dữ liệu gửi đi
-        const payload = {
-            name: categories,
-            candidate_id: candidate_id // Gửi kèm candidate_id nếu API cần liên kết
-        };
+        // Chuẩn bị dữ liệu gửi đi (bọc trong object để API dễ xử lý)
+        const payload = { name: categories };
 
         // Vô hiệu hóa nút bấm tránh gửi trùng lặp (Double click)
         saveCategoryBtn.disabled = true;
@@ -243,59 +240,32 @@ document.addEventListener('DOMContentLoaded', function () {
                 headers: {
                     'Content-Type': 'application/json',
                     'Accept': 'application/json',
-                    'X-CSRF-TOKEN': csrfToken
+                    'X-CSRF-TOKEN': csrfToken // Thêm vào nếu API chung domain và bật CSRF
                 },
                 body: JSON.stringify(payload)
             });
 
-            const result = await response.json();            
+            const result = await response.json();
 
             if (response.ok) {
                 alert('Thêm danh mục thành công!');
-                // Giả định `result.data` là một mảng chứa các danh mục vừa tạo từ server: [{id: 1, name: 'Danh mục A'}, ...]
-                // Nếu API của bạn trả về cấu trúc khác, hãy điều chỉnh biến `insertedCategories` bên dưới cho phù hợp.
-                const insertedCategories = result.data || categories.map((name, index) => ({ id: 'new_' + index + '_' + Date.now(), name: name }));
-
-                // Tạo cấu trúc row Bootstrap
-                let htmlContent = '<div class="row mt-2">';
-
-                insertedCategories.forEach(cat => {
-                    htmlContent += `
-                        <div class="col-md-6 mb-3">
-                            <label class="category-card" for="cat_${cat.id}">
-                                <input type="checkbox" name="categories[]" value="${cat.id}" id="cat_${cat.id}" class="hidden-checkbox">
-                                <div class="category-icon"><i class="fas fa-folder text-primary"></i></div>
-                                <div class="category-info text-start">
-                                    <h6>${cat.name}</h6>
-                                    <p>Danh mục cá nhân tự thêm</p>
-                                </div>
-                            </label>
-                        </div>
-                    `;
-                });
-
-                htmlContent += '</div>';
-
-                // Kiểm tra nếu đang hiển thị "Không có dữ liệu" thì xóa trắng trước khi chèn mới
-                if (categoryList.innerHTML.includes('Không có dữ liệu')) {
-                    categoryList.innerHTML = '';
-                    categoryList.classList.remove('text-center'); // Bỏ căn giữa text để giao diện grid chuẩn
-                }
-
-                // Chèn HTML danh mục mới vào danh sách chính
-                categoryList.insertAdjacentHTML('beforeend', htmlContent);
-
-                // Reset form modal về trạng thái ban đầu (giữ lại duy nhất 1 ô input trống)
+                
+                // Reset form và xóa các ô nhập extra
                 categoriesForm.reset();
-                const extraGroups = categoryFields.querySelectorAll('.category-field-group');
-                extraGroups.forEach((group, index) => {
-                    if (index > 0) group.remove(); // Xóa các ô input được add thêm bằng dấu (+), giữ lại ô đầu tiên
-                });
-
+                categoryFields.innerHTML = `
+                    <div class="category-field-group mb-3 d-flex align-items-end gap-2">
+                        <div class="flex-grow-1">
+                            <input name="categories_name[]" type="text" class="form-control" placeholder="Nhập tên danh mục" />
+                        </div>
+                    </div>`;
                 // Ẩn modal sau khi lưu thành công
                 categoryModal.hide();
 
+                // Tùy chọn: Gọi hàm load lại danh sách danh mục ở trang chính (nếu có)
+                // if (typeof loadCategories === 'function') loadCategories();
+                
             } else {
+                // Xử lý lỗi trả về từ API (Ví dụ: validate lỗi)
                 alert('Có lỗi xảy ra: ' + (result.message || 'Vui lòng thử lại.'));
             }
         } catch (error) {
@@ -307,5 +277,90 @@ document.addEventListener('DOMContentLoaded', function () {
             saveCategoryBtn.innerText = 'Thêm mới';
         }
     });
+});
 
+
+
+// ------------------------------------------------------------------------------------------------------------------------
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryFormAddBtn = document.getElementById('category_form_add');
+    const categoryAddDiv = document.getElementById('category-add');
+    const categoryListDiv = document.getElementById('category-list');
+
+    // Sự kiện khi click vào nút dấu cộng (+) để thêm form nhập danh mục
+    categoryFormAddBtn.addEventListener('click', function () {
+        // Tạo cấu trúc form thêm mới danh mục
+        const formTemplate = `
+            <div class="category-field-group mb-3 d-flex align-items-end gap-2">
+                <div class="flex-grow-1">
+                    <label class="form-label fw-bold small">Tên danh mục mới</label>
+                    <input name="categories_name[]" type="text" class="form-control unique-category-input" placeholder="Nhập tên danh mục và nhấn Enter..." />
+                </div>
+                <button type="button" class="btn btn-outline-danger remove-input-btn"><i class="fa fa-trash"></i></button>
+            </div>
+        `;
+
+        // Chèn form vào div #category-add
+        categoryAddDiv.insertAdjacentHTML('beforeend', formTemplate);
+
+        // Auto focus vào ô input vừa tạo
+        const inputs = categoryAddDiv.querySelectorAll('.unique-category-input');
+        const latestInput = inputs[inputs.length - 1];
+        latestInput.focus();
+
+        // Xử lý sự kiện khi người dùng nhập dữ liệu và nhấn ENTER để xác nhận thêm vào list
+        latestInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                e.preventDefault(); // Tránh submit form chính
+                handlePushToCategoryList(this);
+            }
+        });
+
+        // Xử lý nút xóa input nếu người dùng đổi ý không muốn nhập nữa
+        const removeBtns = categoryAddDiv.querySelectorAll('.remove-input-btn');
+        removeBtns[removeBtns.length - 1].addEventListener('click', function() {
+            this.closest('.category-field-group').remove();
+        });
+    });
+
+    // Hàm chuyển đổi từ ô input thành card hiển thị trong #category-list
+    function handlePushToCategoryList(inputElement) {
+        const categoryName = inputElement.value.trim();
+        
+        if (categoryName === '') {
+            alert('Vui lòng nhập tên danh mục!');
+            return;
+        }
+
+        // Tạo một ID ngẫu nhiên hoặc dựa trên timestamp để không bị trùng lặp id/for của checkbox
+        const uniqueId = 'cat_' + Date.now();
+
+        // Tạo cấu trúc card danh mục mới (được chọn sẵn - checked)
+        const newCardTemplate = `
+            <div class="col-md-6 mb-3">
+                <label class="category-card" for="${uniqueId}">
+                    <input type="checkbox" name="categories[]" value="${categoryName}" id="${uniqueId}" class="hidden-checkbox" checked>
+                    <div class="category-icon"><i class="fas fa-folder-plus"></i></div>
+                    <div class="category-info">
+                        <h6>${categoryName}</h6>
+                        <p>Danh mục do bạn tự tạo</p>
+                    </div>
+                </label>
+            </div>
+        `;
+
+        // Kiểm tra xem bên trong #category-list đã có hàng (.row) nào chưa
+        let rowTarget = categoryListDiv.querySelector('.row');
+        if (!rowTarget) {
+            // Nếu chưa có (.row) nào (lần đầu tiên), tạo một .row mới
+            categoryListDiv.innerHTML = '<div class="row mt-2"></div>';
+            rowTarget = categoryListDiv.querySelector('.row');
+        }
+
+        // Thêm card mới vào danh sách hiển thị
+        rowTarget.insertAdjacentHTML('beforeend', newCardTemplate);
+
+        // Xóa ô input ở vùng #category-add sau khi đã chuyển đổi thành công
+        inputElement.closest('.category-field-group').remove();
+    }
 });

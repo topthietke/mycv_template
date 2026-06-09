@@ -42,10 +42,11 @@ class CatetoriesService
             $data [] = [
                 'name' => $item,
                 'code' => Str::slug($item),
+                'candidate_id' => $params['candidate_id'],
                 'created_by' => Auth::user()->id ?? null,
                 'created_at' => now(),                
             ];
-        }        
+        } 
         return $this->categoriesRepo->create_multiple($data);
     }
 

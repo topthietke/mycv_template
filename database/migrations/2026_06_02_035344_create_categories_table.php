@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('code')->unique(); // 'objective', 'skill', 'experience', 'education'
             $table->string('name');
+            $table->bigInteger('candidate_id')->nullable()->default(null);
             $table->bigInteger('created_by')->nullable()->default(null);
             $table->bigInteger('updated_by')->nullable()->default(null);
             $table->bigInteger('deleted_by')->nullable()->default(null);
