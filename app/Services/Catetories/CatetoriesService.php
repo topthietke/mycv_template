@@ -20,7 +20,27 @@ class CatetoriesService
 
     public function index($params)
     {
-        return $this->categoriesRepo->index($params);
+        try {
+            // $model = $this->categories->findByConditions($params);
+            $model = $this->categoriesRepo->index($params);
+            if (!empty($model)) {
+                return  [
+                    'code' => 200,
+                    'message' => 'Tải danh sách danh mục thành công',
+                    'data' => $model
+                ];
+            } else {
+                return [
+                    'code' => 201,
+                    'message' => 'Tải danh sách danh mục không thành công',
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
+                'message' => $e->getMessage()
+            ];
+     }
     }
 
     public function edit($id)
@@ -47,7 +67,25 @@ class CatetoriesService
                 'created_at' => now(),                
             ];
         } 
-        return $this->categoriesRepo->create_multiple($data);
+        $categories = $this->categoriesRepo->create_multiple($data);
+        if($categories) {
+            $params = [
+                'candidate_id' => $params['candidate_id']
+            ];
+            $data = $this->categoriesRepo->whereByConditions($params);
+            return [
+                "code" => 200,
+                "message" => "Tạo nhiều danh mục thành công",
+                "data" => $data
+            ];
+        } else {
+            return [
+                "code" => 403,
+                "message" => "Tạo nhiều danh mục không thành công",
+                "data" => $data
+            ];
+        }
+
     }
 
     public function update($data, $id) {      

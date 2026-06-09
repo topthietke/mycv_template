@@ -50,6 +50,7 @@ class CategoriesController extends Controller {
     {
         try {
             $categories = $this->cat_service->create_multiple($request->all());
+            
             return response()->json([
                 'success' => true,
                 'message' => 'Tạo nhiều danh mục thành công!',

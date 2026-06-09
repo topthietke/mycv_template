@@ -10,7 +10,9 @@ class CategoriesRepository {
     public function __construct(Category $categories) {
         $this->categories = $categories;
     }
-
+    public function whereByConditions($params){
+        return $this->categories->findByConditions($params);
+    }
     public function index($params) {
         try {
             $model = $this->categories->findByConditions($params);
