@@ -48,21 +48,7 @@ class CategoriesController extends Controller {
 
     public function create_multiple(Request $request): JsonResponse
     {
-        try {
-            $categories = $this->cat_service->create_multiple($request->all());
-            
-            return response()->json([
-                'success' => true,
-                'message' => 'Tạo nhiều danh mục thành công!',
-                'data' => $categories
-            ], 201);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra trong quá trình tạo nhiều danh mục.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json($this->cat_service->create_multiple($request->all()));
     }
     public function show($id): JsonResponse
     {

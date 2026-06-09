@@ -249,7 +249,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             const result = await response.json();            
-
+            console.log(result);
+            return;
             if (response.ok) {
                 alert('Thêm danh mục thành công!');
                 // Giả định `result.data` là một mảng chứa các danh mục vừa tạo từ server: [{id: 1, name: 'Danh mục A'}, ...]
