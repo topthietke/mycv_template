@@ -35,7 +35,7 @@
         <div class="col-md-6">
             <label class="category-card" for="cat_skills">
                 <input type="checkbox" name="categories[]" value="skills" id="cat_skills" class="hidden-checkbox">
-                <div class="category-icon"><i class="fas fa-bolt"></i></div>
+                <div class="category-icon"><i class="fas fa-bullseye"></i></div>
                 <div class="category-info">
                     <h6>Kỹ năng</h6>
                     <p>Các công nghệ, công cụ thuần thục</p>

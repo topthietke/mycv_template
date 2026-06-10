@@ -1,36 +1,35 @@
 import { API_URL } from "/assets/js/variableApi.js";
 import { msg_success, msg_error, ajax } from "/assets/js/function.js";
 
+function goToStep(step) {    
+    // Ẩn tất cả form
+    $('.step-form').removeClass('active');
+
+    // Xóa trạng thái active của indicator
+    $('.step').removeClass('active completed');
+
+    // Cập nhật giao diện thanh hiển thị (progress bar)
+    if (step === 1) {
+        $('#candidateForm').addClass('active');
+        $('#indicator-1').addClass('active');
+        $('#progress-line').css('width', '0%');
+    } else if (step === 2) {
+        $('#categoryForm').addClass('active');
+        $('#indicator-1').addClass('completed');
+        $('#indicator-2').addClass('active');
+        $('#progress-line').css('width', '50%');
+    } else if (step === 3) {
+        alert(1111);
+        $('#detailsForm').addClass('active');
+        $('#indicator-1').addClass('completed');
+        $('#indicator-2').addClass('completed');
+        $('#indicator-3').addClass('active');
+        $('#progress-line').css('width', '100%');
+    }
+}
 
 $(document).ready(function () {
     // Lấy API host từ file .env thông qua Laravel helper
-
-    function goToStep(step) {
-        // Ẩn tất cả form
-        $('.step-form').removeClass('active');
-
-        // Xóa trạng thái active của indicator
-        $('.step').removeClass('active completed');
-
-        // Cập nhật giao diện thanh hiển thị (progress bar)
-        if (step === 1) {
-            $('#candidateForm').addClass('active');
-            $('#indicator-1').addClass('active');
-            $('#progress-line').css('width', '0%');
-        } else if (step === 2) {
-            $('#categoryForm').addClass('active');
-            $('#indicator-1').addClass('completed');
-            $('#indicator-2').addClass('active');
-            $('#progress-line').css('width', '50%');
-        } else if (step === 3) {
-            $('#detailsForm').addClass('active');
-            $('#indicator-1').addClass('completed');
-            $('#indicator-2').addClass('completed');
-            $('#indicator-3').addClass('active');
-            $('#progress-line').css('width', '100%');
-        }
-    }
-
 
     $('#candidateForm').on('submit', function (e) {
         e.preventDefault();
@@ -87,14 +86,9 @@ $(document).ready(function () {
                 if (res && res.success == true) {
                     alert(res.message || 'Thông tin đã được lưu thành công!');
 
-
                     // Lấy giá trị id từ response.data
                     const candidate_id = res.data.id;
                     sessionStorage.setItem('candidate_id', candidate_id);
-                    // document.cookie = `candidate_id=${candidate_id}; path=/`;
-
-                    // console.log("ID trong Session:", sessionStorage.getItem('candidate_id'));
-
                     goToStep(2); // Chuyển sang bước 2
                 } else {
                     alert(res.message);
@@ -138,8 +132,6 @@ $(document).ready(function () {
 
     });
 
-
-
     // Xóa thông báo lỗi khi người dùng bắt đầu nhập lại
     $('.form-control, .form-select').on('input change', function () {
         $(this).removeClass('is-invalid');
@@ -149,7 +141,6 @@ $(document).ready(function () {
 });
 
 // ========================================== Bổ sung thêm input danh mục ==========================================
-
 document.addEventListener('DOMContentLoaded', function () {
     const categoryFields = document.getElementById('category_fields');
     const categoryList = document.getElementById('category_list');
@@ -209,12 +200,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
-
-
     // ==============================================  Thêm mới danh mục ===============================================
     // 2. Chức năng gửi API khi bấm nút "Thêm mới"
     saveCategoryBtn.addEventListener('click', async function () {
-        let candidate_id = sessionStorage.getItem('candidate_id');        
+        let candidate_id = sessionStorage.getItem('candidate_id');
         // Thu thập tất cả các giá trị từ các input có name="categories_name[]"
         const inputs = categoriesForm.querySelectorAll('input[name="categories_name[]"]');
         const categories = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== '');
@@ -247,60 +236,55 @@ document.addEventListener('DOMContentLoaded', function () {
                 },
                 body: JSON.stringify(payload)
             });
-
-            const result = await response.json();            
-             
-            if (result && result.code == 200) {
+            let html = '<div class="row mt-2">';
+            let data = null;
+            const result = await response.json();
+            if (response.ok) {
                 alert('Thêm danh mục thành công!');
-                // Giả định `result.data` là một mảng chứa các danh mục vừa tạo từ server: [{id: 1, name: 'Danh mục A'}, ...]
-                // Nếu API của bạn trả về cấu trúc khác, hãy điều chỉnh biến `insertedCategories` bên dưới cho phù hợp.
-                const insertedCategories = result.data || categories.map((name, index) => ({ id: 'new_' + index + '_' + Date.now(), name: name }));
 
-                // Tạo cấu trúc row Bootstrap
+                // Mẹo xử lý: Nếu API trả về danh sách kèm ID từ Database (ví dụ result.data) thì ta dùng, 
+                // nếu không có thì ta tự tạo ID tạm thời bằng timestamp để không trùng lặp các thuộc tính `for` và `id`
+                const listCategories = result.data || categories.map((name, index) => ({ id: 'new_' + index + '_' + Date.now(), name: name }));
+
+                // 1. Khởi tạo chuỗi HTML chứa cấu trúc các danh mục mới
                 let htmlContent = '<div class="row mt-2">';
-
-                insertedCategories.forEach(cat => {
+                listCategories.forEach(cat => {
                     htmlContent += `
-                        <div class="col-md-6 mb-3">
+                        <div class="col-md-6 mb-3" data-id="${cat.id}">
                             <label class="category-card" for="cat_${cat.id}">
                                 <input type="checkbox" name="categories[]" value="${cat.id}" id="cat_${cat.id}" class="hidden-checkbox">
-                                <div class="category-icon"><i class="fas fa-folder text-primary"></i></div>
+                                <div class="category-icon"><i class="fas fa-bullseye text-primary"></i></div>
                                 <div class="category-info text-start">
                                     <h6>${cat.name}</h6>
                                     <p>Danh mục cá nhân tự thêm</p>
                                 </div>
                             </label>
-                        </div>
-                    `;
+                        </div>`;
                 });
-
                 htmlContent += '</div>';
 
-                // Kiểm tra nếu đang hiển thị "Không có dữ liệu" thì xóa trắng trước khi chèn mới
-                // if (categoryList.innerHTML.includes('Không có dữ liệu')) {
-                //     categoryList.innerHTML = '';
-                //     categoryList.classList.remove('text-center'); // Bỏ căn giữa text để giao diện grid chuẩn
-                // }
+                // 2. Kiểm tra nếu giao diện đang hiện chữ "Không có dữ liệu" thì xóa trắng trước khi chèn
+                if (categoryList.innerHTML.includes('Không có dữ liệu')) {
+                    categoryList.innerHTML = '';
+                    categoryList.classList.remove('text-center'); // Bỏ căn giữa text để hiển thị lưới thẻ đều nhau
+                }
 
-                categoryList.innerHTML = 'aaaa';
-                // categoryList.insertAdjacentHTML(htmlContent);
+                // 3. Append (chèn) dữ liệu vào thẻ #category_list ở file chính
+                categoryList.insertAdjacentHTML('beforeend', htmlContent);
 
-                // Chèn HTML danh mục mới vào danh sách chính
-                // categoryList.insertAdjacentHTML('beforeend', htmlContent);
-
-                // Reset form modal về trạng thái ban đầu (giữ lại duy nhất 1 ô input trống)
+                // 4. Reset form trong modal và xóa các ô input phụ do nút (+) tạo ra (chỉ giữ lại 1 ô trống ban đầu)
                 categoriesForm.reset();
                 const extraGroups = categoryFields.querySelectorAll('.category-field-group');
                 extraGroups.forEach((group, index) => {
-                    if (index > 0) group.remove(); // Xóa các ô input được add thêm bằng dấu (+), giữ lại ô đầu tiên
+                    if (index > 0) group.remove();
                 });
-
-                // Ẩn modal sau khi lưu thành công
+                // 5. Ẩn modal sau khi lưu thành công
                 categoryModal.hide();
 
             } else {
                 alert('Có lỗi xảy ra: ' + (result.message || 'Vui lòng thử lại.'));
             }
+
         } catch (error) {
             console.error('Error post data:', error);
             alert('Không thể kết nối đến máy chủ API!');
@@ -311,4 +295,49 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     });
 
+
+    // Thực hiện bước số 3
+    const categoryForm = document.getElementById('categoryForm');
+    const nextButton = categoryForm.querySelector('.btn-next');
+
+    // Lắng nghe sự kiện click vào nút "Tiếp theo"
+    nextButton.addEventListener('click', function (e) {
+        e.preventDefault(); // Ngăn chặn hành vi reload trang mặc định của button
+
+        // 1. Kiểm tra xem người dùng đã chọn ít nhất 1 danh mục chưa (Tùy chọn)
+        const checkedCategories = categoryForm.querySelectorAll('input[name="categories[]"]:checked');
+        if (checkedCategories.length === 0) {
+            alert('Vui lòng chọn ít nhất một danh mục trước khi tiếp tục!');
+            return;
+        }
+
+        // 2. Lấy dữ liệu của form hiện tại bằng FormData (Nếu bạn cần dùng sau này)
+        const formData = new FormData(categoryForm);
+
+        // 3. Tìm form chi tiết ở bước 3 (id="detailsForm")
+        const detailsForm = document.getElementById('detailsForm');
+
+        if (detailsForm) {
+            // Ẩn form bước 2 (bằng cách xóa class 'active' hoặc ẩn style)
+            categoryForm.classList.remove('active');
+            categoryForm.style.display = 'none';
+
+            // Hiển thị form bước 3
+            detailsForm.classList.add('active');
+            detailsForm.style.display = 'block'; // Hoặc style phù hợp với giao diện của bạn
+
+            console.log('Đã chuyển sang bước 3 thành công.');
+        } else {
+            console.error('Không tìm thấy form với id="detailsForm" ở file content_form.');
+        }
+    });
+
+    // Xử lý thêm cho nút "Quay lại" (Nếu bạn cần)
+    const backButton = categoryForm.querySelector('.btn-back-step');
+    backButton.addEventListener('click', function () {
+        // Code xử lý quay lại bước 1 tại đây...
+    });
+
 });
+
+
