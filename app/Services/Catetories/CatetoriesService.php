@@ -21,7 +21,6 @@ class CatetoriesService
     public function index($params)
     {
         try {
-            // $model = $this->categories->findByConditions($params);
             $model = $this->categoriesRepo->index($params);
             if (!empty($model)) {
                 return  [
@@ -40,7 +39,7 @@ class CatetoriesService
                 'code' => 500,
                 'message' => $e->getMessage()
             ];
-     }
+        }
     }
 
     public function edit($id)
@@ -49,26 +48,27 @@ class CatetoriesService
     }
 
     public function create($data)
-    {        
-        if(empty($data['code'])) {
+    {
+        if (empty($data['code'])) {
             $data['code'] = Str::slug($data['name']);
-        }        
+        }
         return $this->categoriesRepo->create($data);
     }
 
-    public function create_multiple($params) {        
-        $data = [];        
+    public function create_multiple($params)
+    {
+        $data = [];
         foreach ($params['name'] as $item) {
-            $data [] = [
+            $data[] = [
                 'name' => $item,
                 'code' => Str::slug($item),
                 'candidate_id' => $params['candidate_id'],
                 'created_by' => Auth::user()->id ?? null,
-                'created_at' => now(),                
+                'created_at' => now(),
             ];
-        } 
+        }
         $categories = $this->categoriesRepo->create_multiple($data);
-        if($categories) {
+        if ($categories) {
             $params = [
                 'candidate_id' => $params['candidate_id']
             ];
@@ -85,13 +85,13 @@ class CatetoriesService
                 "data" => $data
             ];
         }
-
     }
 
-    public function update($data, $id) {      
-        if(empty($data['code'])) {            
-            $data['code'] = Str::slug($data['name']);            
-        }     
+    public function update($data, $id)
+    {
+        if (empty($data['code'])) {
+            $data['code'] = Str::slug($data['name']);
+        }
         $data['updated_by'] = Auth::user()->id ?? null;
         $data['updated_at'] = now();
         return $this->categoriesRepo->update($data, $id);

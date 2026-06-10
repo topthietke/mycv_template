@@ -17,16 +17,7 @@ class CategoriesController extends Controller {
 
     public function index(Request $request): JsonResponse
     {
-        try {
-            $data = $this->cat_service->index($request->all());
-            return response()->json($data);
-        } catch (\Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Có lỗi xảy ra khi tải danh sách danh mục.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
+        return response()->json($this->cat_service->index($request->all()));
     }
 
     public function store(Request $request): JsonResponse {

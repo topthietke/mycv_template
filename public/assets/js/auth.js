@@ -249,9 +249,8 @@ document.addEventListener('DOMContentLoaded', function () {
             });
 
             const result = await response.json();            
-            console.log(result);
-            return;
-            if (response.ok) {
+             
+            if (result && result.code == 200) {
                 alert('Thêm danh mục thành công!');
                 // Giả định `result.data` là một mảng chứa các danh mục vừa tạo từ server: [{id: 1, name: 'Danh mục A'}, ...]
                 // Nếu API của bạn trả về cấu trúc khác, hãy điều chỉnh biến `insertedCategories` bên dưới cho phù hợp.
@@ -278,13 +277,16 @@ document.addEventListener('DOMContentLoaded', function () {
                 htmlContent += '</div>';
 
                 // Kiểm tra nếu đang hiển thị "Không có dữ liệu" thì xóa trắng trước khi chèn mới
-                if (categoryList.innerHTML.includes('Không có dữ liệu')) {
-                    categoryList.innerHTML = '';
-                    categoryList.classList.remove('text-center'); // Bỏ căn giữa text để giao diện grid chuẩn
-                }
+                // if (categoryList.innerHTML.includes('Không có dữ liệu')) {
+                //     categoryList.innerHTML = '';
+                //     categoryList.classList.remove('text-center'); // Bỏ căn giữa text để giao diện grid chuẩn
+                // }
+
+                categoryList.innerHTML = 'aaaa';
+                // categoryList.insertAdjacentHTML(htmlContent);
 
                 // Chèn HTML danh mục mới vào danh sách chính
-                categoryList.insertAdjacentHTML('beforeend', htmlContent);
+                // categoryList.insertAdjacentHTML('beforeend', htmlContent);
 
                 // Reset form modal về trạng thái ban đầu (giữ lại duy nhất 1 ô input trống)
                 categoriesForm.reset();
