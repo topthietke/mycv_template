@@ -58,6 +58,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js" integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="/assets/js/auth.js"></script>
+    <script src="/assets/js/init.js"></script>
 </body>
 
 </html>

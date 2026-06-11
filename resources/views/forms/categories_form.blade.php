@@ -10,17 +10,17 @@
             </a>
         </div>
     </div>
-    {{-- ====================================== Tiêu đề + icon thêm danh muc =======================================
-    --}}
+    {{-- ====================================== Tiêu đề + icon thêm danh muc ======================================= --}}
 
-    <div id="category_list" style="padding:10px;">
-        Không có dữ liệu
+    <div id="category_list" style="padding:10px;" class="text-center">
+        <h6>Không có danh mục nào! Vui lòng thêm mới danh mục</h6>
     </div>
 
     <div class="d-flex justify-content-between align-items-center">
         <button type="button" class="btn btn-back-step" id="category_form_back" data-step="1">Quay lại</button>
-        <button type="button" class="btn btn-next" id="category_form_submit" data-step="3">
+        <button type="button" class="btn btn-primary" id="category_form_submit" data-step="3">
             Tiếp theo <i class="fas fa-arrow-right ms-2"></i>
         </button>
     </div>
 </form>
+

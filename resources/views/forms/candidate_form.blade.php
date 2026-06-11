@@ -86,8 +86,8 @@
     --}}
     <div class="row g-4">
         <div class="col-md-6">
-            <x-input type="text" name="git_url" class="form-control" placeholder="Nhập địa chỉ GitHub/GitLab"
-                label="Địa chỉ GitHub/GitLab" />
+            <x-input type="text" name="git_url" class="form-control" placeholder="Nhập địa chỉ GitHub/ GitLab"
+                label="Địa chỉ GitHub/ GitLab" />
         </div>
         <div class="col-md-6">
             <x-input type="text" name="website_url" class="form-control" placeholder="Nhập địa chỉ website"

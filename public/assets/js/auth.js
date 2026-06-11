@@ -1,7 +1,7 @@
 import { API_URL } from "/assets/js/variableApi.js";
 import { msg_success, msg_error, ajax } from "/assets/js/function.js";
 
-function goToStep(step) {    
+function goToStep(step) {
     // Ẩn tất cả form
     $('.step-form').removeClass('active');
 
@@ -17,14 +17,13 @@ function goToStep(step) {
         $('#categoryForm').addClass('active');
         $('#indicator-1').addClass('completed');
         $('#indicator-2').addClass('active');
-        $('#progress-line').css('width', '50%');
+        $('#progress-line').css('width', '70%');
     } else if (step === 3) {
-        alert(1111);
         $('#detailsForm').addClass('active');
         $('#indicator-1').addClass('completed');
         $('#indicator-2').addClass('completed');
         $('#indicator-3').addClass('active');
-        $('#progress-line').css('width', '100%');
+        // $('#progress-line').css('width', '100%');
     }
 }
 
@@ -298,46 +297,305 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Thực hiện bước số 3
     const categoryForm = document.getElementById('categoryForm');
-    const nextButton = categoryForm.querySelector('.btn-next');
+    if (categoryForm) {
+        const nextButton = categoryForm.querySelector('.btn-next');
 
-    // Lắng nghe sự kiện click vào nút "Tiếp theo"
-    nextButton.addEventListener('click', function (e) {
-        e.preventDefault(); // Ngăn chặn hành vi reload trang mặc định của button
+        // Lắng nghe sự kiện click vào nút "Tiếp theo"
+        if (nextButton) {
+            nextButton.addEventListener('click', function (e) {
+                e.preventDefault(); // Ngăn chặn hành vi reload trang mặc định của button
 
-        // 1. Kiểm tra xem người dùng đã chọn ít nhất 1 danh mục chưa (Tùy chọn)
-        const checkedCategories = categoryForm.querySelectorAll('input[name="categories[]"]:checked');
-        if (checkedCategories.length === 0) {
+                // 1. Kiểm tra xem người dùng đã chọn ít nhất 1 danh mục chưa (Tùy chọn)
+                const checkedCategories = categoryForm.querySelectorAll('input[name="categories[]"]:checked');
+                if (checkedCategories.length === 0) {
+                    alert('Vui lòng chọn ít nhất một danh mục trước khi tiếp tục!');
+                    return;
+                }
+
+                // 2. Lấy dữ liệu của form hiện tại bằng FormData (Nếu bạn cần dùng sau này)
+                const formData = new FormData(categoryForm);
+
+                // 3. Tìm form chi tiết ở bước 3 (id="detailsForm")
+                const detailsForm = document.getElementById('detailsForm');
+
+                if (detailsForm) {
+                    // Ẩn form bước 2 (bằng cách xóa class 'active' hoặc ẩn style)
+                    categoryForm.classList.remove('active');
+                    categoryForm.style.display = 'none';
+
+                    // Hiển thị form bước 3
+                    detailsForm.classList.add('active');
+                    detailsForm.style.display = 'block'; // Hoặc style phù hợp với giao diện của bạn
+
+                    console.log('Đã chuyển sang bước 3 thành công.');
+                } else {
+                    console.error('Không tìm thấy form với id="detailsForm" ở file content_form.');
+                }
+            });
+        }
+
+        // Xử lý thêm cho nút "Quay lại" (Nếu bạn cần)
+        const backButton = categoryForm.querySelector('.btn-back-step');
+        if (backButton) {
+            backButton.addEventListener('click', function () {
+                // Code xử lý quay lại bước 1 tại đây...
+            });
+        }
+    }
+});
+
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryCards = document.querySelectorAll('#category_list .category-card');
+    const submitBtn = document.getElementById('category_form_submit');
+
+    categoryCards.forEach(function (card) {
+        card.addEventListener('click', function () {
+            updateSubmitButton();
+            syncSelectedCategoriesToDetailsForm();
+        });
+    });
+
+    function updateSubmitButton() {
+        const anyChecked = document.querySelectorAll('#category_list input[name="categories[]"]:checked').length > 0;
+        submitBtn.disabled = !anyChecked;
+    }
+
+    function syncSelectedCategoriesToDetailsForm() {
+        const detailsForm = document.getElementById('detailsForm');
+        if (!detailsForm) return;
+
+        // Xóa các hidden input cũ đã sync trước đó
+        detailsForm.querySelectorAll('.synced-category').forEach(el => el.remove());
+
+        const checkedBoxes = document.querySelectorAll('#category_list input[name="categories[]"]:checked');
+
+        checkedBoxes.forEach(function (checkbox) {
+            const colDiv = checkbox.closest('[data-id]');
+            const categoryId = colDiv ? colDiv.getAttribute('data-id') : checkbox.value;
+            const categoryName = colDiv ? colDiv.querySelector('h6')?.textContent?.trim() : '';
+
+            // Hidden input cho ID
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'category_ids[]';
+            inputId.value = categoryId;
+            inputId.classList.add('synced-category');
+
+            // Hidden input cho Name
+            const inputName = document.createElement('input');
+            inputName.type = 'hidden';
+            inputName.name = 'category_names[]';
+            inputName.value = categoryName;
+            inputName.classList.add('synced-category');
+
+            detailsForm.appendChild(inputId);
+            detailsForm.appendChild(inputName);
+        });
+    }
+});
+
+// ============================================================= Next Bước 3 ================================================
+document.addEventListener('DOMContentLoaded', function () {
+    const categoryForm = document.getElementById('categoryForm');
+    const categoryList = document.getElementById('category_list');
+    const submitBtn = document.getElementById('category_form_submit');
+
+    if (!categoryForm || !categoryList || !submitBtn) return;
+
+    // 1. Dùng Event Delegation để lắng nghe khi click vào các card (kể cả card mới thêm qua Ajax)
+    categoryList.addEventListener('click', function (e) {
+        const card = e.target.closest('.category-card');
+        if (card) {
+            // Đợi một chút để checkbox thay đổi trạng thái tự nhiên theo thuộc tính `for` của label
+            setTimeout(() => {
+                updateSubmitButton();
+                syncSelectedCategoriesToDetailsForm();
+            }, 50);
+        }
+    });
+
+    // Hàm cập nhật trạng thái disable/enable của nút "Tiếp theo"
+    function updateSubmitButton() {
+        const anyChecked = categoryList.querySelectorAll('input[name="categories[]"]:checked').length > 0;
+        submitBtn.disabled = !anyChecked;
+    }
+
+    // Hàm đồng bộ dữ liệu ID và Name sang form Bước 3 (detailsForm) dưới dạng hidden input
+    function syncSelectedCategoriesToDetailsForm() {
+        const detailsForm = document.getElementById('detailsForm');
+        if (!detailsForm) return;
+
+        // Xóa các hidden input cũ đã đồng bộ trước đó để tránh trùng lặp
+        detailsForm.querySelectorAll('.synced-category').forEach(el => el.remove());
+
+        // Lấy tất cả các checkbox đang được check
+        const checkedBoxes = categoryList.querySelectorAll('input[name="categories[]"]:checked');
+
+        checkedBoxes.forEach(function (checkbox) {
+            const colDiv = checkbox.closest('[data-id]');
+            const categoryId = colDiv ? colDiv.getAttribute('data-id') : checkbox.value;
+            const categoryName = colDiv ? colDiv.querySelector('h6')?.textContent?.trim() : '';
+
+            // Tạo Hidden input cho ID
+            const inputId = document.createElement('input');
+            inputId.type = 'hidden';
+            inputId.name = 'category_ids[]';
+            inputId.value = categoryId;
+            inputId.classList.add('synced-category');
+
+            // Tạo Hidden input cho Name
+            const inputName = document.createElement('input');
+            inputName.type = 'hidden';
+            inputName.name = 'category_names[]';
+            inputName.value = categoryName;
+            inputName.classList.add('synced-category');
+
+            // Đẩy vào detailsForm
+            detailsForm.appendChild(inputId);
+            detailsForm.appendChild(inputName);
+        });
+    }
+
+
+    // 2. Xử lý sự kiện click vào nút "Tiếp theo" (id="category_form_submit")
+    submitBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+
+        // Kiểm tra xem đã chọn ít nhất 1 danh mục chưa
+        const checkedBoxes = categoryList.querySelectorAll('input[name="categories[]"]:checked');
+        if (checkedBoxes.length === 0) {
             alert('Vui lòng chọn ít nhất một danh mục trước khi tiếp tục!');
             return;
         }
 
-        // 2. Lấy dữ liệu của form hiện tại bằng FormData (Nếu bạn cần dùng sau này)
-        const formData = new FormData(categoryForm);
+        // Đưa biến ra phạm vi toàn cục (window) để file/script khác có thể sử dụng
+        window.selectedCategories = [];
+        checkedBoxes.forEach(checkbox => {
+            const colDiv = checkbox.closest('[data-id]');
+            window.selectedCategories.push({
+                id: colDiv ? colDiv.getAttribute('data-id') : checkbox.value,
+                name: colDiv ? colDiv.querySelector('h6')?.textContent?.trim() : ''
+            });
+        });
 
-        // 3. Tìm form chi tiết ở bước 3 (id="detailsForm")
-        const detailsForm = document.getElementById('detailsForm');
+        // Gọi hàm hiển thị giao diện động ở Bước 3
+        renderDetailsForm(window.selectedCategories);
 
-        if (detailsForm) {
-            // Ẩn form bước 2 (bằng cách xóa class 'active' hoặc ẩn style)
-            categoryForm.classList.remove('active');
-            categoryForm.style.display = 'none';
-
-            // Hiển thị form bước 3
-            detailsForm.classList.add('active');
-            detailsForm.style.display = 'block'; // Hoặc style phù hợp với giao diện của bạn
-
-            console.log('Đã chuyển sang bước 3 thành công.');
+        // Chuyển sang Bước 3: Gọi hàm goToStep(3) có sẵn của bạn để đồng bộ giao diện / progress line
+        if (typeof goToStep === 'function') {
+            goToStep(3);
         } else {
-            console.error('Không tìm thấy form với id="detailsForm" ở file content_form.');
+            // Backend dự phòng nếu không tìm thấy hàm goToStep
+            const detailsForm = document.getElementById('detailsForm');
+            if (detailsForm) {
+                categoryForm.classList.remove('active');
+                categoryForm.style.display = 'none';
+                detailsForm.classList.add('active');
+                detailsForm.style.display = 'block';
+            }
         }
     });
 
-    // Xử lý thêm cho nút "Quay lại" (Nếu bạn cần)
-    const backButton = categoryForm.querySelector('.btn-back-step');
-    backButton.addEventListener('click', function () {
-        // Code xử lý quay lại bước 1 tại đây...
-    });
+    // Hàm tự động sinh các form-section dựa trên danh mục được chọn
+    function renderDetailsForm(categories) {
+        const container = document.getElementById('dynamic-categories-container');
+        if (!container) return;
+
+        // Xóa sạch nội dung cũ trước khi render mới
+        container.innerHTML = '';
+
+        // Duyệt qua từng danh mục người dùng đã chọn để sinh HTML
+        categories.forEach(cat => {
+            const sectionHtml = `<div class="form-section mb-4" data-category-id="${cat.id}">
+                    <div class="section-title fw-bold mb-2 text-primary">
+                        ${cat.name}
+                    </div>
+                    <div class="mb-2">                        
+                        <textarea class="form-control experiences" name="category_details[${cat.id}]" rows="4" 
+                        placeholder="Vui lòng nhập nội dung cho danh mục ${cat.name}..." required></textarea>
+                    </div>
+                </div>`;
+            container.insertAdjacentHTML('beforeend', sectionHtml);
+        });
+    }
 
 });
+// ======================================================= Submit Form Details =========================================================================
 
+document.getElementById('detailsForm').addEventListener('submit', async function (event) {
+    // Ngăn chặn hành động submit mặc định của form
+    event.preventDefault();
 
+    // 1. Lấy tất cả các form-section chứa dữ liệu danh mục
+    const sections = document.querySelectorAll('#dynamic-categories-container .form-section');
+    let isValid = true;
+    const requestDataList = [];
+
+    // Lấy candidate_id từ sessionStorage
+    const candidateId = sessionStorage.getItem('candidate_id');
+
+    // 2. Duyệt qua từng section để kiểm tra và lấy dữ liệu
+    sections.forEach(section => {
+        const categoryId = section.getAttribute('data-category-id');
+        const textarea = section.querySelector('textarea.experiences');
+        const content = textarea.value.trim();
+        const categoryName = section.querySelector('.section-title').textContent.trim();
+
+        // Kiểm tra nếu nội dung trống
+        if (!content) {
+            alert(`Vui lòng nhập nội dung cho danh mục: ${categoryName}`);
+            textarea.focus();
+            isValid = false;
+            return; // Thoát vòng lặp forEach này
+        }
+
+        // Nếu hợp lệ, push object vào danh sách chờ gửi API
+        requestDataList.push({
+            candidate_id: parseInt(candidateId),
+            category_id: parseInt(categoryId),
+            content: content
+        });
+    });   
+
+    // Nếu có ít nhất 1 trường chưa nhập, dừng xử lý tiếp theo
+    if (!isValid) return;
+
+    // 3. Tiến hành gọi API bằng AJAX khi tất cả dữ liệu đã hợp lệ
+    const submitBtn = this.querySelector('.btn-submit');
+    
+    try {
+        // Thay đổi trạng thái nút submit sang loading
+        submitBtn.disabled = true;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-1"></i> Đang xử lý...';
+
+        const apiUrl = API_URL.contents;
+
+        // Tạo mảng chứa các request AJAX (mỗi $.ajax trả về một Deferred/Promise object)
+        const apiRequests = requestDataList.map(data => {
+            return $.ajax({
+                url: apiUrl,
+                type: 'POST',
+                contentType: 'application/json',
+                data: JSON.stringify(data),
+                // headers: { 'Authorization': 'Bearer ' + token } // Thêm nếu cần
+            });
+        });
+
+        // Chờ tất cả các request AJAX hoàn thành (Tương đương Promise.all)
+        await $.when.apply($, apiRequests);
+
+        alert('Thêm mới thông tin chi tiết thành công!');
+        
+        setTimeout(function () {
+            window.location.href = '/login'; // Thay đổi đường dẫn '/login' theo dự án của bạn
+        }, 2000);
+
+    } catch (error) {
+        console.error('Error:', error);
+        alert('Đã có lỗi xảy ra trong quá trình lưu dữ liệu. Vui lòng thử lại!');
+    } finally {
+        // Khôi phục lại trạng thái nút submit
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Kết thúc';
+    }
+});
