@@ -73,7 +73,6 @@ class CandidateRepository {
     }
 
     public function update($params, $id) {
-
         $record = $this->candidate->findById($id);
         if(empty($record)) {
             return [

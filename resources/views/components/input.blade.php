@@ -13,15 +13,16 @@
     'suffix'      => null,
     'size'        => null,
     'error'       => null,
+    'append'      => null,
 ])
 
 @php
     $id        = $id ?? $name;
     $sizeClass = $size ? "form-control-{$size}" : '';
-    $hasAddon  = $prefix || $suffix;
     $errors    = $errors ?? session()->get('errors', new \Illuminate\Support\MessageBag);
     $serverError = $errors->first($name);
     $errorMsg    = $serverError ?: $error;
+    $hasAddon  = $prefix || $suffix || isset($append);
 @endphp
 
 <div class="mb-3">
@@ -39,7 +40,7 @@
     @if ($hasAddon)
         <div class="input-group {{ $sizeClass ? "input-group-{$size}" : '' }}">
             @if ($prefix)
-                <span class="input-group-text">{{ $prefix }}</span>
+                <span class="input-group-text">{!! $prefix !!}</span>
             @endif
 
             <input
@@ -51,11 +52,15 @@
                 {{ $required  ? 'required'  : '' }}
                 {{ $disabled  ? 'disabled'  : '' }}
                 {{ $readonly  ? 'readonly'  : '' }}
-                {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($serverError ? ' is-invalid' : '')]) }}
+                    {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($errorMsg ? ' is-invalid' : '')]) }}
             >
 
             @if ($suffix)
                 <span class="input-group-text">{{ $suffix }}</span>
+                @endif
+
+                @if (isset($append))
+                    {{ $append }}
             @endif
 
             @if ($errorMsg)
@@ -73,7 +78,7 @@
             {{ $required  ? 'required'  : '' }}
             {{ $disabled  ? 'disabled'  : '' }}
             {{ $readonly  ? 'readonly'  : '' }}
-            {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($serverError ? ' is-invalid' : '')]) }}
+            {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($errorMsg ? ' is-invalid' : '')]) }}
         >        
         @if ($errorMsg)
             <div class="invalid-feedback">{{ $errorMsg }}</div>

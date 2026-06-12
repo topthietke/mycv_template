@@ -9,8 +9,7 @@ use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
-class Controller extends BaseController
-{
+class Controller extends BaseController {
     use AuthorizesRequests, ValidatesRequests;
 
     public function responseData($data, $code = null, $message = null)
@@ -24,8 +23,7 @@ class Controller extends BaseController
     }
 
 
-    public function test_send_mail(Request $request): bool
-    {
+    public function test_send_mail(Request $request): bool {        
         $toEmail = $request->input('toEmail');
         $toName = $request->input('toName');
         $subject = $request->input('subject');
@@ -34,7 +32,7 @@ class Controller extends BaseController
 
         try {
             Mail::send(
-                'emails',
+                'templates.email_template',
                 [
                     'candidateName' => $toName,
                     'subject'       => $subject,
@@ -52,7 +50,7 @@ class Controller extends BaseController
             );
 
             return true;
-        } catch (\Exception $e) {
+        } catch (\Exception $e) {            
             Log::error('Send mail failed', [
                 'to'      => $toEmail,
                 'subject' => $subject,
@@ -63,31 +61,31 @@ class Controller extends BaseController
         }
     }
 
-    public function send_account_info_mail(Request $request): bool {
-        
-        $toEmail      = $request->input('toEmail');
-        $toName       = $request->input('toName');
-        $tempPassword = $request->input('tempPassword');
+    public function send_account_info_mail(Request $request): bool { 
         try {
+            $name  = $request->input('name');
+            $email = $request->input('email');
+            $data  = [
+                'email'    => $email,
+                'name'     => $name,
+                'password' => $request->input('password'),
+                'url'      => config('app.url') . '/login',
+            ];
+            
             Mail::send(
-                'account',
-                [
-                    'candidateName' => $toName,
-                    'email'         => $toEmail,
-                    'tempPassword'  => $tempPassword,
-                    'loginUrl'      => config('app.url') . '/login',
-                ],
-                function ($message) use ($toEmail, $toName) {
+                'templates.thong_tin_tai_khoan',
+                $data,
+                function ($message) use ($email, $name) {
                     $message
-                        ->to($toEmail, $toName)
+                        ->to($email, $name)
                         ->subject('Thông tin tài khoản đăng nhập của bạn');
                 }
             );
-
             return true;
         } catch (\Exception $e) {
+            dd($e->getMessage());
             Log::error('Send account info mail failed', [
-                'to'    => $toEmail,
+                'to'    => $data['email'],
                 'error' => $e->getMessage(),
             ]);
 

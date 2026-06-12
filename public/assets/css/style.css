@@ -279,7 +279,7 @@ body {
     transform: translateY(0);
   }
 }
-/* ========================================= Custom CSS cho trang đăng ký tài khoản ứng viên ========================================= */ */
+/* ========================================= Custom CSS cho trang đăng ký tài khoản ứng viên ============================================================ */
 .label-back-login {
   text-decoration: none;
   color: var(--primary-color);
@@ -297,4 +297,18 @@ body {
 
 #addCategoryFieldBtn {
   border: 1px dashed var(--text-muted);
+}
+
+/* =========================================================== Login CSS ============================================================================= */
+.card-custom {
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
+    
+    width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-top: 10px;
 }

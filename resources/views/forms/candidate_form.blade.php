@@ -4,6 +4,7 @@
 <form id="candidateForm" class="step-form active" enctype="multipart/form-data">
     @csrf
     <h5 class="mb-2 fw-bold">Bước 1: Thông tin cá nhân</h5>
+    <hr class="text-muted">
     {{-- ================================ Nhập Họ và tên, Ngày sinh =============================== --}}
     <div class="row g-4">
         {{-- Họ và tên --}}
