@@ -72,6 +72,7 @@ $(document).ready(function () {
 
         // Gom dữ liệu form (hỗ trợ cả file avatar)
         let formData = new FormData(this);
+        
         $.ajax({
             url: API_URL.candidate,
             type: 'POST',
@@ -555,14 +556,14 @@ document.getElementById('detailsForm').addEventListener('submit', async function
             category_id: parseInt(categoryId),
             content: content
         });
-    });   
+    });
 
     // Nếu có ít nhất 1 trường chưa nhập, dừng xử lý tiếp theo
     if (!isValid) return;
 
     // 3. Tiến hành gọi API bằng AJAX khi tất cả dữ liệu đã hợp lệ
     const submitBtn = this.querySelector('.btn-submit');
-    
+
     try {
         // Thay đổi trạng thái nút submit sang loading
         submitBtn.disabled = true;
@@ -585,7 +586,7 @@ document.getElementById('detailsForm').addEventListener('submit', async function
         await $.when.apply($, apiRequests);
 
         alert('Thêm mới thông tin chi tiết thành công!');
-        
+
         setTimeout(function () {
             window.location.href = '/login'; // Thay đổi đường dẫn '/login' theo dự án của bạn
         }, 2000);
@@ -599,3 +600,4 @@ document.getElementById('detailsForm').addEventListener('submit', async function
         submitBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Kết thúc';
     }
 });
+

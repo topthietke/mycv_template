@@ -15,7 +15,6 @@
 </head>
 
 <body>
-
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-xl-5 col-lg-6 col-md-8">
@@ -36,7 +35,8 @@
                         <x-input name="password" type="password" label="Mật khẩu" placeholder="Mật khẩu" required
                             prefix='<i class="fa fa-lock"></i>'>
                             <x-slot:append>
-                                <x-button variant="light" class="input-group-text" type="button" onclick="togglePasswordVisibility()"
+                                <x-button variant="light" class="input-group-text" type="button"
+                                    onclick="togglePasswordVisibility()"
                                     style="border: 1px solid #ccc; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
                                     <i class="fa fa-eye" id="togglePasswordIcon"></i>
                                 </x-button>
@@ -47,11 +47,11 @@
                             <x-checkbox name="remember_me" label="Ghi nhớ đăng nhập" id="rememberMe" />
                             <a href="{{ route('forgot.password') }}" class="small text-link">Quên mật khẩu?</a>
                         </div>
-                        
+
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
-                                <x-button href="{{ route('register') }}" variant="success py-2 px-4" icon="fa fa-long-arrow-left"
-                                    class="back-to-login p-0 text-decoration-none">
+                                <x-button href="{{ route('register') }}" variant="success py-2 px-4"
+                                    icon="fa fa-long-arrow-left" class="back-to-login p-0 text-decoration-none">
                                     Đăng ký
                                 </x-button>
                             </div>
@@ -70,7 +70,24 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="/assets/js/auth.js"></script>
+    <script type="module" src="/assets/js/login.js"></script>
+    <script>
+        function togglePasswordVisibility() {            
+            const passwordInput = document.getElementById("password");
+            const icon = document.getElementById("togglePasswordIcon");
+
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.remove("bi-eye");
+                icon.classList.add("bi-eye-slash");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.remove("bi-eye-slash");
+                icon.classList.add("bi-eye");
+            }
+        }
+
+    </script>
 </body>
 
 </html>

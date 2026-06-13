@@ -23,26 +23,20 @@ class AuthService
      {
           // Check email
           $user = $this->user_repository->login($params);
-
           if (!empty($user)) {
                $token = $user->createToken('auth_token')->plainTextToken;  // Trường hợp báo lỗi hàm này thì phải có HasApiTokens trong model  User   
-               $data = [
+               return [
                     "code"    => Response::HTTP_OK,
                     "message" => "Đăng nhập thành công",
-                    "data"    => [
-                         'user'  => $user,
-                         'token' => $token
-                    ]
+                    "data"    => $user,
+                    'token'   => $token
                ];
           } else {
-               $data = [
-                    "code"  => Response::HTTP_BAD_REQUEST,
-                    "message" => "Email hoặc Mật khẩu không đúng",
-                    "data"  => null
+               return [
+                    "code"    => Response::HTTP_BAD_REQUEST,
+                    "message" => "Email hoặc Mật khẩu không đúng",                    
                ];
           }
-
-          return $data;
      }
      public function register($params)
      {
