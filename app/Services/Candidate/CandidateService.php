@@ -7,7 +7,6 @@ use App\Helpers\Helpers;
 use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
-use App\Events\CandidateCreated;
 
 class CandidateService
 {    
@@ -34,12 +33,24 @@ class CandidateService
         return $this->candidate_repository->edit($id);
     }
 
-    public function create($data)
-    {
+    public function create($data) {
         $params = $this->candidate_repository->create($data);        
-
-        event(new CandidateCreated($params));
-
+        $password = Str::random(16);        
+        $data_users = [
+            'name'     => $params['fullname'],
+            'email'    => $params['email'],
+            'password' => Hash::make($password),            
+        ];
+        $users = $this->user_factory->create($data_users);
+        if(!empty($users)) {
+            $data_email = [
+                'name'     => $params['fullname'],
+                'email'    => $params['email'],
+                'password' => $password,
+                'url'      => config('app.url') . '/login',
+            ];
+            $this->send_mail($data_email);
+        }
         return $params;
     }
 
