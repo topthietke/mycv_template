@@ -2,8 +2,11 @@
 
 namespace App\Services\Candidate;
 
+use App\Events\CandidateCreatedEvent;
+use App\Events\SendMailEvent;
 use App\Repository\CandidateRepository;
 use App\Helpers\Helpers;
+use App\Repository\AuthRepository;
 use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
@@ -12,15 +15,15 @@ class CandidateService
 {    
     use Helpers;
     protected $candidate_repository;
-    protected $user_factory;
+    protected $auth_repository;
 
     public function __construct(
         CandidateRepository $candidate_repository,
-        UserFactory $user_factory
+        AuthRepository $auth_repository        
     )
     {
         $this->candidate_repository = $candidate_repository;
-        $this->user_factory         = $user_factory;
+        $this->auth_repository      = $auth_repository;
     }
 
     public function index($params)
@@ -34,23 +37,28 @@ class CandidateService
     }
 
     public function create($data) {
-        $params = $this->candidate_repository->create($data);        
-        $password = Str::random(16);        
-        $data_users = [
-            'name'     => $params['fullname'],
-            'email'    => $params['email'],
-            'password' => Hash::make($password),            
-        ];
-        $users = $this->user_factory->create($data_users);
-        if(!empty($users)) {
-            $data_email = [
-                'name'     => $params['fullname'],
-                'email'    => $params['email'],
-                'password' => $password,
-                'url'      => config('app.url') . '/login',
-            ];
-            $this->send_mail($data_email);
+        $params = $this->candidate_repository->create($data);
+        $params['password'] = $password = Str::random(16);
+        CandidateCreatedEvent::dispatch($params);
+        $c_user = $this->auth_repository->countByConditions(['email' => $params['email']]);               
+        if ($c_user) {            
+            event(new SendMailEvent(
+                $params['email'],
+                $params['fullname'],
+                $password ?? '',
+                $params['url'] ?? config('app.url') . '/login',
+            ));
         }
+        // if(!empty($c_user)) {
+        //     $data_email = [
+        //         'name'     => $params['fullname'],
+        //         'email'    => $params['email'],
+        //         'password' => $password,
+        //         'url'      => config('app.url') . '/login',
+        //     ];
+        //     $this->send_mail($data_email);
+        // }
+
         return $params;
     }
 

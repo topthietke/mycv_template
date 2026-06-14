@@ -5,11 +5,13 @@ namespace App\Helpers;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Log;
 
-trait Helpers {
+trait Helpers
+{
     /**
      * Tạo slug từ tiếng Việt có dấu.
      */
-    public function slug($string) {
+    public function slug($string)
+    {
         $search = [
             '#(à|á|ạ|ả|ã|â|ầ|ấ|ậ|ẩ|ẫ|ă|ằ|ắ|ặ|ẳ|ẵ)#',
             '#(è|é|ẹ|ẻ|ẽ|ê|ề|ế|ệ|ể|ễ)#',
@@ -28,8 +30,20 @@ trait Helpers {
             "/[^a-zA-Z0-9\-\_]/",
         ];
         $replace = [
-            'a', 'e', 'i', 'o', 'u', 'y', 'd',
-            'A', 'E', 'I', 'O', 'U', 'Y', 'D',
+            'a',
+            'e',
+            'i',
+            'o',
+            'u',
+            'y',
+            'd',
+            'A',
+            'E',
+            'I',
+            'O',
+            'U',
+            'Y',
+            'D',
             '-',
         ];
         $string = preg_replace($search, $replace, $string);
@@ -40,11 +54,11 @@ trait Helpers {
     /**
      * Gửi email thông tin tài khoản.
      */
-    public function send_mail($params): bool {
-        $email = $params['email'] ?? '';
-        $name  = $params['name'] ?? '';
-
+    public function send_mail($params): bool
+    {
         try {
+            $email = $params['email'] ?? '';
+            $name  = $params['name'] ?? '';
             $data  = [
                 'email'    => $email,
                 'name'     => $name,

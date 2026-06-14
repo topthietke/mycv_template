@@ -96,4 +96,12 @@ class AuthRepository {
             ];
         }
     }
+    public function findByConditions($params){
+        return $this->user->findByConditions($params);
+    }
+
+    public function countByConditions($params){
+        return $this->user->countByConditions($params);
+    }
+    
 }

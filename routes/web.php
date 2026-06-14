@@ -25,3 +25,11 @@ Route::get('/forgot-password', [LoginController::class, 'forgot_password'])->nam
 // Route::resource('/candidate', CandidateController::class);
 // Route::resource('/categories', CategoriesController::class);
 // Route::resource('/contents', ContentsController::class);
+
+Route::get('/run-queue', function () {
+    Artisan::call('queue:work', [
+        '--once' => true,
+        '--queue' => 'default',
+    ]);
+    return 'Queue job processed';
+});
