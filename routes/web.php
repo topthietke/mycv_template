@@ -26,10 +26,22 @@ Route::get('/forgot-password', [LoginController::class, 'forgot_password'])->nam
 // Route::resource('/categories', CategoriesController::class);
 // Route::resource('/contents', ContentsController::class);
 
-Route::get('/run-queue', function () {
-    Artisan::call('queue:work', [
-        '--once' => true,
-        '--queue' => 'default',
+// Route::get('/start-queue', function () {
+//     // Chạy lệnh background bằng phương thức start()
+//     $process = Process::start('php artisan queue:work > /dev/null 2>&1');
+
+//     return response()->json([
+//         'message' => 'Queue worker đã được kích hoạt ngầm!',
+//         'process_id' => $process->id()
+//     ]);
+// });
+
+
+Route::get('/start-queue', function () {
+    // Thực thi lệnh shell thuần
+    shell_exec('nohup php artisan queue:work > /dev/null 2>&1 &');
+
+    return response()->json([
+        'message' => 'Lệnh đã được gửi đến hệ thống.'
     ]);
-    return 'Queue job processed';
 });

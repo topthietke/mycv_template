@@ -6,13 +6,13 @@ use App\Events\CandidateCreatedEvent;
 use App\Events\SendMailEvent;
 use App\Repository\CandidateRepository;
 use App\Helpers\Helpers;
+use App\Jobs\SendAccountInfoMailJob;
 use App\Repository\AuthRepository;
 use Database\Factories\UserFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-class CandidateService
-{    
+class CandidateService {    
     use Helpers;
     protected $candidate_repository;
     protected $auth_repository;
@@ -41,24 +41,17 @@ class CandidateService
         $params['password'] = $password = Str::random(16);
         CandidateCreatedEvent::dispatch($params);
         $c_user = $this->auth_repository->countByConditions(['email' => $params['email']]);               
-        if ($c_user) {            
-            event(new SendMailEvent(
-                $params['email'],
-                $params['fullname'],
-                $password ?? '',
-                $params['url'] ?? config('app.url') . '/login',
-            ));
+        
+        if(!empty($c_user)) {
+            $data_email = [
+                'name'     => $params['fullname'],
+                'email'    => $params['email'],
+                'password' => $password,
+                'url'      => config('app.url') . '/login',
+            ];
+            // $this->send_mail($data_email);
+            SendAccountInfoMailJob::dispatch($data_email);    
         }
-        // if(!empty($c_user)) {
-        //     $data_email = [
-        //         'name'     => $params['fullname'],
-        //         'email'    => $params['email'],
-        //         'password' => $password,
-        //         'url'      => config('app.url') . '/login',
-        //     ];
-        //     $this->send_mail($data_email);
-        // }
-
         return $params;
     }
 
