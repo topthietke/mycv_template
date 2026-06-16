@@ -142,15 +142,15 @@ $(document).ready(function () {
 
 // ========================================== Bổ sung thêm input danh mục ==========================================
 document.addEventListener('DOMContentLoaded', function () {
-    const categoryFields = document.getElementById('category_fields');
-    const categoryList = document.getElementById('category_list');
-    const addBtn = document.getElementById('addCategoryFieldBtn');
+    const categoryFields  = document.getElementById('category_fields');
+    const categoryList    = document.getElementById('category_list');
+    const addBtn          = document.getElementById('addCategoryFieldBtn');
     const saveCategoryBtn = document.getElementById('saveCategoryBtn');
-    const categoriesForm = document.getElementById('categories_form');
+    const categoriesForm  = document.getElementById('categories_form');
 
     // Lấy instance của Bootstrap Modal để đóng sau khi lưu thành công
     const categoryModalEl = document.getElementById('categoryModal');
-    const categoryModal = bootstrap.Modal.getOrCreateInstance(categoryModalEl);
+    const categoryModal   = bootstrap.Modal.getOrCreateInstance(categoryModalEl);
 
 
     // Lắng nghe sự kiện click vào nút Thêm (+)
@@ -263,12 +263,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
                 htmlContent += '</div>';
 
-                // 2. Kiểm tra nếu giao diện đang hiện chữ "Không có dữ liệu" thì xóa trắng trước khi chèn
-                if (categoryList.innerHTML.includes('Không có dữ liệu')) {
-                    categoryList.innerHTML = '';
-                    categoryList.classList.remove('text-center'); // Bỏ căn giữa text để hiển thị lưới thẻ đều nhau
-                }
-
+                // 2. Kiểm tra nếu giao diện đang hiện thông báo trống thì xóa trắng trước khi chèn
+                // if (categoryList.innerHTML.includes('Không có dữ liệu') || 
+                //     categoryList.innerHTML.includes('Không có danh mục nào! Vui lòng thêm mới danh mục trước khi thực hiện')) {
+                //     categoryList.innerHTML = '';
+                //     categoryList.classList.remove('text-center'); // Bỏ căn giữa text để hiển thị lưới thẻ đều nhau
+                // }
+                categoryList.innerHTML = '';
                 // 3. Append (chèn) dữ liệu vào thẻ #category_list ở file chính
                 categoryList.insertAdjacentHTML('beforeend', htmlContent);
 
@@ -294,7 +295,6 @@ document.addEventListener('DOMContentLoaded', function () {
             saveCategoryBtn.innerText = 'Thêm mới';
         }
     });
-
 
     // Thực hiện bước số 3
     const categoryForm = document.getElementById('categoryForm');
@@ -503,8 +503,8 @@ document.addEventListener('DOMContentLoaded', function () {
         if (!container) return;
 
         // Xóa sạch nội dung cũ trước khi render mới
-        container.innerHTML = '';
-
+        // container.innerHTML = '';
+        container.append = '';
         // Duyệt qua từng danh mục người dùng đã chọn để sinh HTML
         categories.forEach(cat => {
             const sectionHtml = `<div class="form-section mb-4" data-category-id="${cat.id}">
@@ -600,4 +600,3 @@ document.getElementById('detailsForm').addEventListener('submit', async function
         submitBtn.innerHTML = '<i class="fas fa-check-circle me-1"></i> Kết thúc';
     }
 });
-

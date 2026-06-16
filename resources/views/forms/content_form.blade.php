@@ -1,8 +1,7 @@
 <form id="detailsForm" class="step-form">
     <div class="mb-4">
         <h4 class="fw-bold mb-2">Bước 3: Nhập thông tin chi tiết</h4>
-        <p class="text-muted" style="font-size: 15px;">Vui lòng hoàn thiện nội dung cho các phần danh mục bạn vừa lựa
-            chọn.</p>
+        <p class="text-muted" style="font-size: 15px;">Vui lòng hoàn thiện nội dung cho các phần danh mục bạn vừa lựa chọn.</p>
     </div>
 
     <div id="dynamic-categories-container"></div>
