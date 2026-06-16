@@ -1,5 +1,5 @@
 <?php
-// use App\Http\Controllers\LoginController;
+
 use App\Http\Controllers\Web\LoginController;
 use App\Http\Controllers\Web\HomeController;
 use Illuminate\Support\Facades\Route;
@@ -35,13 +35,3 @@ Route::get('/forgot-password', [LoginController::class, 'forgot_password'])->nam
 //         'process_id' => $process->id()
 //     ]);
 // });
-
-
-Route::get('/start-queue', function () {
-    // Thực thi lệnh shell thuần
-    shell_exec('nohup php artisan queue:work > /dev/null 2>&1 &');
-
-    return response()->json([
-        'message' => 'Lệnh đã được gửi đến hệ thống.'
-    ]);
-});
