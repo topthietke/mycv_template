@@ -17,7 +17,7 @@ function goToStep(step) {
         $('#categoryForm').addClass('active');
         $('#indicator-1').addClass('completed');
         $('#indicator-2').addClass('active');
-        $('#progress-line').css('width', '70%');
+        $('#progress-line').css('width', '80%');
     } else if (step === 3) {
         $('#detailsForm').addClass('active');
         $('#indicator-1').addClass('completed');
@@ -72,7 +72,7 @@ $(document).ready(function () {
 
         // Gom dữ liệu form (hỗ trợ cả file avatar)
         let formData = new FormData(this);
-        
+
         $.ajax({
             url: API_URL.candidate,
             type: 'POST',
@@ -142,15 +142,15 @@ $(document).ready(function () {
 
 // ========================================== Bổ sung thêm input danh mục ==========================================
 document.addEventListener('DOMContentLoaded', function () {
-    const categoryFields  = document.getElementById('category_fields');
-    const categoryList    = document.getElementById('category_list');
-    const addBtn          = document.getElementById('addCategoryFieldBtn');
+    const categoryFields = document.getElementById('category_fields');
+    const categoryList = document.getElementById('category_list');
+    const addBtn = document.getElementById('addCategoryFieldBtn');
     const saveCategoryBtn = document.getElementById('saveCategoryBtn');
-    const categoriesForm  = document.getElementById('categories_form');
+    const categoriesForm = document.getElementById('categories_form');
 
     // Lấy instance của Bootstrap Modal để đóng sau khi lưu thành công
     const categoryModalEl = document.getElementById('categoryModal');
-    const categoryModal   = bootstrap.Modal.getOrCreateInstance(categoryModalEl);
+    const categoryModal = bootstrap.Modal.getOrCreateInstance(categoryModalEl);
 
 
     // Lắng nghe sự kiện click vào nút Thêm (+)
@@ -502,21 +502,53 @@ document.addEventListener('DOMContentLoaded', function () {
         const container = document.getElementById('dynamic-categories-container');
         if (!container) return;
 
-        // Xóa sạch nội dung cũ trước khi render mới
-        // container.innerHTML = '';
-        container.append = '';
+        container.innerHTML = '';
+        // Chèn CSS trực tiếp để đảm bảo hiển thị đúng giao diện header
+        const styleHtml = `
+            <style>
+            .line-glow {height: 2px; background: linear-gradient(90deg, #3b82f6, transparent);flex-grow: 1;margin-left: -1rem; z-index: -1;}        
+            .heading-modern-3 {background: linear-gradient(90deg, #4f46e5, #06b6d4); border-radius: 30px 0px 30px 0px; padding: 0.625rem 2rem; color: white; font-weight: 700; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(165, 180, 252, 0.4), 0 2px 4px -1px rgba(165, 180, 252, 0.4);}
+            </style>`;
+        container.insertAdjacentHTML('beforeend', styleHtml);
+
         // Duyệt qua từng danh mục người dùng đã chọn để sinh HTML
         categories.forEach(cat => {
-            const sectionHtml = `<div class="form-section mb-4" data-category-id="${cat.id}">
-                    <div class="section-title fw-bold mb-2 text-primary">
-                        ${cat.name}
+            // form-section mb-4
+            const editorId = `editor-${cat.id}`;
+            const sectionHtml = `<div class="mb-4" data-category-id="${cat.id}">
+                <div class="mx-auto d-flex flex-column justify-content-center">
+                    <div class="d-flex align-items-center w-100">
+                        <div class="heading-modern-3">
+                            ✦ ${cat.name}
+                        </div>
+                        <div class="line-glow"></div>
                     </div>
-                    <div class="mb-2">                        
-                        <textarea class="form-control experiences" name="category_details[${cat.id}]" rows="4" 
-                        placeholder="Vui lòng nhập nội dung cho danh mục ${cat.name}..." required></textarea>
-                    </div>
+                </div>
+                
+                <div class="my-4">                        
+                    <textarea class="form-control experiences" name="category_details[${cat.id}]" rows="4" id="${editorId}" placeholder="Vui lòng nhập nội dung cho danh mục ${cat.name}..."></textarea>
+                </div>
                 </div>`;
             container.insertAdjacentHTML('beforeend', sectionHtml);
+
+            // Khởi tạo CKEditor 5 cho textarea vừa render
+            if (typeof ClassicEditor !== 'undefined') {
+                ClassicEditor
+                    .create(document.querySelector(`#${editorId}`), {
+                        placeholder: `Vui lòng nhập nội dung cho danh mục ${cat.name}...`
+                    })
+                    .then(editor => {
+                        // Thiết lập chiều cao tối thiểu cho vùng soạn thảo (ví dụ 300px)
+                        editor.editing.view.change(writer => {
+                            writer.setStyle('min-height', '300px', editor.editing.view.document.getRoot());
+                        });
+                        // Lưu instance vào element để truy xuất dữ liệu khi submit
+                        document.querySelector(`#${editorId}`).ckeditorInstance = editor;
+                    })
+                    .catch(error => {
+                        console.error('Có lỗi xảy ra khi khởi tạo CKEditor:', error);
+                    });
+            }
         });
     }
 
@@ -539,13 +571,20 @@ document.getElementById('detailsForm').addEventListener('submit', async function
     sections.forEach(section => {
         const categoryId = section.getAttribute('data-category-id');
         const textarea = section.querySelector('textarea.experiences');
-        const content = textarea.value.trim();
-        const categoryName = section.querySelector('.section-title').textContent.trim();
+
+        // Lấy nội dung từ CKEditor instance nếu có, ngược lại lấy từ value gốc
+        const content = textarea.ckeditorInstance ? textarea.ckeditorInstance.getData().trim() : textarea.value.trim();
+
+        const categoryName = section.querySelector('.section-label').textContent.trim();
 
         // Kiểm tra nếu nội dung trống
         if (!content) {
             alert(`Vui lòng nhập nội dung cho danh mục: ${categoryName}`);
-            textarea.focus();
+            if (textarea.ckeditorInstance) {
+                textarea.ckeditorInstance.editing.view.focus();
+            } else {
+                textarea.focus();
+            }
             isValid = false;
             return; // Thoát vòng lặp forEach này
         }

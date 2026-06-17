@@ -30,6 +30,7 @@ body {
   border-radius: 12px;
   padding: 40px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+  width: 1024px;
 }
 
 /* Nút quay lại góc trên phải */
@@ -312,3 +313,6 @@ body {
     padding-bottom: 20px;
     padding-top: 10px;
 }
+
+/* ================================================================ title csss =============================================================================== */
+  

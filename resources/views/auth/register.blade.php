@@ -7,13 +7,11 @@
     <title>Đăng ký tài khoản</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="{{ asset('/assets/css/style.css') }}">
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@6/tinymce.min.js" referrerpolicy="origin"></script>
-    <script src="/assets/js/init.js"></script>
+    <link rel="stylesheet" href="{{ asset('/assets/css/style.css') }}">        
+   
 </head>
 
 <body>
-
     <div class="container">
         <div class="form-container">
             <div class="row">
@@ -58,6 +56,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.8/js/bootstrap.min.js" integrity="sha512-nKXmKvJyiGQy343jatQlzDprflyB5c+tKCzGP3Uq67v+lmzfnZUi/ZT+fc6ITZfSC5HhaBKUIvr/nTLCV+7F+Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@ckeditor/ckeditor5-build-classic@41.4.2/build/ckeditor.js"></script>    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script type="module" src="/assets/js/register.js"></script>
 
