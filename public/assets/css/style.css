@@ -136,7 +136,7 @@ body {
 /* Custom Inputs */
 .form-label {
   font-weight: 500;
-  font-size: 14px;
+  font-size: 17px;
   color: #495057;
   margin-bottom: 6px;
 }
@@ -315,4 +315,4 @@ body {
 }
 
 /* ================================================================ title csss =============================================================================== */
-  
+.dot, ._dot {height: 1px;background: linear-gradient(90deg, #0317c9, transparent);}

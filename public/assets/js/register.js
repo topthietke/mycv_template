@@ -506,8 +506,8 @@ document.addEventListener('DOMContentLoaded', function () {
         // Chèn CSS trực tiếp để đảm bảo hiển thị đúng giao diện header
         const styleHtml = `
             <style>
-            .line-glow {height: 2px; background: linear-gradient(90deg, #3b82f6, transparent);flex-grow: 1;margin-left: -1rem; z-index: -1;}        
-            .heading-modern-3 {background: linear-gradient(90deg, #4f46e5, #06b6d4); border-radius: 30px 0px 30px 0px; padding: 0.625rem 2rem; color: white; font-weight: 700; flex-shrink: 0; box-shadow: 0 4px 6px -1px rgba(165, 180, 252, 0.4), 0 2px 4px -1px rgba(165, 180, 252, 0.4);}
+                .slanted-bar {background: #000;color: #fff;font-weight: 700;padding: 10px 55px 10px 20px;display: inline-block;clip-path: polygon(0 0, calc(100% - 35px) 0, 100% 100%, 0 100%); border-top-left-radius: 8px;}
+                .dot {height: 2px;background: linear-gradient(90deg, #000, transparent);}
             </style>`;
         container.insertAdjacentHTML('beforeend', styleHtml);
 
@@ -516,15 +516,8 @@ document.addEventListener('DOMContentLoaded', function () {
             // form-section mb-4
             const editorId = `editor-${cat.id}`;
             const sectionHtml = `<div class="mb-4" data-category-id="${cat.id}">
-                <div class="mx-auto d-flex flex-column justify-content-center">
-                    <div class="d-flex align-items-center w-100">
-                        <div class="heading-modern-3">
-                            ✦ ${cat.name}
-                        </div>
-                        <div class="line-glow"></div>
-                    </div>
-                </div>
-                
+                <div class="slanted-bar" style="border-bottom: 1px solid #000;">${cat.name}</div>
+                <div class="dot"></div>                
                 <div class="my-4">                        
                     <textarea class="form-control experiences" name="category_details[${cat.id}]" rows="4" id="${editorId}" placeholder="Vui lòng nhập nội dung cho danh mục ${cat.name}..."></textarea>
                 </div>
@@ -533,10 +526,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Khởi tạo CKEditor 5 cho textarea vừa render
             if (typeof ClassicEditor !== 'undefined') {
-                ClassicEditor
-                    .create(document.querySelector(`#${editorId}`), {
-                        placeholder: `Vui lòng nhập nội dung cho danh mục ${cat.name}...`
-                    })
+                ClassicEditor.create(document.querySelector(`#${editorId}`), { placeholder: `Vui lòng nhập nội dung cho danh mục ${cat.name}...` })
                     .then(editor => {
                         // Thiết lập chiều cao tối thiểu cho vùng soạn thảo (ví dụ 300px)
                         editor.editing.view.change(writer => {
@@ -558,7 +548,6 @@ document.addEventListener('DOMContentLoaded', function () {
 document.getElementById('detailsForm').addEventListener('submit', async function (event) {
     // Ngăn chặn hành động submit mặc định của form
     event.preventDefault();
-
     // 1. Lấy tất cả các form-section chứa dữ liệu danh mục
     const sections = document.querySelectorAll('#dynamic-categories-container .form-section');
     let isValid = true;

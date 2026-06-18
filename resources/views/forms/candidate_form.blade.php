@@ -3,8 +3,14 @@
 ?>
 <form id="candidateForm" class="step-form active" enctype="multipart/form-data">
     @csrf
-    <h5 class="mb-2 fw-bold">Bước 1: Thông tin cá nhân</h5>
-    <hr class="text-muted">
+    <div class="row">
+        <div class="col-lg-12">
+            <h5 class="mb-2 fw-bold">Bước 1: Thông tin cá nhân</h5>
+        </div>
+    </div>
+    
+    <div class="dot my-4"></div>
+
     {{-- ================================ Nhập Họ và tên, Ngày sinh =============================== --}}
     <div class="row g-4">
         {{-- Họ và tên --}}
@@ -79,25 +85,22 @@
             <x-file name="avatar" class="form-control" accept="image/*" label="Ảnh đại diện (Avatar)" />
         </div>
         <div class="col-md-6">
-            <x-input type="text" name="facebook_url" class="form-control" placeholder="Nhập địa chỉ facebook"
-                label="Địa chỉ Facebook" />
+            <x-input type="text" name="facebook_url" class="form-control" placeholder="Nhập địa chỉ facebook" label="Địa chỉ Facebook" />
         </div>
     </div>
     {{-- ================================ Ảnh đại diện và địa chỉ facebook =============================================
     --}}
     <div class="row g-4">
         <div class="col-md-6">
-            <x-input type="text" name="git_url" class="form-control" placeholder="Nhập địa chỉ GitHub/ GitLab"
-                label="Địa chỉ GitHub/ GitLab" />
+            <x-input type="text" name="git_url" class="form-control" placeholder="Nhập địa chỉ GitHub/ GitLab"    label="Địa chỉ GitHub/ GitLab" />
         </div>
         <div class="col-md-6">
-            <x-input type="text" name="website_url" class="form-control" placeholder="Nhập địa chỉ website"
-                label="Địa chỉ Website" />
+            <x-input type="text" name="website_url" class="form-control" placeholder="Nhập địa chỉ website" label="Địa chỉ Website" />
         </div>
     </div>
     {{-- ================================ Nút submit ============================================= --}}
-    {{-- <hr class="mt-5 mb-4 text-muted"> --}}
-    <div class="d-flex justify-content-end">
+    <div class="dot my-3"></div>
+    <div class="d-flex justify-content-end my-3">
         <x-button type="submit" class="btn btn-next"> Tiếp theo <i class="fas fa-arrow-right ms-2"></i></x-button>
     </div>
 </form>
