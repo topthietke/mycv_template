@@ -1,0 +1,384 @@
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --black: #111111;
+    --white: #ffffff;
+    --light-gray: #f5f5f5;
+    --mid-gray: #888;
+    --text: #222;
+    --accent: #111;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: #e8e8e8;
+    color: var(--text);
+    font-size: 13.5px;
+    line-height: 1.6;
+}
+
+/* ── DOWNLOAD BAR ── */
+#dl-bar {
+    position: fixed;
+    top: 18px;
+    right: 24px;
+    z-index: 9999;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+#dl-pdf-btn {
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 10px 22px;
+    font-family: 'Inter', sans-serif;
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    box-shadow: 0 2px 16px rgba(0, 0, 0, 0.32);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: background 0.18s, transform 0.12s;
+    min-width: 170px;
+    justify-content: center;
+}
+
+#dl-pdf-btn:hover:not(:disabled) {
+    background: #333;
+    transform: translateY(-1px);
+}
+
+#dl-pdf-btn:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+
+/* Progress bar inside button */
+#dl-progress {
+    display: none;
+    height: 3px;
+    background: rgba(255, 255, 255, 0.25);
+    border-radius: 0 0 6px 6px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    overflow: hidden;
+}
+
+#dl-progress-fill {
+    height: 100%;
+    background: #fff;
+    width: 0%;
+    transition: width 0.3s ease;
+}
+
+.cv-page {
+    width:920px;
+    margin: 30px auto;
+    background: #fff;
+    box-shadow: 0 4px 32px rgba(0, 0, 0, 0.18);
+    padding: 0 0 40px 0;
+    position: relative;
+}
+
+/* ─── HEADER ─── */
+.cv-header {
+    display: flex;
+    align-items: stretch;
+    min-height: 140px;
+}
+
+.cv-header__photo {
+    width: 150px;
+    min-width: 150px;
+    overflow: hidden;
+    background: #ccc;
+}
+
+.cv-header__photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top center;
+    display: block;
+}
+
+.cv-header__info {
+    flex: 1;
+    padding: 20px 28px 16px 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.cv-header__name {
+    font-family: 'Inter', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--black);
+    line-height: 1.15;
+}
+
+.cv-header__title {
+    font-size: 13px;
+    color: var(--mid-gray);
+    letter-spacing: 1px;
+    margin-top: 2px;
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+
+.cv-header__divider {
+    width: 100%;
+    height: 1px;
+    background: #ccc;
+    margin-bottom: 10px;
+}
+
+.cv-header__contacts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 18px;
+    font-size: 12px;
+    color: #444;
+}
+
+.cv-header__contacts span {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+
+    line-height: 2.2;
+
+}
+
+.cv-header__contacts svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+    fill: #555;
+}
+
+/* ─── BODY ─── */
+.cv-body {
+    padding: 22px 36px 0 36px;
+}
+
+/* ─── INTRO ─── */
+.cv-intro {
+    margin-bottom: 22px;
+    text-align: justify;
+    line-height: 2.2;
+      
+}
+
+.cv-intro__title {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--black);
+    margin-bottom: 6px;
+}
+
+.cv-intro__text {
+    font-size: 13px;
+    color: #333;
+    line-height: 2.2;
+
+}
+
+/* ─── SECTION HEADER ─── */
+.cv-section {
+    margin-bottom: 20px;
+}
+
+.cv-section__header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 14px;
+}
+
+.cv-section__label {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Inter', sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 5px 18px 5px 12px;
+    clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 50%, calc(100% - 10px) 100%, 0 100%);
+    white-space: nowrap;
+    letter-spacing: 0.5px;
+
+    /* border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px; */
+    border-radius: 5px;
+}
+
+.cv-section__line {
+    flex: 1;
+    height: 1px;
+    background: #000;
+    margin-left: 0;
+}
+
+/* ─── ENTRY ─── */
+.cv-entry {
+    margin-bottom: 16px;
+}
+
+.cv-entry__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 8px;
+}
+
+.cv-entry__school {
+    font-weight: 700;
+    font-size: 13.5px;
+    color: #111;
+}
+
+.cv-entry__degree {
+    font-weight: normal;
+    font-size: 13.5px;
+    color: #111;
+    text-align: right;
+}
+
+.cv-entry__date {
+    font-size: 12px;
+    color: #666;
+    white-space: nowrap;
+    text-align: right;
+    min-width: 110px;
+}
+
+.cv-entry__subtitle {
+    font-size: 12.5px;
+    color: #444;
+    margin-top: 2px;
+    /* font-style: italic; */
+    line-height: 2.2;
+}
+
+.cv-entry__bullets {
+    margin-top: 5px;
+    padding-left: 18px;
+    line-height: 2;
+    font-size:13.5px;
+    text-align: justify;
+}
+
+.cv-entry__bullets li {
+    font-size: 13.5px;
+    color: #000;
+    margin-bottom: 2px;
+    line-height: 2.2;
+    /* list-style-type: "- "; */
+}
+
+/* ─── SKILLS ─── */
+.cv-skills-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4px 20px;
+    font-size: 13px;
+    color: #333;
+}
+
+/* ─── REFERENCE ─── */
+.cv-reference {
+    font-size: 13px;
+    line-height: 1.7;
+    color: #333;
+}
+
+.cv-reference a {
+    color: #1a5fad;
+    text-decoration: underline;
+}
+
+/* ─── CERT ENTRY ─── */
+.cv-cert__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+}
+
+.cv-cert__name {
+    font-weight: 700;
+    font-size: 13.5px;
+    color: #111;
+}
+
+.cv-cert__date {
+    font-size: 12px;
+    color: #666;
+}
+
+.cv-cert__desc {
+    font-size: 12.5px;
+    color: #444;
+    margin-top: 2px;
+}
+
+/* ─── PAGE FOOTER ─── */
+.cv-page-num {
+    text-align: right;
+    font-size: 11.5px;
+    color: #aaa;
+    padding: 18px 36px 0 36px;
+}
+
+.cv-li_text {
+    text-align: justify;
+}
+
+.cv-entry__title {    
+    font-size: 13px;
+    font-weight: normal;
+}
+
+.lnk_project {
+    /* color: #000 !important; */
+    text-decoration: none;
+}
+
+/* ─── PRINT ─── */
+@media print {
+    body {
+        background: white;
+    }
+
+    .cv-page {
+        box-shadow: none;
+        margin: 0;
+    }
+
+    #dl-bar {
+        display: none !important;
+    }
+}
+
+@media (max-width: 760px) {
+    .cv-page {
+        width: 100%;
+        margin: 0;
+    }
+}

@@ -9,6 +9,8 @@ Route::get('/', function () {
     return view('auth.register');
 });
 
+Route::get('/home', [HomeController::class, 'index'])->name('register');
+
 Route::get('/register', [LoginController::class, 'form_register'])->name('register');
 Route::get('/login', [LoginController::class, 'form_login'])->name('login');
 Route::get('/forgot-password', [LoginController::class, 'forgot_password'])->name('forgot.password');

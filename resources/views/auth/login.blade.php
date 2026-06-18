@@ -13,7 +13,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
-
+{{-- onsubmit="return handleLogin(event)" --}}
 <body>
     <div class="container">
         <div class="row justify-content-center">
@@ -28,12 +28,9 @@
                         <p class="text-muted small">Vui lòng nhập thông tin để truy cập hệ thống</p>
                     </div>
 
-                    <form id="loginForm" novalidate onsubmit="return handleLogin(event)">
-                        <x-input name="email" type="email" label="Địa chỉ Email" placeholder="Email" required
-                            prefix='<i class="fa fa-user"></i>' />
-
-                        <x-input name="password" type="password" label="Mật khẩu" placeholder="Mật khẩu" required
-                            prefix='<i class="fa fa-lock"></i>'>
+                    <form id="loginForm" novalidate >
+                        <x-input name="email" type="email" label="Địa chỉ Email" placeholder="Email" required prefix='<i class="fa fa-user"></i>' />
+                        <x-input name="password" type="password" label="Mật khẩu" placeholder="Mật khẩu" required prefix='<i class="fa fa-lock"></i>'>
                             <x-slot:append>
                                 <x-button variant="light" class="input-group-text" type="button"
                                     onclick="togglePasswordVisibility()"
@@ -78,12 +75,12 @@
 
             if (passwordInput.type === "password") {
                 passwordInput.type = "text";
-                icon.classList.remove("bi-eye");
-                icon.classList.add("bi-eye-slash");
+                icon.classList.remove("fa-eye");
+                icon.classList.add("fa-eye-slash");
             } else {
                 passwordInput.type = "password";
-                icon.classList.remove("bi-eye-slash");
-                icon.classList.add("bi-eye");
+                icon.classList.remove("fa-eye-slash");
+                icon.classList.add("fa-eye");
             }
         }
 
