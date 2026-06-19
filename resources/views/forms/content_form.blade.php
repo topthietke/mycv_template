@@ -16,7 +16,7 @@
 </form>
 
 
-<script>
+{{-- <script>
     ClassicEditor
         .create(document.querySelector('.experiences'), {
             // Bạn có thể tùy chỉnh cấu hình tại đây (Xem mục 3)
@@ -28,4 +28,4 @@
         .catch(error => {
             console.error('Có lỗi xảy ra khi khởi tạo editor:', error);
         });
-</script>
+</script> --}}

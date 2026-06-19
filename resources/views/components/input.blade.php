@@ -52,7 +52,7 @@
                 {{ $required  ? 'required'  : '' }}
                 {{ $disabled  ? 'disabled'  : '' }}
                 {{ $readonly  ? 'readonly'  : '' }}
-                    {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($errorMsg ? ' is-invalid' : '')]) }}
+                {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($errorMsg ? ' is-invalid' : '')]) }}
             >
 
             @if ($suffix)
@@ -75,7 +75,7 @@
             name="{{ $name }}"
             value="{{ old($name, $value) }}"
             placeholder="{{ $placeholder }}"
-            {{ $required  ? 'required'  : '' }}
+            {{-- {{ $required  ? 'required'  : '' }} --}}
             {{ $disabled  ? 'disabled'  : '' }}
             {{ $readonly  ? 'readonly'  : '' }}
             {{ $attributes->merge(['class' => "form-control {$sizeClass}" . ($errorMsg ? ' is-invalid' : '')]) }}

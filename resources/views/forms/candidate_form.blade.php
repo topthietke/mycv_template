@@ -15,42 +15,38 @@
     <div class="row g-4">
         {{-- Họ và tên --}}
         <div class="col-md-6">
-            <x-input type="text" name="fullname" class="form-control" placeholder="Nhập họ và tên" label="Họ và tên" />
+            <x-input type="text" name="fullname" class="form-control" placeholder="Nhập họ và tên" label="Họ và tên" :required="true"/>
         </div>
         {{-- Ngày sinh --}}
         <div class="col-md-6">
-            <x-input type="date" name="birthday" class="form-control" label="Ngày sinh" />
+            <x-input type="date" name="birthday" class="form-control" label="Ngày sinh" :required="true"/>
         </div>
     </div>
     {{-- ================================ Nhập Giới thiệu và Email =============================== --}}
     <div class="row g-4">
         {{-- Giới tính --}}
         <div class="col-md-6">
-            <x-select name="gender" class="form-select" label="Giới tính" :options="$gender" />
+            <x-select name="gender" class="form-select" label="Giới tính" :options="$gender" :required="true"/>
         </div>
         {{-- Email --}}
         <div class="col-md-6">
-            <x-input type="email" name="email" class="form-control" placeholder="Nhập email" label="Email"
-                />
+            <x-input type="email" name="email" class="form-control" placeholder="Nhập email" label="Email" :required="true" />
         </div>
     </div>
     {{-- ================================ Nhập số điện thoại và vị trí ứng tuyển =============================== --}}
     <div class="row g-4">
         <div class="col-md-6">
-            <x-input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại"
-                label="Số điện thoại" />
+            <x-input type="text" name="phone" class="form-control" placeholder="Nhập số điện thoại" label="Số điện thoại" :required="true"/>
         </div>
 
         <div class="col-md-6">
-            <x-input type="text" name="position" class="form-control" placeholder="Nhập vị trí ứng tuyển"
-                label="Vị trí ứng tuyển" :required="false" />
+            <x-input type="text" name="position" class="form-control" placeholder="Nhập vị trí ứng tuyển" label="Vị trí ứng tuyển" :required="true" />
         </div>
     </div>
     {{-- ================================ Nhập Nhập số CMND/CCCD và ngày cấp =============================== --}}
     <div class="row g-4">
         <div class="col-md-6">
-            <x-input type="text" name="identity_card" class="form-control" placeholder="Nhập số CMND/CCCD"
-                label="Số CMND/CCCD" :required="false" />
+            <x-input type="text" name="identity_card" class="form-control" placeholder="Nhập số CMND/CCCD" label="Số CMND/CCCD"/>
         </div>
         <div class="col-md-6">
             <x-input type="date" name="identity_date" class="form-control" label="Ngày cấp" :required="false" />

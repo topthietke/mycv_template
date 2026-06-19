@@ -24,17 +24,15 @@
                     </div>
 
                     <div class="text-center mb-4">
-                        <h3 class="fw-bold mb-1">Đăng nhập tài khoản</h3>
+                        <h4 class="fw-bold mb-1">Đăng nhập tài khoản</h4>
                         <p class="text-muted small">Vui lòng nhập thông tin để truy cập hệ thống</p>
                     </div>
 
                     <form id="loginForm" novalidate >
-                        <x-input name="email" type="email" label="Địa chỉ Email" placeholder="Email" required prefix='<i class="fa fa-user"></i>' />
-                        <x-input name="password" type="password" label="Mật khẩu" placeholder="Mật khẩu" required prefix='<i class="fa fa-lock"></i>'>
+                        <x-input name="email" type="email" label="Địa chỉ Email" placeholder="Email" prefix='<i class="fa fa-user"></i>' :required="true"/>
+                        <x-input name="password" type="password" label="Mật khẩu" placeholder="Mật khẩu" :required="true" prefix='<i class="fa fa-lock"></i>'>
                             <x-slot:append>
-                                <x-button variant="light" class="input-group-text" type="button"
-                                    onclick="togglePasswordVisibility()"
-                                    style="border: 1px solid #ccc; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
+                                <x-button variant="light" class="input-group-text" type="button" onclick="togglePasswordVisibility()" style="border: 1px solid #ccc; border-top-right-radius: 5px; border-bottom-right-radius: 5px;">
                                     <i class="fa fa-eye" id="togglePasswordIcon"></i>
                                 </x-button>
                             </x-slot:append>
@@ -47,8 +45,7 @@
 
                         <div class="row">
                             <div class="col-lg-6 col-md-6">
-                                <x-button href="{{ route('register') }}" variant="success py-2 px-4"
-                                    icon="fa fa-long-arrow-left" class="back-to-login p-0 text-decoration-none">
+                                <x-button href="{{ route('auth.register') }}" variant="success py-2 px-4" icon="fa fa-long-arrow-left" class="back-to-login p-0 text-decoration-none">
                                     Đăng ký
                                 </x-button>
                             </div>

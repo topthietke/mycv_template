@@ -51,7 +51,7 @@
     <select
         id="{{ $id }}"
         name="{{ $multiple ? $name . '[]' : $name }}"
-        {{ $required  ? 'required'  : '' }}
+        {{-- {{ $required  ? 'required'  : '' }} --}}
         {{ $disabled  ? 'disabled'  : '' }}
         {{ $multiple  ? 'multiple'  : '' }}
         {{ $attributes->merge(['class' => "form-select {$sizeClass}" . ($errorMsg ? ' is-invalid' : '')]) }}

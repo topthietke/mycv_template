@@ -1,226 +1,196 @@
 import { API_URL } from "/assets/js/variableApi.js";
 import { msg_success, msg_error, ajax } from "/assets/js/function.js";
 
-const API_BASE_URL = API_URL.login;
+const API_LOGIN_URL = API_URL.login;
+const TOKEN_COOKIE_NAME = "auth_token";
+const HOME_ROUTE = "/"; // đổi thành route trang chủ thực tế nếu cần, vd: "/dashboard"
 
-// ─── Helpers ────────────────────────────────────────────────────────────────
+/* ============ Helpers: Cookie ============ */
 
 /**
- * Hiển thị thông báo lỗi dưới một input field
- * @param {string} fieldName - Tên field (email | password)
- * @param {string} message   - Nội dung lỗi
+ * Set cookie.
+ * @param {string} name
+ * @param {string} value
+ * @param {number} days - số ngày hết hạn. Nếu không truyền -> cookie theo phiên (session cookie).
  */
-function showFieldError(fieldName, message) {
-    const input = document.getElementById(fieldName);
-    if (!input) return;
-
-    input.classList.add('is-invalid');
-
-    // Xóa thông báo cũ nếu có
-    const existingFeedback = input.parentElement.querySelector('.invalid-feedback');
-    if (existingFeedback) existingFeedback.remove();
-
-    const feedback = document.createElement('div');
-    feedback.className = 'invalid-feedback';
-    feedback.textContent = message;
-    input.parentElement.appendChild(feedback);
+function setCookie(name, value, days) {
+    let expires = "";
+    if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+        expires = "; expires=" + date.toUTCString();
+    }
+    // SameSite=Lax để cookie vẫn gửi kèm khi điều hướng GET thông thường (vào trang chủ)
+    document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Lax`;
 }
 
-/**
- * Xóa tất cả lỗi trên form
- */
-function clearErrors() {
-    document.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
-    document.querySelectorAll('.invalid-feedback').forEach(el => el.remove());
-    const alertBox = document.getElementById('loginAlert');
-    if (alertBox) alertBox.remove();
+function getCookie(name) {
+    const match = document.cookie.match(
+        new RegExp("(^| )" + name + "=([^;]+)")
+    );
+    return match ? decodeURIComponent(match[2]) : null;
 }
 
-/**
- * Hiển thị alert lỗi chung phía trên form
- * @param {string} message
- */
-function showGlobalError(message) {
-    const form = document.getElementById('loginForm');
-    if (!form) return;
-
-    const existingAlert = document.getElementById('loginAlert');
-    if (existingAlert) existingAlert.remove();
-
-    const alert = document.createElement('div');
-    alert.id = 'loginAlert';
-    alert.className = 'alert alert-danger d-flex align-items-center gap-2 mb-3';
-    alert.setAttribute('role', 'alert');
-    alert.innerHTML = `<i class="fa fa-exclamation-circle"></i> <span>${message}</span>`;
-    form.prepend(alert);
+function deleteCookie(name) {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 
-/**
- * Bật / tắt trạng thái loading cho nút submit
- * @param {boolean} loading
- */
-function setLoading(loading) {
-    const btn = document.querySelector('#loginForm button[type="submit"]');
-    if (!btn) return;
+/* ============ Helpers: UI ============ */
 
-    if (loading) {
-        btn.disabled = true;
-        btn.dataset.originalHtml = btn.innerHTML;
-        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang đăng nhập...`;
+function showError(message) {
+    let alertBox = document.getElementById("loginAlert");
+
+    if (!alertBox) {
+        alertBox = document.createElement("div");
+        alertBox.id = "loginAlert";
+        alertBox.className = "alert alert-danger py-2 small mb-3";
+        alertBox.setAttribute("role", "alert");
+
+        const form = document.getElementById("loginForm");
+        form.parentNode.insertBefore(alertBox, form);
+    }
+
+    alertBox.textContent = message;
+    alertBox.classList.remove("d-none");
+}
+
+function hideError() {
+    const alertBox = document.getElementById("loginAlert");
+    if (alertBox) {
+        alertBox.classList.add("d-none");
+    }
+}
+
+function setLoadingState(isLoading) {
+    const submitBtn = document.querySelector(
+        '#loginForm button[type="submit"]'
+    );
+    if (!submitBtn) return;
+
+    if (isLoading) {
+        submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+        submitBtn.disabled = true;
+        submitBtn.innerHTML =
+            '<span class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>Đang đăng nhập...';
     } else {
-        btn.disabled = false;
-        if (btn.dataset.originalHtml) {
-            btn.innerHTML = btn.dataset.originalHtml;
+        submitBtn.disabled = false;
+        if (submitBtn.dataset.originalHtml) {
+            submitBtn.innerHTML = submitBtn.dataset.originalHtml;
         }
     }
 }
 
-// ─── Validate ────────────────────────────────────────────────────────────────
+/* ============ Validate ============ */
 
-/**
- * Validate phía client trước khi gọi API
- * @returns {boolean}
- */
 function validateForm(email, password) {
-    let valid = true;
-
     if (!email) {
-        showFieldError('email', 'Vui lòng nhập địa chỉ email.');
-        valid = false;
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        showFieldError('email', 'Địa chỉ email không hợp lệ.');
-        valid = false;
+        showError("Vui lòng nhập địa chỉ Email.");
+        return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showError("Địa chỉ Email không hợp lệ.");
+        return false;
     }
 
     if (!password) {
-        showFieldError('password', 'Vui lòng nhập mật khẩu.');
-        valid = false;
-    } else if (password.length < 6) {
-        showFieldError('password', 'Mật khẩu phải có ít nhất 6 ký tự.');
-        valid = false;
+        showError("Vui lòng nhập mật khẩu.");
+        return false;
     }
 
-    return valid;
+    return true;
 }
 
-// ─── API Call ─────────────────────────────────────────────────────────────────
-
-
-async function callLoginAPI(email, password) {
-    const response = await fetch(`${API_BASE_URL}`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-    });
-
-    
-    const data = await response.json();    
-    if (!response.ok) {
-        // Ném lỗi kèm data để xử lý validation errors từ server
-        const error = new Error(data.message || 'Đăng nhập thất bại.');
-        error.status = response.status;
-        error.data = data;
-        throw error;
-    }
-
-    return data;
-}
-
-// ─── Session / Token ──────────────────────────────────────────────────────────
-
-/**
- * Lưu thông tin đăng nhập vào storage
- * @param {Object} data   - Response từ API (chứa token, user, ...)
- * @param {boolean} remember - Có ghi nhớ không?
- */
-function saveSession(data, remember) {
-    console.log(9999, data);
-    return;
-    const storage = remember ? localStorage : sessionStorage;
-
-    if (data.token || data.access_token) {
-        storage.setItem('auth_token', data.token ?? data.access_token);
-    }
-
-    if (data.user) {
-        storage.setItem('auth_user', JSON.stringify(data.user));
-    }
-
-    // Nếu API trả về token_type (Bearer), lưu lại để dùng khi gọi API sau
-    if (data.token_type) {
-        storage.setItem('token_type', data.token_type);
-    }
-}
-
-// ─── Main Handler ─────────────────────────────────────────────────────────────
+/* ============ Submit Login ============ */
 
 async function handleLogin(event) {
-    alert(1111);
     event.preventDefault();
-    clearErrors();
+    hideError();
 
-    const email    = document.getElementById('email')?.value?.trim() ?? '';
-    const password = document.getElementById('password')?.value ?? '';
-    const remember = document.getElementById('rememberMe')?.checked ?? false;
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const rememberMeInput = document.getElementById("rememberMe");
 
-    // Client-side validation
-    if (!validateForm(email, password)) return;
+    const email = emailInput ? emailInput.value.trim() : "";
+    const password = passwordInput ? passwordInput.value : "";
+    const rememberMe = rememberMeInput ? rememberMeInput.checked : false;
 
-    setLoading(true);
+    if (!validateForm(email, password)) {
+        return false;
+    }
+
+    setLoadingState(true);
 
     try {
-        const data = await callLoginAPI(email, password);
+        const response = await fetch(API_LOGIN_URL, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+            },
+            body: JSON.stringify({ email, password }),
+        });
 
-        // Lưu session
-        saveSession(data, remember);
+        const data = await response.json().catch(() => ({}));
+        console.log(data);
+        return;
 
-        // Chuyển hướng sau khi đăng nhập thành công
-        // Ưu tiên: redirect từ query string → dashboard mặc định
-        const params   = new URLSearchParams(window.location.search);
-        const redirect = params.get('redirect') || data.redirect_url || '/home';
-        window.location.href = redirect;
 
-    } catch (error) {
-        console.error('[Login Error]', error);
-
-        if (error.status === 422 && error.data?.errors) {
-            // Validation errors từ Laravel (422 Unprocessable Entity)
-            const errors = error.data.errors;
-            Object.entries(errors).forEach(([field, messages]) => {
-                showFieldError(field, Array.isArray(messages) ? messages[0] : messages);
-            });
-        } else if (error.status === 401 || error.status === 403) {
-            showGlobalError('Email hoặc mật khẩu không đúng. Vui lòng thử lại.');
-        } else if (!navigator.onLine) {
-            showGlobalError('Không có kết nối mạng. Vui lòng kiểm tra lại.');
-        } else {
-            showGlobalError(error.message || 'Đã xảy ra lỗi. Vui lòng thử lại sau.');
+        if (!response.ok) {
+            const message =
+                data.message ||
+                (data.errors && Object.values(data.errors)[0]?.[0]) ||
+                "Email hoặc mật khẩu không chính xác.";
+            showError(message);
+            setLoadingState(false);
+            return false;
         }
-    } finally {
-        setLoading(false);
+
+        // Tùy backend trả về token ở data.token hoặc data.access_token
+        const token = data.token || data.access_token || data.data?.token;
+
+        if (!token) {
+            showError("Đăng nhập thất bại: không nhận được token từ máy chủ.");
+            setLoadingState(false);
+            return false;
+        }
+
+        // Ghi nhớ đăng nhập -> cookie sống 7 ngày, không thì cookie theo phiên trình duyệt
+        const cookieDays = rememberMe ? 7 : null;
+        setCookie(TOKEN_COOKIE_NAME, token, cookieDays);
+
+        // Lưu thêm vào sessionStorage để các script JS khác trong trang dùng cho Authorization header
+        sessionStorage.setItem(TOKEN_COOKIE_NAME, token);
+
+        if (data.user) {
+            sessionStorage.setItem("auth_user", JSON.stringify(data.user));
+        }
+
+        // Chuyển hướng về trang chủ, middleware server-side sẽ đọc cookie auth_token
+        window.location.href = HOME_ROUTE;
+    } catch (error) {
+        console.error("Lỗi đăng nhập:", error);
+        showError("Không thể kết nối tới máy chủ. Vui lòng thử lại sau.");
+        setLoadingState(false);
     }
+
+    return false;
 }
 
-// ─── Init ─────────────────────────────────────────────────────────────────────
+/* ============ Init ============ */
 
-document.addEventListener('DOMContentLoaded', () => {
-    const form = document.getElementById('loginForm');
+document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("loginForm");
     if (form) {
-        form.addEventListener('submit', handleLogin);
+        form.addEventListener("submit", handleLogin);
     }
 
-    // Xóa lỗi inline khi người dùng bắt đầu gõ lại
-    ['email', 'password'].forEach(id => {
-        const input = document.getElementById(id);
-        if (input) {
-            input.addEventListener('input', () => {
-                input.classList.remove('is-invalid');
-                const feedback = input.parentElement.querySelector('.invalid-feedback');
-                if (feedback) feedback.remove();
-            });
-        }
-    });
+    // Nếu đã có token hợp lệ sẵn trong cookie, có thể tự điều hướng về trang chủ
+    // (bỏ comment nếu muốn áp dụng)
+    // if (getCookie(TOKEN_COOKIE_NAME)) {
+    //     window.location.href = HOME_ROUTE;
+    // }
 });
+
+export { handleLogin, getCookie, deleteCookie };
