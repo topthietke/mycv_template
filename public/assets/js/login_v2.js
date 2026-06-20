@@ -12,7 +12,6 @@ const HOME_ROUTE = "/home"; // đổi thành route trang chủ thực tế nếu
  * @param {string} name
  * @param {string} value
  * @param {number} days - số ngày hết hạn. Nếu không truyền -> cookie theo phiên (session cookie).
- * @returns {boolean} true nếu cookie được ghi thành công (verify lại bằng getCookie).
  */
 function setCookie(name, value, days) {
     let expires = "";
@@ -21,17 +20,8 @@ function setCookie(name, value, days) {
         date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
         expires = "; expires=" + date.toUTCString();
     }
-
-    // Thêm Secure khi chạy HTTPS để cookie không bị gửi qua kênh không mã hoá.
-    // Không thêm khi đang chạy http://localhost (môi trường dev) vì sẽ khiến cookie bị từ chối.
-    const secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
-
     // SameSite=Lax để cookie vẫn gửi kèm khi điều hướng GET thông thường (vào trang chủ)
-    document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Lax${secureFlag}`;
-
-    // Verify: một số trình duyệt (chặn cookie, chế độ riêng tư nghiêm ngặt, extension...) có thể
-    // âm thầm không ghi được cookie. Đọc lại để chắc chắn việc lưu đã thành công.
-    return getCookie(name) === value;
+    document.cookie = `${name}=${encodeURIComponent(value)}${expires}; path=/; SameSite=Lax`;
 }
 
 function getCookie(name) {
@@ -42,8 +32,7 @@ function getCookie(name) {
 }
 
 function deleteCookie(name) {
-    const secureFlag = window.location.protocol === "https:" ? "; Secure" : "";
-    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; SameSite=Lax${secureFlag}`;
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 
 /* ============ Helpers: UI ============ */
@@ -150,52 +139,27 @@ async function handleLogin(event) {
             setLoadingState(false);
             return false;
         }
+                
         // Tùy backend trả về token ở data.token hoặc data.access_token
         const token = data.token || data.access_token || data.data?.token;
-
+        
+        
         if (!token) {
             showError("Đăng nhập thất bại: không nhận được token từ máy chủ.");
             setLoadingState(false);
             return false;
         }
 
+        
         // Ghi nhớ đăng nhập -> cookie sống 7 ngày, không thì cookie theo phiên trình duyệt
         const cookieDays = rememberMe ? 7 : null;
-        const cookieSaved = setCookie(TOKEN_COOKIE_NAME, token, cookieDays);
+        setCookie(TOKEN_COOKIE_NAME, token, cookieDays);
 
         // Lưu thêm vào sessionStorage để các script JS khác trong trang dùng cho Authorization header
-        let sessionSaved = true;
-        try {
-            sessionStorage.setItem(TOKEN_COOKIE_NAME, token);
-            sessionSaved = sessionStorage.getItem(TOKEN_COOKIE_NAME) === token;
-        } catch (storageError) {
-            // sessionStorage có thể bị chặn (chế độ ẩn danh nghiêm ngặt, cài đặt trình duyệt...)
-            console.error("Không thể ghi sessionStorage:", storageError);
-            sessionSaved = false;
-        }
-
-        // Middleware phía server (CheckAuthToken) đọc token từ cookie, nên cookie là bắt buộc.
-        // Nếu cookie không lưu được thì dừng lại và báo lỗi thay vì redirect vào trang sẽ bị
-        // middleware đá ngược về login (gây vòng lặp khó hiểu cho người dùng).
-        
-        if (!cookieSaved) {
-            showError("Đăng nhập thành công nhưng trình duyệt đã chặn việc lưu cookie. " + "Vui lòng kiểm tra cài đặt cookie/quyền riêng tư rồi thử lại.");
-            setLoadingState(false);
-            return false;
-        }
-
-        if (!sessionSaved) {
-            // Không chặn đăng nhập vì cookie (nguồn xác thực chính) đã lưu thành công,
-            // chỉ cảnh báo để biết các tính năng dùng sessionStorage có thể không hoạt động.
-            console.warn("Lưu ý: sessionStorage không khả dụng, một số tính năng JS phía client có thể bị ảnh hưởng.");
-        }
+        sessionStorage.setItem(TOKEN_COOKIE_NAME, token);
 
         if (data.user) {
-            try {
-                sessionStorage.setItem("auth_token", JSON.stringify(data.user));
-            } catch (storageError) {
-                console.error("Không thể ghi auth_token vào sessionStorage:", storageError);
-            }
+            sessionStorage.setItem("auth_user", JSON.stringify(data.user));
         }
 
         // Chuyển hướng về trang chủ, middleware server-side sẽ đọc cookie auth_token
@@ -217,11 +181,8 @@ document.addEventListener("DOMContentLoaded", () => {
         form.addEventListener("submit", handleLogin);
     }
 
-    // Nếu đã có cookie token (chưa chắc còn hợp lệ phía server) thì thử điều hướng về trang chủ.
-    // Đây chỉ là optimistic check phía client để tránh hiển thị lại form login không cần thiết;
-    // việc xác thực thật sự (token còn hạn/hợp lệ hay không) do middleware CheckAuthToken xử lý
-    // khi request tới /home — nếu token sai/hết hạn, middleware sẽ tự xoá cookie và redirect
-    // ngược lại route('login'), nên sẽ không gây vòng lặp vô hạn.
+    // Nếu đã có token hợp lệ sẵn trong cookie, có thể tự điều hướng về trang chủ
+    // (bỏ comment nếu muốn áp dụng)
     if (getCookie(TOKEN_COOKIE_NAME)) {
         window.location.href = HOME_ROUTE;
     }

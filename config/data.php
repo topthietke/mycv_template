@@ -1,9 +1,10 @@
 <?php 
     return [
-        "gender"  =>  [            
-            "0" => "Nữ",
-            "1" => "Nam",
-            "2" => "Khác"
+        "api_url" => env('API_URL'),
+        "gender"  => [            
+            "0"   => "Nữ",
+            "1"   => "Nam",
+            "2"   => "Khác"
         ],
         "activities_title"  => "Hoạt động",
         "company_name"      => "Tên công ty",
