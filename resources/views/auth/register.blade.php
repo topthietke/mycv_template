@@ -45,13 +45,13 @@
                 </div>
             </div>                       
              {{-- ================================ Bước 1: Thông tin cá nhân =============================== --}}
-             @include('forms.candidate_form')
+             @include('auth.forms.candidate_form')
              {{-- ================================ Bước 2: Chọn danh mục =============================== --}}
-             @include('forms.categories_form')
+             @include('auth.forms.categories_form')
              {{-- ================================ Bước 3: Nhập nội dung cho các mục đã chọn =============================== --}}
-             @include('forms.content_form')
+             @include('auth.forms.content_form')
              {{-- ================================ Modal thêm danh mục mới =============================== --}}
-             @include('forms.modal_add_categories')
+             @include('auth.forms.modal_add_categories')
              {{-- ================================ Các scripts cần thiết =============================== --}}
         </div>
     </div>

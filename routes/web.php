@@ -20,11 +20,14 @@ Route::middleware('guest')->group(function () {
     Route::post('/login', [LoginController::class, 'login'])->name('login.post');
     Route::post('/register', [LoginController::class, 'register']);
     Route::post('/forgot-password', [LoginController::class, 'forgotPassword']);
+
+
 });
 
 
 
 Route::middleware('check.login')->group(function () {
+    Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
 

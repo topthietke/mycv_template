@@ -29,9 +29,13 @@
         <div id="dl-progress-fill"></div>
       </div>
     </button>
-    <a href="edit.php" class="btn btn-primary">
+    <a href="#" class="btn btn-primary">
       <i class="fa fa-edit"></i>
       Chỉnh sửa
+    </a>
+    <a href="/logout" class="btn btn-primary">
+      <i class="fa fa-lock"></i>
+      Đăng xuất
     </a>
 
   </div>

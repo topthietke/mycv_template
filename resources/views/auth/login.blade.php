@@ -1,11 +1,3 @@
-<?php 
-  if(Auth::check()) {
-        return redirect()->route('home');
-    } else {
-        return redirect()->route('login');
-    }
-?>
-
 <!DOCTYPE html>
 <html lang="vi">
 
