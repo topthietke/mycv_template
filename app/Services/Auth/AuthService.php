@@ -23,7 +23,7 @@ class AuthService
      {
           // Check email
           $user = $this->user_repository->login($params);
-          if (!empty($user)) {
+          if (!empty($user)) {               
                $token = $user->createToken('auth_token')->plainTextToken;  // Trường hợp báo lỗi hàm này thì phải có HasApiTokens trong model  User   
                return [
                     "code"    => Response::HTTP_OK,

@@ -13,9 +13,9 @@ Route::get('/user', function (Request $request) {
     return $request->user();
 })->middleware('auth:sanctum');
 
-Route::post('/login', [LoginController::class, 'login']);
-Route::post('/register', [LoginController::class, 'register']);
-Route::post('/forgot-password', [LoginController::class, 'forgotPassword']);
+// Route::post('/login', [LoginController::class, 'login']);
+// Route::post('/register', [LoginController::class, 'register']);
+// Route::post('/forgot-password', [LoginController::class, 'forgotPassword']);
 
 Route::resource('/candidate', CandidateController::class);
 Route::resource('/categories', CategoriesController::class);

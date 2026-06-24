@@ -22,8 +22,10 @@ class LoginController extends Controller {
     }
 
     public function login(LoginRequest $request) {
-        $params = $request->all();
-        return $this->user_interface->login($params);
+        $params = $request->all();        
+        $login  = $this->user_interface->login($params);
+        $request->session()->regenerate();
+        return $login;
     }
 
     public function form_register() {
