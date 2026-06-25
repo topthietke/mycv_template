@@ -7,9 +7,12 @@ use Illuminate\Support\Facades\Log;
 
 trait Helpers
 {
-    /**
-     * Tạo slug từ tiếng Việt có dấu.
-     */
+    protected $POST = 'POST';
+    protected $GET  = 'GET';
+    protected $CONTENT_TYPE_JSON =  'application/json';
+    protected $CONTENT_TYPE_JS =  'application/javascript';
+    protected $CONTENT_MULTI_FORM_DATA = 'multipart/form-data';
+    protected $CONTENT_FORM_URLENCODED = 'application/x-www-form-urlencoded';
     public function slug($string)
     {
         $search = [
@@ -51,9 +54,6 @@ trait Helpers
         return strtolower($string);
     }
 
-    /**
-     * Gửi email thông tin tài khoản.
-     */
     public function send_mail($params): bool
     {
         try {
@@ -84,5 +84,45 @@ trait Helpers
 
             return false;
         }
+    }
+
+
+    public function apiBase($url, $method, $postData, $content_type)
+    {
+        $curl = curl_init();
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => $url,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,   // CURLOPT_TIMEOUT => 30 (Image upload may need)
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_CUSTOMREQUEST => $method,
+            CURLOPT_POSTFIELDS => $postData,
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type:' . $content_type,
+                'Access-Control-Allow-Origin: *',
+                'token:' . session('store.token'),
+            ),
+            // CURLOPT_SSL_VERIFYPEER => false, // Image upload may need
+        ));
+
+        $response = curl_exec($curl);        
+        curl_close($curl);
+        return $response;
+    }
+
+    public function data_get($url) {        
+        $response = $this->apiBase($url, $this->GET, null, $this->CONTENT_TYPE_JSON);
+        return $response;
+    }
+
+    public function data_post($url, $postData)
+    {
+        $response = $this->apiBase($url, $this->POST, $postData, $this->CONTENT_TYPE_JSON);
+        return $response;
     }
 }

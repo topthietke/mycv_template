@@ -8,6 +8,8 @@ use App\Http\Requests\Candidate\UpdateCandidateRequest;
 use App\Services\Candidate\CandidateService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Str;
+use Illuminate\Http\UploadedFile;
 
 class CandidateController extends Controller {
     protected $can_service;
@@ -15,13 +17,18 @@ class CandidateController extends Controller {
     public function __construct(CandidateService $can_service) {
         $this->can_service = $can_service;
     }
-    public function store(StoreCandidateRequest $request): JsonResponse {        
+    public function store(StoreCandidateRequest $request): JsonResponse {
         try {
-            $candidate = $this->can_service->create($request->validated());
+            $data = $request->validated();
+
+            if ($request->hasFile('avatar')) {
+                $data['avatar'] = $this->uploadAvatar($request->file('avatar'));
+            }            
+            $candidate = $this->can_service->create($data);
             return response()->json([
                 'success' => true,
                 'message' => 'Đăng ký tài khoản ứng viên thành công!',
-                'data' => $candidate
+                'data'    => $candidate
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
@@ -93,5 +100,26 @@ class CandidateController extends Controller {
                 'error' => $e->getMessage()
             ], 500);
         }
+    }
+
+
+    // =================================================== Upload file =====================================================
+    private function uploadAvatar(UploadedFile $file): string {
+        // 1. Lấy tên file gốc và extension (jpg, png...)
+        $originalName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        
+        $extension = $file->getClientOriginalExtension();
+
+        // 2. Slug lại tên file để tránh ký tự đặc biệt + thêm chuỗi ngẫu nhiên/thời gian để tránh trùng file
+        $safeName = Str::slug($originalName) . '-' . time() . '.' . $extension;
+
+        // 3. Định nghĩa thư mục đích trong public (public/img)
+        $destinationPath = public_path('assets/img');        
+
+        // 4. Di chuyển file từ thư mục tạm (/tmp) vào thư mục đích
+        $file->move($destinationPath, $safeName);
+
+        // 5. Trả về đường dẫn định dạng mong muốn
+        return '/assets/img/' . $safeName; // Return a relative path for storage
     }
 }

@@ -14,7 +14,7 @@ return new class extends Migration
        Schema::create('candidates', function (Blueprint $table) {
             $table->id();
             $table->string('fullname')->nullable(FALSE)->comment('Họ và tên');
-            $table->string('position')->nullable(FALSE)->comment('Vị trí ứng tuyển');
+            $table->string('position')->nullable(FALSE)->comment('Vị trí ứng tuyển');            
             $table->date('birthday')->nullable(FALSE)->comment('Ngày sinh');
             $table->string('gender')->nullable(FALSE)->comment('Giới tính');
             $table->string('email')->unique()->nullable(FALSE)->comment('Email');

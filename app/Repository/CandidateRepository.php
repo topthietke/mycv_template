@@ -17,21 +17,19 @@ class CandidateRepository {
                 $data = [
                     'code' => 200,
                     'message' => 'Tải danh sách ứng viên thành công',
-                    'personal' => $model
+                    'data' => $model
 
                 ];
             } else {
                 $data = [
                     'code' => 201,
-                    'message' => 'Tải danh sách ứng viên không thành công',
-                    'personal' => null
+                    'message' => 'Tải danh sách ứng viên không thành công',                    
                 ];
             }
         } catch (\Exception $e) {
             $data = [
                 'code' => 500,
-                'message' => $e->getMessage(),
-                'personal' => null
+                'message' => $e->getMessage(),                
             ];
         }
         return $data;
@@ -44,21 +42,19 @@ class CandidateRepository {
                 $data = [
                     'code' => 200,
                     'message' => 'Tải chi tiết ứng viên thành công',
-                    'personal' => $model
+                    'data' => $model
 
                 ];
             } else {
                 $data = [
                     'code' => 201,
-                    'message' => 'Tải chi tiết ứng viên không thành công',
-                    'data' => null
+                    'message' => 'Tải chi tiết ứng viên không thành công',                    
                 ];
             }
         } catch (\Exception $e) {
             $data = [
                 'code' => 500,
-                'message' => $e->getMessage(),
-                'data' => null
+                'message' => $e->getMessage(),                
             ];
         }
         return $data;
@@ -126,7 +122,7 @@ class CandidateRepository {
                 return [
                     'code' => 200,
                     'message' => 'Xóa bỏ thông tin ứng viên thành công',
-                    'personal' => true
+                    'data' => true
                 ];
             }
             return [
