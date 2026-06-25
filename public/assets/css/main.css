@@ -135,8 +135,8 @@ body {
 }
 
 .cv-header__title {
-    font-size: 13px;
-    color: var(--mid-gray);
+    font-size: 15px;
+    color: var(--black);
     letter-spacing: 1px;
     margin-top: 2px;
     margin-bottom: 10px;
