@@ -38,15 +38,12 @@ class CandidateService
     }
 
 
-    public function create($data)
-    {
-        
+    public function create($data) {
         $params = $this->candidate_repository->create($data);
         $params['password'] = $password = Str::random(16);
-        CandidateCreatedEvent::dispatch($params);
-        $c_user = $this->auth_repository->countByConditions(['email' => $params['email']]);
-
-        if (!empty($c_user)) {
+        CandidateCreatedEvent::dispatch($params);        
+        $c_user = $this->auth_repository->countByConditions($params);    
+        if (!empty($c_user) || $c_user > 0) {
             $data_email = [
                 'name'     => $params['fullname'],
                 'email'    => $params['email'],

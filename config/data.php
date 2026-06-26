@@ -64,5 +64,11 @@
                 "required" => "Vui lòng nhập số điện thoại.",
                 "phone" => "Vui lòng nhập số điện thoại hợp lệ."
             ]
+        ],
+        "page" => [
+            "page_1" => [1,2,3],
+            "page_2" => [4],
+            "page_3" => [4],
+            "page_4" => [5,6],            
         ]
     ];

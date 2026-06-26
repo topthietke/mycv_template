@@ -21,19 +21,7 @@ class CatetoriesService
     public function index($params)
     {
         try {
-            $model = $this->categoriesRepo->index($params);
-            if (!empty($model)) {
-                return  [
-                    'code' => 200,
-                    'message' => 'Tải danh sách danh mục thành công',
-                    'data' => $model
-                ];
-            } else {
-                return [
-                    'code' => 201,
-                    'message' => 'Tải danh sách danh mục không thành công',
-                ];
-            }
+            return $this->categoriesRepo->index($params);
         } catch (\Exception $e) {
             return [
                 'code' => 500,
@@ -42,8 +30,8 @@ class CatetoriesService
         }
     }
 
-    public function edit($id)
-    {
+    public function edit(string $id)
+    {        
         return $this->categoriesRepo->edit($id);
     }
 

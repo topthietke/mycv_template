@@ -15,28 +15,27 @@ class CategoriesRepository {
     }
     public function index($params) {
         try {
-            $model = $this->categories->findByConditions($params);
+            $model = $this->categories->getWithRelations(['contents']);
             if ($model->isNotEmpty()) {
-                $data = [
+                return [
                     'code' => 200,
                     'message' => 'Tải danh sách danh mục thành công',
-                    'personal' => $model
+                    'data' => $model
                 ];
             } else {
-                $data = [
+                return [
                     'code' => 201,
                     'message' => 'Tải danh sách danh mục không thành công',
-                    'personal' => null
+                    'data' => null
                 ];
             }
         } catch (\Exception $e) {
-            $data = [
+            return [
                 'code' => 500,
                 'message' => $e->getMessage(),
-                'personal' => null
+                'data' => null
             ];
-        }
-        return $data;
+        }        
     }
 
     public function edit($id) {
@@ -46,7 +45,7 @@ class CategoriesRepository {
                 $data = [
                     'code' => 200,
                     'message' => 'Tải chi tiết danh mục thành công',
-                    'personal' => $model
+                    'data' => $model
                 ];
             } else {
                 $data = [
@@ -123,7 +122,7 @@ class CategoriesRepository {
                 return [
                     'code' => 200,
                     'message' => 'Xóa bỏ danh mục thành công',
-                    'personal' => true
+                    'data' => true
                 ];
             }
             return [

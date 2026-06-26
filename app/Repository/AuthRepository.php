@@ -100,8 +100,9 @@ class AuthRepository {
         return $this->user->findByConditions($params);
     }
 
-    public function countByConditions($params){
-        return $this->user->countByConditions($params);
+    public function countByConditions($params){        
+        return $this->user->where('email', $params['email'])->count();
+        // countByConditions($params);
     }
     
 }

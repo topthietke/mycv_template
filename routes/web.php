@@ -19,7 +19,7 @@ Route::middleware('guest')->group(function () {
 
     Route::post('/login', [LoginController::class, 'login'])->name('login.post');
     Route::post('/register', [LoginController::class, 'register']);
-    Route::post('/forgot-password', [LoginController::class, 'forgotPassword']);
+    Route::post('/forgot-password', [LoginController::class, 'forgotPassword'])->name('forgot.password.post');
 
 
 });

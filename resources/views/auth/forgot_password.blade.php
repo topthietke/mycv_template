@@ -35,7 +35,9 @@
                     <p class="text-muted small mb-4">Nhập đầy đủ thông tin để đặt lại mật khẩu.</p>
                 </div>
 
-                <form id="forgotPasswordForm">
+                {{-- <form id="forgotPasswordForm"> --}}
+                <form action="{{ route('forgot.password.post') }}" method="POST" novalidate>
+                    @csrf
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
                             <x-input name="email" type="email" label="Địa chỉ Email" placeholder="Email" required prefix='<i class="fa fa-user"></i>' />

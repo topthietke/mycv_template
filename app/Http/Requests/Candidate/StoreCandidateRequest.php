@@ -27,9 +27,9 @@ class StoreCandidateRequest extends BaseRequest
             'current_address'        => 'required|string',
             'expected_salary'        => 'nullable|numeric',
             'avatar'                 => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'facebook_url'           => 'nullable|url',
-            'git_url'                => 'nullable|url',
-            'website_url'            => 'nullable|url',           
+            // 'facebook_url'           => 'nullable|url',
+            // 'git_url'                => 'nullable|url',
+            // 'website_url'            => 'nullable|url',           
         ];
     }
 
@@ -48,9 +48,9 @@ class StoreCandidateRequest extends BaseRequest
             'current_address'        => 'Địa chỉ hiện tại',
             'expected_salary'        => 'Mức lương mong muốn',
             'avatar'                 => 'Ảnh đại diện',
-            'facebook_url'           => 'Link Facebook',
-            'git_url'                => 'Link Git',
-            'website_url'            => 'Link Website'
+            // 'facebook_url'           => 'Link Facebook',
+            // 'git_url'                => 'Link Git',
+            // 'website_url'            => 'Link Website'
         ];
     }
 

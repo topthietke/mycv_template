@@ -10,7 +10,7 @@ class Category extends BaseModel
     protected $fillable = [
         "id",  "code",  "name",  "candidate_id",  "created_by",  "updated_by",  "deleted_by",  "created_at",  "updated_at",  "deleted_at"
     ];
-    public function candidateContents() {
+    public function contents() {
         return $this->hasMany(CandidateContent::class, 'category_id', 'id');
     }
 }
