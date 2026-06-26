@@ -18,7 +18,24 @@
 <body>
     <div class="container d-flex justify-content-center my-5">
         <div class="card card-custom">
-
+            {{-- Hiển thị thông báo --}}
+            @if (session('success'))
+                <div class="alert alert-success" role="alert">
+                    {{ session('success') }}
+                </div>
+            @endif
+            @if (session('error'))
+                <div class="alert alert-danger" role="alert">
+                    {{ session('error') }}
+                </div>
+            @endif
+            @if ($errors->any())
+                <div class="alert alert-danger" role="alert">
+                    @foreach ($errors->all() as $error)
+                        <p class="mb-0">{{ $error }}</p>
+                    @endforeach
+                </div>
+            @endif
             <div id="requestState" class="fade-in">
                 <div class="row my-4">
                     <div class="col-lg-12 col-md-12 text-center">

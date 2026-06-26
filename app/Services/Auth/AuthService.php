@@ -92,21 +92,29 @@ class AuthService
      public function change_password($params)
      {
           try {
-               $user = Auth::user();               
-               $user->update([
+               if(!empty(Auth::user())) {
+                    $user = Auth::user();   
+               } else if($params['email']) {
+                    $user = $this->user_repository->where(['email' => $params['email']]);
+               }                            
+               $update = $user->update([
                     'password' => Hash::make($params['password']),
                ]);
-
-               return [
-                    "code"    => Response::HTTP_OK,
-                    "success" => true,
-                    "message" => "Đổi mật khẩu thành công.",
-               ];
+               if (!empty($update)) {
+                    return [
+                         "code"    => Response::HTTP_OK,                      
+                         "message" => "Đổi mật khẩu thành công.",
+                    ];
+               } else {
+                    return [
+                         "code"    => Response::HTTP_FAILED_DEPENDENCY,                      
+                         "message" => "Đổi mật khẩu thành công.",
+                    ];
+               }
           } catch (\Exception $e) {
                return [
-                    "code"    => Response::HTTP_INTERNAL_SERVER_ERROR,
-                    "success" => false,
-                    "message" => "Đã xảy ra lỗi, vui lòng thử lại sau.",
+                    "code"    => Response::HTTP_INTERNAL_SERVER_ERROR,                    
+                    "message" => $e->getMessage()
                ];
           }
      }

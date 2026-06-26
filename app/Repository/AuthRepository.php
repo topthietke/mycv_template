@@ -96,7 +96,10 @@ class AuthRepository {
             ];
         }
     }
-    public function findByConditions($params){
+    public function where(array $params){
+        return $this->user->where($params);
+    }
+    public function findByConditions(array $params){
         return $this->user->findByConditions($params);
     }
 

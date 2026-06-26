@@ -50,7 +50,7 @@ class CandidateService
                 'password' => $password,
                 'url'      => config('app.url') . '/login',
             ];
-            // $this->send_mail($data_email);
+            
             SendAccountInfoMailJob::dispatch($data_email);
         }
         return $params;
