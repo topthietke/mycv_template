@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Categories\StoreCategoryRequest;
+use App\Http\Requests\Categories\StoreMultipleCategoriesRequest;
 use App\Services\Catetories\CatetoriesService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -20,7 +22,7 @@ class CategoriesController extends Controller {
         return response()->json($this->cat_service->index($request->all()));
     }
 
-    public function store(Request $request): JsonResponse {
+    public function store(StoreCategoryRequest $request): JsonResponse {
         try {
             $category = $this->cat_service->create($request->all());
             return response()->json([
@@ -37,7 +39,7 @@ class CategoriesController extends Controller {
         }
     }
 
-    public function create_multiple(Request $request): JsonResponse
+    public function create_multiple(StoreMultipleCategoriesRequest $request): JsonResponse
     {
         return response()->json($this->cat_service->create_multiple($request->all()));
     }

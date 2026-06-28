@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->string('code')->unique(); // 'objective', 'skill', 'experience', 'education'
-            $table->string('name');
+            $table->string('code')->nullable(false); // 'objective', 'skill', 'experience', 'education'
+            $table->string('name')->nullable(false);
             $table->bigInteger('candidate_id')->nullable()->default(null);
             $table->bigInteger('created_by')->nullable()->default(null);
             $table->bigInteger('updated_by')->nullable()->default(null);
