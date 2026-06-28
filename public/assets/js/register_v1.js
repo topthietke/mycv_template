@@ -435,7 +435,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 });
 
-// ============================================================= Next Bước 3 + Page & Drag-Drop ================================================
+// ============================================================= Next Bước 3 ================================================
 document.addEventListener("DOMContentLoaded", function () {
   const categoryForm = document.getElementById("categoryForm");
   const categoryList = document.getElementById("category_list");
@@ -443,251 +443,101 @@ document.addEventListener("DOMContentLoaded", function () {
 
   if (!categoryForm || !categoryList || !submitBtn) return;
 
-  // ── CSS động cho tính năng page & drag-drop ──────────────────────────────
-  const pageStyles = `
-    <style>
-      /* Khu vực thêm page */
-      #page-section { margin-top: 16px; }
-      #add-page-btn {
-        display: inline-flex; align-items: center; gap: 6px;
-        padding: 6px 14px; border: 2px dashed #7c6fcd; border-radius: 8px;
-        background: transparent; color: #7c6fcd; font-size: 13px;
-        font-weight: 600; cursor: pointer; transition: all .2s;
-      }
-      #add-page-btn:hover { background: #f0eeff; }
-
-      /* Khung page */
-      .page-box {
-        border: 2px solid #e0daf7; border-radius: 12px;
-        padding: 14px 16px; margin-top: 14px; background: #faf9ff;
-        position: relative;
-      }
-      .page-box-header {
-        display: flex; align-items: center; justify-content: space-between;
-        margin-bottom: 10px;
-      }
-      .page-box-title {
-        font-weight: 700; font-size: 13px; color: #5b4fcf;
-      }
-      .page-box-id {
-        font-size: 11px; color: #999; margin-left: 8px;
-      }
-      .page-drop-zone {
-        min-height: 70px; border: 2px dashed #c5bee8; border-radius: 8px;
-        padding: 10px; display: flex; flex-wrap: wrap; gap: 8px;
-        background: #fff; transition: background .2s;
-      }
-      .page-drop-zone.dragover { background: #ede9ff; border-color: #7c6fcd; }
-
-      /* Tag danh mục bên trong page */
-      .page-cat-tag {
-        display: inline-flex; align-items: center; gap: 6px;
-        background: #7c6fcd; color: #fff; border-radius: 20px;
-        padding: 4px 12px; font-size: 12px; font-weight: 600;
-        user-select: none;
-      }
-      .page-cat-tag .remove-tag {
-        cursor: pointer; font-size: 14px; line-height: 1;
-        opacity: .8; transition: opacity .15s;
-      }
-      .page-cat-tag .remove-tag:hover { opacity: 1; }
-
-      /* Card danh mục bị disabled (đã kéo vào page) */
-      .category-card.is-dropped {
-        opacity: .4; pointer-events: none; cursor: not-allowed;
-      }
-      .col-md-6[data-id].dragging { opacity: .4; }
-
-      /* Nút xoá page */
-      .btn-remove-page {
-        background: none; border: none; color: #c0392b;
-        cursor: pointer; font-size: 13px; padding: 0 4px;
-      }
-      .btn-remove-page:hover { color: #e74c3c; }
-    </style>`;
-  document.head.insertAdjacentHTML("beforeend", pageStyles);
-
-  // ── Inject khu vực "Thêm page" vào sau #category_list ───────────────────
-  const pageSection = document.createElement("div");
-  pageSection.id = "page-section";
-  pageSection.innerHTML = `
-    <button type="button" id="add-page-btn">
-      <i class="fas fa-plus"></i> Thêm trang (page)
-    </button>
-    <div id="page-list"></div>`;
-  categoryList.insertAdjacentElement("afterend", pageSection);
-
-  let pageCounter = 0; // đếm số page đã tạo
-
-  // ── Thêm page mới ────────────────────────────────────────────────────────
-  document.getElementById("add-page-btn").addEventListener("click", function () {
-    pageCounter++;
-    const pageId = "page_" + pageCounter;
-    const pageBox = document.createElement("div");
-    pageBox.className = "page-box";
-    pageBox.dataset.pageId = pageId;
-    pageBox.innerHTML = `
-      <div class="page-box-header">
-        <span class="page-box-title">
-          Trang ${pageCounter}
-          <span class="page-box-id">#${pageId}</span>
-        </span>
-        <button type="button" class="btn-remove-page" title="Xoá page này">
-          <i class="fas fa-times-circle"></i> Xoá trang
-        </button>
-      </div>
-      <div class="page-drop-zone" data-page-id="${pageId}">
-        <span class="drop-hint" style="color:#bbb;font-size:12px;align-self:center;">
-          Kéo danh mục vào đây…
-        </span>
-      </div>`;
-    document.getElementById("page-list").appendChild(pageBox);
-    bindDropZone(pageBox.querySelector(".page-drop-zone"));
-  });
-
-  // ── Xoá page → trả danh mục về ──────────────────────────────────────────
-  document.getElementById("page-list").addEventListener("click", function (e) {
-    const removeBtn = e.target.closest(".btn-remove-page");
-    if (!removeBtn) return;
-    const box = removeBtn.closest(".page-box");
-    // Trả lại tất cả card đang bị disabled trong page này
-    box.querySelectorAll(".page-cat-tag").forEach(function (tag) {
-      restoreCategoryCard(tag.dataset.catId);
-    });
-    box.remove();
-  });
-
-  // ── Kích hoạt drag trên mỗi card danh mục (dùng Event Delegation) ────────
-  categoryList.addEventListener("dragstart", function (e) {
-    const col = e.target.closest(".col-md-6[data-id]");
-    if (!col) return;
-    const card = col.querySelector(".category-card");
-    if (card && card.classList.contains("is-dropped")) {
-      e.preventDefault();
-      return;
+  // 1. Dùng Event Delegation để lắng nghe khi click vào các card (kể cả card mới thêm qua Ajax)
+  categoryList.addEventListener("click", function (e) {
+    const card = e.target.closest(".category-card");
+    if (card) {
+      // Đợi một chút để checkbox thay đổi trạng thái tự nhiên theo thuộc tính `for` của label
+      setTimeout(() => {
+        updateSubmitButton();
+        syncSelectedCategoriesToDetailsForm();
+      }, 50);
     }
-    col.classList.add("dragging");
-    e.dataTransfer.setData("text/plain", col.dataset.id);
-    e.dataTransfer.effectAllowed = "move";
   });
 
-  categoryList.addEventListener("dragend", function (e) {
-    const col = e.target.closest(".col-md-6[data-id]");
-    if (col) col.classList.remove("dragging");
-  });
-
-  // Đảm bảo các col có thể drag
-  function enableDragOnCards() {
-    categoryList.querySelectorAll(".col-md-6[data-id]").forEach(function (col) {
-      col.setAttribute("draggable", "true");
-    });
+  // Hàm cập nhật trạng thái disable/enable của nút "Tiếp theo"
+  function updateSubmitButton() {
+    const anyChecked =
+      categoryList.querySelectorAll('input[name="categories[]"]:checked')
+        .length > 0;
+    submitBtn.disabled = !anyChecked;
   }
-  enableDragOnCards();
 
-  // Quan sát DOM khi category mới được thêm (ajax) → tự gán draggable
-  const observer = new MutationObserver(enableDragOnCards);
-  observer.observe(categoryList, { childList: true, subtree: true });
+  // Hàm đồng bộ dữ liệu ID và Name sang form Bước 3 (detailsForm) dưới dạng hidden input
+  function syncSelectedCategoriesToDetailsForm() {
+    const detailsForm = document.getElementById("detailsForm");
+    if (!detailsForm) return;
 
-  // ── Bind drag-over / drop vào drop-zone ──────────────────────────────────
-  function bindDropZone(zone) {
-    zone.addEventListener("dragover", function (e) {
-      e.preventDefault();
-      e.dataTransfer.dropEffect = "move";
-      zone.classList.add("dragover");
-    });
-    zone.addEventListener("dragleave", function () {
-      zone.classList.remove("dragover");
-    });
-    zone.addEventListener("drop", function (e) {
-      e.preventDefault();
-      zone.classList.remove("dragover");
+    // Xóa các hidden input cũ đã đồng bộ trước đó để tránh trùng lặp
+    detailsForm
+      .querySelectorAll(".synced-category")
+      .forEach((el) => el.remove());
 
-      const catId = e.dataTransfer.getData("text/plain");
-      if (!catId) return;
+    // Lấy tất cả các checkbox đang được check
+    const checkedBoxes = categoryList.querySelectorAll(
+      'input[name="categories[]"]:checked',
+    );
 
-      // Kiểm tra nếu danh mục đã có trong page này rồi thì bỏ qua
-      if (zone.querySelector(`.page-cat-tag[data-cat-id="${catId}"]`)) return;
+    checkedBoxes.forEach(function (checkbox) {
+      const colDiv = checkbox.closest("[data-id]");
+      const categoryId = colDiv
+        ? colDiv.getAttribute("data-id")
+        : checkbox.value;
+      const categoryName = colDiv
+        ? colDiv.querySelector("h6")?.textContent?.trim()
+        : "";
 
-      const col = categoryList.querySelector(`.col-md-6[data-id="${catId}"]`);
-      if (!col) return;
-      const catName = col.querySelector("h6")?.textContent?.trim() || catId;
+      // Tạo Hidden input cho ID
+      const inputId = document.createElement("input");
+      inputId.type = "hidden";
+      inputId.name = "category_ids[]";
+      inputId.value = categoryId;
+      inputId.classList.add("synced-category");
 
-      // Ẩn gợi ý "kéo vào đây" nếu còn
-      const hint = zone.querySelector(".drop-hint");
-      if (hint) hint.remove();
+      // Tạo Hidden input cho Name
+      const inputName = document.createElement("input");
+      inputName.type = "hidden";
+      inputName.name = "category_names[]";
+      inputName.value = categoryName;
+      inputName.classList.add("synced-category");
 
-      // Tạo tag trong drop-zone
-      const tag = document.createElement("span");
-      tag.className = "page-cat-tag";
-      tag.dataset.catId = catId;
-      tag.dataset.catName = catName;
-      tag.innerHTML = `${catName} <span class="remove-tag" title="Xoá khỏi trang">&times;</span>`;
-      zone.appendChild(tag);
-
-      // Disable card gốc
-      col.querySelector(".category-card")?.classList.add("is-dropped");
-
-      // Xử lý nút X trên tag
-      tag.querySelector(".remove-tag").addEventListener("click", function () {
-        restoreCategoryCard(catId);
-        tag.remove();
-        // Nếu zone trống → hiển thị lại gợi ý
-        if (!zone.querySelector(".page-cat-tag")) {
-          zone.insertAdjacentHTML(
-            "beforeend",
-            `<span class="drop-hint" style="color:#bbb;font-size:12px;align-self:center;">Kéo danh mục vào đây…</span>`,
-          );
-        }
-      });
+      // Đẩy vào detailsForm
+      detailsForm.appendChild(inputId);
+      detailsForm.appendChild(inputName);
     });
   }
 
-  // ── Trả card về trạng thái bình thường ──────────────────────────────────
-  function restoreCategoryCard(catId) {
-    const col = categoryList.querySelector(`.col-md-6[data-id="${catId}"]`);
-    if (col) {
-      col.querySelector(".category-card")?.classList.remove("is-dropped");
-    }
-  }
-
-  // ── Lấy danh mục từ tất cả các page (cho submit) ────────────────────────
-  function getCategoriesFromPages() {
-    const result = [];
-    document.querySelectorAll("#page-list .page-box").forEach(function (box) {
-      const pageId = box.dataset.pageId;
-      box.querySelectorAll(".page-cat-tag").forEach(function (tag) {
-        result.push({
-          id: tag.dataset.catId,
-          name: tag.dataset.catName,
-          pageId: pageId,
-        });
-      });
-    });
-    return result;
-  }
-
-  // ── Submit: lấy danh mục từ các page thay vì checkbox ───────────────────
+  // 2. Xử lý sự kiện click vào nút "Tiếp theo" (id="category_form_submit")
   submitBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
-    const pageCategories = getCategoriesFromPages();
-
-    if (pageCategories.length === 0) {
-      alert(
-        "Vui lòng tạo ít nhất một trang và kéo danh mục vào trước khi tiếp tục!",
-      );
+    // Kiểm tra xem đã chọn ít nhất 1 danh mục chưa
+    const checkedBoxes = categoryList.querySelectorAll(
+      'input[name="categories[]"]:checked',
+    );
+    if (checkedBoxes.length === 0) {
+      alert("Vui lòng chọn ít nhất một danh mục trước khi tiếp tục!");
       return;
     }
 
-    // Đưa ra phạm vi toàn cục để các script khác dùng
-    window.selectedCategories = pageCategories;
+    // Đưa biến ra phạm vi toàn cục (window) để file/script khác có thể sử dụng
+    window.selectedCategories = [];
+    checkedBoxes.forEach((checkbox) => {
+      const colDiv = checkbox.closest("[data-id]");
+      window.selectedCategories.push({
+        id: colDiv ? colDiv.getAttribute("data-id") : checkbox.value,
+        name: colDiv ? colDiv.querySelector("h6")?.textContent?.trim() : "",
+      });
+    });
 
-    // Gọi hàm render bước 3
-    renderDetailsForm(pageCategories);
+    // Gọi hàm hiển thị giao diện động ở Bước 3
+    renderDetailsForm(window.selectedCategories);
 
+    // Chuyển sang Bước 3: Gọi hàm goToStep(3) có sẵn của bạn để đồng bộ giao diện / progress line
     if (typeof goToStep === "function") {
       goToStep(3);
     } else {
+      // Backend dự phòng nếu không tìm thấy hàm goToStep
       const detailsForm = document.getElementById("detailsForm");
       if (detailsForm) {
         categoryForm.classList.remove("active");

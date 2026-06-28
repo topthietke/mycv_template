@@ -2,28 +2,45 @@
 
 namespace App\Http\Requests\Categories;
 
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
-
-class UpdateCategoriesRequest extends FormRequest
+use App\Http\Requests\BaseRequest;
+use Illuminate\Validation\Rule;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+class UpdateCategoriesRequest extends BaseRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
+    public function rules(): array
+    {        
+        $categoryId = $this->route('category'); 
+        return [
+            'code' => [
+                'nullable',
+                'string',
+                'max:255',
+                Rule::unique('categories', 'code')->ignore($categoryId),
+            ],
+            'name'         => ['required', 'string', 'max:255'],
+            'candidate_id' => ['nullable', 'integer'],            
+        ];
     }
 
     /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, ValidationRule|array<mixed>|string>
+     * Get custom attributes for validator errors.
      */
-    public function rules(): array
+    public function attributes(): array
     {
         return [
-            //
+            'code'         => 'Mã danh mục',
+            'name'         => 'Tên danh mục',
+            'candidate_id' => 'ID ứng viên'            
         ];
+    }
+    protected function failedValidation(Validator $validator): void {
+        throw new HttpResponseException(
+            response()->json([
+                'success' => false,
+                'message' => 'Dữ liệu không hợp lệ.',
+                'errors' => $validator->errors(),
+            ], 422)
+        );
     }
 }

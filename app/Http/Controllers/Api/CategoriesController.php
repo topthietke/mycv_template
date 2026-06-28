@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Categories\StoreCategoryRequest;
 use App\Http\Requests\Categories\StoreMultipleCategoriesRequest;
+use App\Http\Requests\Categories\UpdateCategoriesRequest;
 use App\Services\Catetories\CatetoriesService;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
@@ -57,7 +58,7 @@ class CategoriesController extends Controller {
         }
     }
 
-    public function update(Request $request, $id): JsonResponse
+    public function update(UpdateCategoriesRequest $request, $id): JsonResponse
     {
         try {
             $result = $this->cat_service->update($request->all(), $id);

@@ -13,18 +13,16 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 class StoreMultipleCategoriesRequest extends BaseRequest
 {
     public function rules(): array
-    {
+    {   
         return [
-            'candidate_id' => ['required', 'integer', 'exists:candidates,id'],
-            'name'         => ['required', 'array', 'min:1'],
+            'candidate_id' => ['required', 'integer', 'exists:candidates,id'],            
             'name.*'       => [
                 'required',
                 'string',
-                'max:255',
-                // Kiểm tra code (slug) generate từ name.* không được trùng trong DB
-                function ($attribute, $value, $fail) {
-                    $code = Str::slug($value, '-');
-                    $exists = DB::table('categories')->where('candidate_id', $this->candidate_id)->where('code', $code)->exists();
+                'max:255',                
+                function ($attribute, $value, $fail) {                    
+                    $code = Str::slug($value, '-');                    
+                    $exists = DB::table('categories')->where('candidate_id', $this->candidate_id)->where('code', $code)->exists();                    
                     if ($exists) {
                         $fail("Tên " . $value . " đã tồn tại.");
                     }
@@ -33,10 +31,6 @@ class StoreMultipleCategoriesRequest extends BaseRequest
         ];
     }
 
-
-    /**
-     * Chuẩn bị data sau khi validate — inject thêm `code` cho từng name
-     */
     public function validated($key = null, $default = null): array
     {
         $data = parent::validated($key, $default);
