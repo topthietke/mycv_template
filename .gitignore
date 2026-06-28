@@ -21,3 +21,4 @@ yarn-error.log
 
 public/.htaccess
 /resources/views/includes/template
+/public/assets/img

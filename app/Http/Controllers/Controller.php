@@ -24,8 +24,8 @@ class Controller extends BaseController {
 
 
     public function test_send_mail(Request $request): bool {        
-        $toEmail = $request->input('toEmail');
-        $toName = $request->input('toName');
+        $toEmail = $request->input('email');
+        $toName = $request->input('name');
         $subject = $request->input('subject');
         $content = $request->input('content');
         $attachments = $request->input('attachments', []);
@@ -50,7 +50,8 @@ class Controller extends BaseController {
             );
 
             return true;
-        } catch (\Exception $e) {            
+        } catch (\Exception $e) {    
+            dd($e->getMessage());        
             Log::error('Send mail failed', [
                 'to'      => $toEmail,
                 'subject' => $subject,

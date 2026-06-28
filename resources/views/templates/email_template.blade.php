@@ -52,16 +52,13 @@
 </head>
 
 <body>
-    <?php 
-        dd(1111);
-    ?>
     <div class="container">
         <div class="header">
             <h3>{{ $subject }}</h3>
         </div>
         <div class="body">            
-            <p>Email: {{ $email }}</p>            
-            <p>Mật khẩu mới: <strong>{{ $password }}</strong></p>            
+            <p>Email: {{ $email ?? '' }}</p>            
+            <p>Mật khẩu mới: <strong>{{ $name ?? '' }}</strong></p>            
         </div>        
     </div>
 </body>
