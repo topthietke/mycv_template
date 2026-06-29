@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('code')->nullable(false); // 'objective', 'skill', 'experience', 'education'
             $table->string('name')->nullable(false);
             $table->bigInteger('candidate_id')->nullable()->default(null);
-            $table->integer('pages')->nullable()->default(1)->comment('Chỉ định categories năm ở page nào');
+            $table->string('pages', 100)->nullable()->default(null)->comment('Chỉ định categories năm ở page nào');
             $table->bigInteger('created_by')->nullable()->default(null);
             $table->bigInteger('updated_by')->nullable()->default(null);
             $table->bigInteger('deleted_by')->nullable()->default(null);

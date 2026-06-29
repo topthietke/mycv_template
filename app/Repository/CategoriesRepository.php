@@ -149,4 +149,21 @@ class CategoriesRepository {
             ];
         }
     }
+
+    public function update_pages(string $pages, $id) {
+        $record = $this->categories->findById($id);        
+        if (empty($record)) {
+            return [
+                'code' => 404,
+                'message' => 'Không tìm thấy danh mục để cập nhật',
+            ];
+        }
+
+        $data = [
+            'pages'      => $pages ?? '1',
+            'updated_by' => Auth::user()->id ?? null,
+            'updated_at' => now(),
+        ];        
+        return $this->categories->updateById($id, $data);
+    }
 }

@@ -231,7 +231,9 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
     // Lấy Token CSRF từ Blade template (nếu có dùng Laravel)
-    const csrfToken = categoriesForm.querySelector('input[name="_token"]',)?.value;
+    const csrfToken = categoriesForm.querySelector(
+      'input[name="_token"]',
+    )?.value;
     // Chuẩn bị dữ liệu gửi đi
     const payload = {
       name: categories,
@@ -669,101 +671,19 @@ document.addEventListener("DOMContentLoaded", function () {
         result.push({
           id: tag.dataset.catId,
           name: tag.dataset.catName,
-          pages: pageId,
+          pageId: pageId,
         });
       });
     });
     return result;
   }
-  // ──────────────────────────────────Update Page ───────────────────
-  async function update_pages(data) {
-    try {
-      const response = await fetch(API_URL.update_pages, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          "X-CSRF-TOKEN": csrfToken,
-        },
-        body: JSON.stringify(data),
-      });
 
-      console.log(2222, response);
-      return;
-
-
-      let html = '<div class="row mt-2">';
-      let data = null;
-      const result = await response.json();
-      if (response.ok) {
-        alert("Thêm danh mục thành công!");
-
-        // Mẹo xử lý: Nếu API trả về danh sách kèm ID từ Database (ví dụ result.data) thì ta dùng,
-        // nếu không có thì ta tự tạo ID tạm thời bằng timestamp để không trùng lặp các thuộc tính `for` và `id`
-        const listCategories =
-          result.data ||
-          categories.map((name, index) => ({
-            id: "new_" + index + "_" + Date.now(),
-            name: name,
-          }));
-
-        // 1. Khởi tạo chuỗi HTML chứa cấu trúc các danh mục mới
-        let htmlContent = '<div class="row mt-2">';
-        listCategories.forEach((cat) => {
-          htmlContent += `
-                        <div class="col-md-6 mb-3" data-id="${cat.id}">
-                            <label class="category-card" for="cat_${cat.id}">
-                                <input type="checkbox" name="categories[]" value="${cat.id}" id="cat_${cat.id}" class="hidden-checkbox">
-                                <div class="category-icon"><i class="fas fa-bullseye text-primary"></i></div>
-                                <div class="category-info text-start">
-                                    <h6>${cat.name}</h6>
-                                    <p>Danh mục cá nhân tự thêm</p>
-                                </div>
-                            </label>
-                        </div>`;
-        });
-        htmlContent += "</div>";
-
-        // 2. Kiểm tra nếu giao diện đang hiện thông báo trống thì xóa trắng trước khi chèn
-        // if (categoryList.innerHTML.includes('Không có dữ liệu') ||
-        //     categoryList.innerHTML.includes('Không có danh mục nào! Vui lòng thêm mới danh mục trước khi thực hiện')) {
-        //     categoryList.innerHTML = '';
-        //     categoryList.classList.remove('text-center'); // Bỏ căn giữa text để hiển thị lưới thẻ đều nhau
-        // }
-        categoryList.innerHTML = "";
-        // 3. Append (chèn) dữ liệu vào thẻ #category_list ở file chính
-        categoryList.insertAdjacentHTML("beforeend", htmlContent);
-
-        // 4. Reset form trong modal và xóa các ô input phụ do nút (+) tạo ra (chỉ giữ lại 1 ô trống ban đầu)
-        categoriesForm.reset();
-        const extraGroups = categoryFields.querySelectorAll(
-          ".category-field-group",
-        );
-        extraGroups.forEach((group, index) => {
-          if (index > 0) group.remove();
-        });
-        // 5. Ẩn modal sau khi lưu thành công
-        categoryModal.hide();
-      } else {
-        alert("Có lỗi xảy ra: " + (result.message || "Vui lòng thử lại."));
-      }
-    } catch (error) {
-      console.error("Error post data:", error);
-      alert("Không thể kết nối đến máy chủ API!");
-    } finally {
-      // Mở lại trạng thái nút bấm
-      saveCategoryBtn.disabled = false;
-      saveCategoryBtn.innerText = "Thêm mới";
-    }
-  }
   // ── Submit: lấy danh mục từ các page thay vì checkbox ───────────────────
   submitBtn.addEventListener("click", function (e) {
     e.preventDefault();
 
     const pageCategories = getCategoriesFromPages();
-    update_pages(pageCategories);
-    console.log(pageCategories);
-    return;
+
     // if (pageCategories.length === 0) {
     //   alert(
     //     "Vui lòng tạo ít nhất một trang và kéo danh mục vào trước khi tiếp tục!",

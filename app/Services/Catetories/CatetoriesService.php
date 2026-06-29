@@ -9,8 +9,7 @@ use Str;
 // use App\Repositories\categoriesRepository;
 
 
-class CatetoriesService
-{
+class CatetoriesService {
     protected $categoriesRepo;
 
     public function __construct(CategoriesRepository $categoriesRepo)
@@ -93,5 +92,25 @@ class CatetoriesService
     public function deleteByCollumn(string $column, mixed $value)
     {
         return $this->categoriesRepo->deleteByCollumn($column, $value);
+    }
+
+    public function update_pages($data) {
+        $dem = 0;
+        foreach ($data as $item) {
+            $model = $this->categoriesRepo->update_pages($item['pages'], $item['id']);
+            if($model == true)  $dem +=1;            
+        }
+        if ($dem > 0) {
+            return [
+                'code' => 200,
+                'message' => 'Cập nhật trang thành công'                
+            ];
+        } else {
+            return [
+                'code' => 500,
+                'message' => 'Cập nhật trang không thành công'                
+            ];
+        }
+        
     }
 }

@@ -85,4 +85,18 @@ class CategoriesController extends Controller {
             ], 500);
         }
     }
+
+    public function update_pages(Request $request): JsonResponse  {        
+        try {
+            $params = $request->all();            
+            $result = $this->cat_service->update_pages($params['items']);
+            return response()->json($result, $result['code'] ?? 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi xóa danh mục.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
