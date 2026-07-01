@@ -66,9 +66,31 @@
             ]
         ],
         "page" => [
-            "page_1" => [1,2,3],
-            "page_2" => [4],
-            "page_3" => [4],
-            "page_4" => [5,6],            
+            "page_1" => 1,
+            "page_2" => 2,
+            "page_3" => 3,
+            "page_4" => 4,
+            "page_5" => 5,
+            "page_6" => 6,
+            "page_7" => 7,
+            "page_8" => 8,
+            "page_9" => 9,
+            "page_10" => 10
+        ],
+        "index" => [
+            "title" => "Thông tin cá nhân",
+            "home_title" => "Trang chủ",
+            "career_title" => "Mục tiêu nghề nghiệp",
+            "educations_title" => "Quá trình đào tạo",
+            "skills_title" => "Công nghệ",
+            "activities_title" => "Hoạt động",
+            "languages_title" => "Ngoại ngữ",
+            "experiences_title" => "Kinh nghiệm làm việc",                        
+        ],
+        "edit" => [
+            "title" => "Chỉnh sửa thông tin"
+        ],
+        "login" => [
+            "title" => "Đăng nhập"
         ]
     ];

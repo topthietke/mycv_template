@@ -38,6 +38,16 @@ class HomeController extends Controller
             "candidate" => $candidate,
             "categories" => $categories,
         ];        
-        return view('pages.index', $data);
+        return view('pages.home.index', $data);
+    }
+
+    public function edit(int| string $candidate_id) {        
+        $candidate = $this->get_data_candidate($candidate_id);
+        $categories = $this->get_data_categories($candidate_id);        
+        $data = [
+            "candidate" => $candidate,
+            "categories" => $categories,
+        ];        
+        return view('pages.edit.edit', $data);
     }
 }

@@ -1,13 +1,14 @@
+<!-- BODY -->
 <?php 
     $allow_page   = config('data.page');
-    $allow_page_4 = $allow_page['page_4'];
+    $allow_page_3 = $allow_page['page_3'];    
 ?>
-
 @if (!empty($categories))
-    <div class="cv-page" id="cv-page-4" style="margin-top: 30px;">
+    <div class="cv-page" id="cv-page-3" style="margin-top: 30px;">
+        <!-- /cv-body -->
         <div class="cv-body" style="padding-top:30px;">
             @foreach ($categories as $item)
-                @if (in_array($item['id'], $allow_page_4))
+                @if ($item['pages'] == $allow_page_3)
                     <div class="cv-section">
                         <div class="cv-section__header">
                             <div class="cv-section__label" id="{{ $item['id'] }}" data-code="{{ $item['code'] }}">
@@ -15,7 +16,8 @@
                             </div>
                             <div class="cv-section__line"></div>
                         </div>
-                        <div class="cv-intro">
+
+                        <div class="cv-entry">
                             @if (!empty($item['contents']))
                                 @foreach ($item['contents'] as $value)
                                     <span>{!! $value['content'] !!}</span>
@@ -26,5 +28,6 @@
                 @endif
             @endforeach
         </div>
+        <!-- /cv-body -->
     </div>
 @endif

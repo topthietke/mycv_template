@@ -8,7 +8,7 @@
         <!-- /cv-body -->
         <div class="cv-body" style="padding-top:30px;">
             @foreach ($categories as $item)
-                @if (in_array($item['id'], $allow_page_2))
+                @if ($item['pages'] == $allow_page_2)
                     <div class="cv-section">
                         <div class="cv-section__header">
                             <div class="cv-section__label" id="{{ $item['id'] }}" data-code="{{ $item['code'] }}">
