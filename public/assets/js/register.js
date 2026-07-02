@@ -1,5 +1,5 @@
 import { API_URL } from "/assets/js/variableApi.js";
-import { msg_success, msg_error, ajax } from "/assets/js/function.js";
+import { msg_success, msg_error } from "/assets/js/function.js";
 
 function goToStep(step) {
     // Ẩn tất cả form
@@ -96,14 +96,13 @@ $(document).ready(function () {
             },
             success: function (res) {
                 if (res && res.success == true) {
-                    alert(res.message || "Thông tin đã được lưu thành công!");
-
+                    msg_success(res.message || "Thông tin đã được lưu thành công!");                    
                     // Lấy giá trị id từ response.data
                     const candidate_id = res.data.id;
                     sessionStorage.setItem("candidate_id", candidate_id);
                     goToStep(2); // Chuyển sang bước 2
                 } else {
-                    alert(res.message);
+                    msg_error(res.message);
                     $btn.html(originalText).prop("disabled", false);
                     return false;
                 }
@@ -137,7 +136,7 @@ $(document).ready(function () {
 
                 // ---------------------------------------------------------------
                 // Hiển thị lỗi hoặc xử lý tiếp theo tùy thuộc vào logic của bạn
-                alert(errorMessage);
+                msg_error(errorMessage);
                 // Hoặc console.log(errorMessagesArray); nếu bạn muốn dùng mảng để map vào từng input
             },
         });
@@ -207,7 +206,7 @@ document.addEventListener("DOMContentLoaded", function () {
             if (categoryFields.querySelectorAll(".category-field-group").length > 1) {
                 group.remove();
             } else {
-                alert("Phải giữ lại ít nhất một danh mục!");
+                msg_error("Phải giữ lại ít nhất một danh mục!");
             }
         }
     });
@@ -226,7 +225,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Kiểm tra nếu người dùng chưa nhập gì
         if (categories.length === 0) {
-            alert("Vui lòng nhập ít nhất một tên danh mục!");
+            msg_error("Vui lòng nhập ít nhất một tên danh mục!");
             return;
         }
 
@@ -256,7 +255,7 @@ document.addEventListener("DOMContentLoaded", function () {
             let data = null;
             const result = await response.json();
             if (response.ok) {
-                alert("Thêm danh mục thành công!");
+                msg_success("Thêm danh mục thành công!");
 
                 // Mẹo xử lý: Nếu API trả về danh sách kèm ID từ Database (ví dụ result.data) thì ta dùng,
                 // nếu không có thì ta tự tạo ID tạm thời bằng timestamp để không trùng lặp các thuộc tính `for` và `id`
@@ -305,11 +304,11 @@ document.addEventListener("DOMContentLoaded", function () {
                 // 5. Ẩn modal sau khi lưu thành công
                 categoryModal.hide();
             } else {
-                alert("Có lỗi xảy ra: " + (result.message || "Vui lòng thử lại."));
+                msg_error("Có lỗi xảy ra: " + (result.message || "Vui lòng thử lại."));
             }
         } catch (error) {
             console.error("Error post data:", error);
-            alert("Không thể kết nối đến máy chủ API!");
+            msg_error("Không thể kết nối đến máy chủ API!");
         } finally {
             // Mở lại trạng thái nút bấm
             saveCategoryBtn.disabled = false;
@@ -795,7 +794,7 @@ document
         // Lấy candidate_id từ sessionStorage
         const candidateId = sessionStorage.getItem("candidate_id");
         if (!candidateId) {
-            alert("Không tìm thấy thông tin ứng viên. Vui lòng quay lại bước 1.");
+            msg_error("Không tìm thấy thông tin ứng viên. Vui lòng quay lại bước 1.");
             return;
         }
         // 2. Duyệt qua từng section để kiểm tra và lấy dữ liệu
@@ -814,7 +813,7 @@ document
 
             // Kiểm tra nếu nội dung trống
             if (!content) {
-                alert(`Vui lòng nhập nội dung cho danh mục: ${categoryName}`);
+                msg_error(`Vui lòng nhập nội dung cho danh mục: ${categoryName}`);
                 if (textarea.ckeditorInstance) {
                     textarea.ckeditorInstance.editing.view.focus();
                 } else {
@@ -860,14 +859,14 @@ document
             // Chờ tất cả các request AJAX hoàn thành (Tương đương Promise.all)
             await $.when.apply($, apiRequests);
 
-            alert("Thêm mới thông tin chi tiết thành công!");
+            msg_success("Thêm mới thông tin chi tiết thành công!");
 
             setTimeout(function () {
                 window.location.href = "/login"; // Thay đổi đường dẫn '/login' theo dự án của bạn
             }, 2000);
         } catch (error) {
             console.error("Error:", error);
-            alert("Đã có lỗi xảy ra trong quá trình lưu dữ liệu. Vui lòng thử lại!");
+            msg_error("Đã có lỗi xảy ra trong quá trình lưu dữ liệu. Vui lòng thử lại!");
         } finally {
             // Khôi phục lại trạng thái nút submit
             submitBtn.disabled = false;

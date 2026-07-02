@@ -1,5 +1,5 @@
 import { API_URL } from "/assets/js/variableApi.js";
-import { msg_success, msg_error, ajax } from "/assets/js/function.js";
+import { msg_success, msg_error } from "/assets/js/function.js";
 
 const API_LOGIN_URL = API_URL.login;
 const auth_token = "auth_token";

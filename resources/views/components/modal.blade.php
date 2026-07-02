@@ -1,6 +1,6 @@
 @props([
     'id'          => 'modal',
-    'title'       => 'Modal Title',
+    'title'       => 'Thông báo',
     'size'        => null,     // sm | lg | xl
     'scrollable'  => false,
     'centered'    => false,
@@ -29,10 +29,9 @@
 >
     <div class="modal-dialog {{ $sizeClass }} {{ $scrollClass }} {{ $centeredClass }}">
         <div class="modal-content">
-
             {{-- Header --}}
             <div class="modal-header">
-                <h5 class="modal-title fw-semibold" id="{{ $id }}Label">{{ $title }}</h5>
+                <span class="modal-title fw-semibold" id="{{ $id }}Label">{{ $title }}</span>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ $closeLabel }}"></button>
             </div>
 

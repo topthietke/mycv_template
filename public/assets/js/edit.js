@@ -1,5 +1,5 @@
 import { API_URL } from "/assets/js/variableApi.js";
-import { msg_success, msg_error, ajax } from "/assets/js/function.js";
+import { msg_success, msg_error } from "/assets/js/function.js";
 
 document.addEventListener('DOMContentLoaded', function () {
     // Click hiển thị form
@@ -106,9 +106,7 @@ document.addEventListener('DOMContentLoaded', function () {
         Object.keys(errors).forEach(fieldName => {
             const field = form.querySelector(`[name="${fieldName}"]`);
             if (!field) return;
-
             field.classList.add('is-invalid');
-
             const feedback = document.createElement('div');
             feedback.className = 'invalid-feedback js-error d-block';
             feedback.textContent = errors[fieldName][0];
@@ -149,9 +147,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return data;
     }
     async function submitCandidateForm(form) {
+        const success_message = document.getElementById('success_message');
+        const errors_message = document.getElementById('errors_message');
         const candidateId = form.dataset.id;
         if (!candidateId) {
-            alert('Không tìm thấy ứng viên!');
+            msg_error('Không tìm thấy ứng viên!');            
             return;
         }
 
@@ -159,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setSubmitLoading(form, true);
 
         const formData = new FormData(form);
-        let data = get_data_udpate(formData);        
+        let data = get_data_udpate(formData);
         // formData.append('_method', 'PUT');
         const apiUrl = `${API_URL.candidate}/${candidateId}`;
         try {
@@ -173,23 +173,29 @@ document.addEventListener('DOMContentLoaded', function () {
                     'Content-Type': 'application/json'
                 },
             });
-            
+
             const result = await response.json().catch(() => ({}));
-            if (response.status === 422) {
-                // Lỗi validate từ Laravel Form Request
-                showFormErrors(form, result.errors || {});
-                return;
+            if (response.ok) {
+                msg_success(result.message || 'Cập nhật thông tin thành công!');
+                setTimeout(function () {                    
+                    goToStep('categories');
+                }, 1000);
+            } else {
+                if (response.status === 422) {
+                    // Lỗi validate từ Laravel Form Request
+                    msg_error(result.message || 'Cập nhật thông tin thất bại!');
+                    return;
+                }
+
+                if (!response.ok) {
+                    throw new Error(result.message || 'Cập nhật thông tin thất bại.');
+                    new bootstrap.Modal(document.getElementById('errorsModal')).show();
+                    errors_message.textContent = result.message || 'Cập nhật thông tin thất bại!';
+                }
             }
 
-            if (!response.ok) {
-                throw new Error(result.message || 'Cập nhật thông tin thất bại.');
-            }
-
-            // Cập nhật thành công -> chuyển sang bước tiếp theo
-            goToStep('categories');
         } catch (error) {
-            console.error(error);
-            alert(error.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+            msg_error(error.message || 'Có lỗi xảy ra, vui lòng thử lại.');            
         } finally {
             setSubmitLoading(form, false);
         }
@@ -209,7 +215,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Giới hạn 2MB theo hint hiển thị
             if (file.size > 2 * 1024 * 1024) {
-                alert('Dung lượng ảnh vượt quá 2MB, vui lòng chọn ảnh khác.');
+                msg_error('Dung lượng ảnh vượt quá 2MB, vui lòng chọn ảnh khác.');
                 avatarInput.value = '';
                 return;
             }

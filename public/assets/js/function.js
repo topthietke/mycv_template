@@ -1,17 +1,12 @@
 
 export function msg_success(message = 'Thành công') {
-    toastr.success(message);
-    // setTimeout(function () {
-    //     document.location.reload();
-    // }, 1000);
-
+    new bootstrap.Modal(document.getElementById('successModal')).show();
+    success_message.textContent = message || 'Cập nhật thông tin thành công!';
 }
 
 export function msg_error(message = 'Không thành công') {
-    toastr.error(message);
-    // setTimeout(function () {
-    //     document.location.reload();
-    // }, 1000);
+    new bootstrap.Modal(document.getElementById('errorsModal')).show();
+    errors_message.textContent = message || 'Cập nhật thông tin thất bại!';
 }
 
 export function ajax(url, data, method) {

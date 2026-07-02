@@ -8,6 +8,9 @@
     @include('head')
     <title>{{ $title }}</title>
     <link rel="stylesheet" href="{{ asset('/assets/css/style.css') }}">
+
+
+
 </head>
 
 <body>
@@ -22,8 +25,10 @@
             {{-- ================================ Bước 3: Nhập nội dung cho các mục đã chọn
             =============================== --}}
             @include('pages.edit.content_form')
-            {{-- ================================ Modal thêm danh mục mới =============================== --}}
-            {{-- @include('pages.edit.modal_add_categories') --}}
+            {{-- ================================ =============================== --}}
+            @include('message_success')
+
+            @include('message_errors')
             {{-- ================================ Các scripts cần thiết =============================== --}}
         </div>
     </div>

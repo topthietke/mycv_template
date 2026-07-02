@@ -399,6 +399,99 @@ body {
   margin-right: auto;
   font-size: .75rem;
   color: #868e96;
-  margin-top:3px;
+  margin-top: 3px;
   max-width: 210px;
+}
+
+/* ========================================================= Modal CSS -========================================================= */
+/* Thông báo lỗi: */
+#errorsModal .modal-content {
+  /* background-color: #2f2f3a; */
+  color: #000;
+  border-radius: 10px;
+  border: none;
+}
+
+.errors-alert {
+  padding: 4px 4px 8px;
+}
+
+.errors-alert__source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 14px;
+}
+
+.errors-alert__message {
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+}
+
+.errors-alert__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-ok {
+  background-color: #22c3d6;
+  border: none;
+  color: #fff;
+  padding: 6px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.btn-ok:hover {
+  background-color: #1cb0c2;
+  color: #fff;
+}
+
+/* ========================================================= Modal CSS -========================================================= */
+/* Thông báo lỗi: */
+
+#successModal .modal-content {
+  /* background-color: #2f2f3a; */
+  color: #000;
+  border-radius: 10px;
+  border: none;
+}
+
+.success-alert {
+  padding: 4px 4px 8px;
+}
+
+.success-alert__source {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 18px;
+  color: #000;
+  margin-bottom: 14px;
+}
+
+.success-alert__message {
+  margin-bottom: 18px;
+  font-size: 0.95rem;
+}
+
+.success-alert__actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.btn-ok {
+  background-color: #22c3d6;
+  border: none;
+  color: #fff;
+  padding: 6px 20px;
+  border-radius: 6px;
+  font-weight: 600;
+}
+
+.btn-ok:hover {
+  background-color: #1cb0c2;
+  color: #fff;
 }
