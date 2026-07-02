@@ -4,7 +4,7 @@ namespace App\Repository;
 use App\Models\Candidate;
 use Illuminate\Support\Facades\Auth;
 
-class CandidateRepository {
+class v1_CandidateRepository {
     private $candidate;
     public function __construct(Candidate $candidate) {
         $this->candidate = $candidate;
@@ -77,27 +77,17 @@ class CandidateRepository {
             ];
         }
 
+        // Assuming 'Candidate' model has fillable fields similar to 'Contents'
+        // You might need to adjust these field names based on your actual Candidate model
         $updateData = [
-            'fullname'          => $params['fullname'] ?? $record->fullname,
-            'position'          => $params['position'] ?? $record->position,
-            'birthday'          => $params['birthday'] ?? $record->birthday,
-            'gender'            => $params['gender'] ?? $record->gender,
-            'email'             => $params['email'] ?? $record->email,
-            'phone'             => $params['phone'] ?? $record->phone,
-            'identity_card'     => $params['identity_card'] ?? $record->identity_card,
-            'identity_date'     => $params['identity_date'] ?? $record->identity_date,
-            'identity_place'    => $params['identity_place'] ?? $record->identity_place,
-            'home_town'         => $params['home_town'] ?? $record->home_town,
-            'current_address'   => $params['current_address'] ?? $record->current_address,
-            'expected_salary'   => $params['expected_salary'] ?? $record->expected_salary,
-            'facebook_url'      => $params['facebook_url'] ?? $record->facebook_url,
-            'git_url'           => $params['git_url'] ?? $record->git_url,
-            'website_url'       => $params['website_url'] ?? $record->website_url,
-            'updated_by'        => Auth::id(),
+            'user_id'        => $params['user_id'] ?? $record->user_id,
+            'name'           => $params['name'] ?? $record->name,
+            'email'          => $params['email'] ?? $record->email,
+            'phone'          => $params['phone'] ?? $record->phone,
+            'address'        => $params['address'] ?? $record->address,
+            'updated_by'     => Auth::user()->id ?? null, // Assuming updated_by is the current authenticated user
         ];
-        if (isset($params['avatar'])) {
-            $updateData['avatar'] = $params['avatar'];
-        }
+        dd($updateData);
         if($this->candidate->updateById($id, $updateData)) {
             return [
                 'code' => 200,

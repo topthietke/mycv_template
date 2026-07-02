@@ -14,7 +14,7 @@ class UpdateCandidateRequest extends BaseRequest
         return true;
     }
 
-    public function rules(): array {        
+    public function rules(): array {
         return [
             'fullname'               => 'required|string|max:255',
             'position'               => 'required|string|max:255',
@@ -22,16 +22,8 @@ class UpdateCandidateRequest extends BaseRequest
             'gender'                 => 'required|string',
             'email'                  => [
                 'required',
-                'email',                
-                function ($attribute, $value, $fail) {
-                    $candidateId = $this->route('id');                    
-                    $exists = Candidate::where('email', $value)
-                        ->where('id', '!=', $candidateId)
-                        ->exists();                    
-                    if ($exists) {
-                        $fail('Địa chỉ email đã tồn tại.');
-                    }
-                },
+                'email',
+                Rule::unique('candidates')->ignore($this->route('candidate')),
             ],
             'phone'                  => 'required|string|max:20',
             'identity_card'          => 'required|string|max:50',
@@ -40,10 +32,7 @@ class UpdateCandidateRequest extends BaseRequest
             'home_town'              => 'required|string',
             'current_address'        => 'required|string',
             'expected_salary'        => 'nullable|numeric',
-            'avatar'                 => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
-            'facebook_url'           => 'nullable|url',
-            'git_url'                => 'nullable|url',
-            'website_url'            => 'nullable|url',            
+            'avatar'                 => 'nullable|image|mimes:jpeg,png,jpg|max:2048',                 
         ];
     }
 
@@ -61,10 +50,7 @@ class UpdateCandidateRequest extends BaseRequest
             'home_town'              => 'Quê quán',
             'current_address'        => 'Địa chỉ hiện tại',
             'expected_salary'        => 'Mức lương mong muốn',
-            'avatar'                 => 'Ảnh đại diện',
-            'facebook_url'           => 'Link Facebook',
-            'git_url'                => 'Link Git',
-            'website_url'            => 'Link Website'
+            'avatar'                 => 'Ảnh đại diện',            
         ];
     }
 }

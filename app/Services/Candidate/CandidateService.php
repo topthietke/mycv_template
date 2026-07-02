@@ -61,8 +61,7 @@ class CandidateService
         return $this->candidate_repository->create_multiple($data);
     }
 
-    public function update($params, $id)
-    {
+    public function update($params, $id) {        
         return $this->candidate_repository->update($params, $id);
     }
 

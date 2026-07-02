@@ -74,7 +74,7 @@ class CandidateController extends Controller {
      * Cập nhật thông tin ứng viên.
      */
     public function update(UpdateCandidateRequest $request, $id): JsonResponse {
-        try {
+        try {            
             $result = $this->can_service->update($request->all(), $id);
             return response()->json($result, $result['code'] ?? 200);
         } catch (\Exception $e) {

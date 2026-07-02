@@ -6,7 +6,7 @@
   --border-color: #dee2e6;
   --bg-body: #cccc;
   --bg-card: #ffffff;
-  --bg-section: #f8f9fa;  
+  --bg-section: #f8f9fa;
 }
 
 body {
@@ -114,16 +114,16 @@ body {
 }
 
 /* Trạng thái đang Active */
-.step.active .icon {  
+.step.active .icon {
   border-color: var(--primary-color);
   color: var(--primary-color);
-  box-shadow: 0 0 0 4px var(--primary-light);  
-  border-width:1px;
+  box-shadow: 0 0 0 4px var(--primary-light);
+  border-width: 1px;
 }
 
 .step.active p {
   color: var(--primary-color);
-  font-weight: 600;  
+  font-weight: 600;
 }
 
 /* Trạng thái đã hoàn thành (Completed) */
@@ -141,7 +141,8 @@ body {
   margin-bottom: 6px;
 }
 
-.form-control, .form-select {
+.form-control,
+.form-select {
   border: 1px solid var(--border-color);
   border-radius: 6px;
   padding: 10px 14px;
@@ -255,6 +256,7 @@ body {
 .text-asterisk {
   color: #dc3545;
 }
+
 .error-message {
   color: #dc3545;
   font-size: 12px;
@@ -266,20 +268,24 @@ body {
 .step-form {
   display: none;
 }
+
 .step-form.active {
   display: block;
   animation: fadeIn 0.4s;
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 /* ========================================= Custom CSS cho trang đăng ký tài khoản ứng viên ============================================================ */
 .label-back-login {
   text-decoration: none;
@@ -292,7 +298,8 @@ body {
 }
 
 
-.remove-category-btn, .remove-input-btn {
+.remove-category-btn,
+.remove-input-btn {
   padding: 8.5px 14px;
 }
 
@@ -302,17 +309,96 @@ body {
 
 /* =========================================================== Login CSS ============================================================================= */
 .card-custom {
-    border: none;
-    border-radius: 16px;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-    background: #ffffff;
-    
-    width: 500px;
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 20px;
-    padding-top: 10px;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+
+  width: 500px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 20px;
+  padding-top: 10px;
 }
 
 /* ================================================================ title csss =============================================================================== */
-.dot, ._dot {height: 1px;background: linear-gradient(90deg, #0317c9, transparent);}
+.dot,
+._dot {
+  height: 1px;
+  background: linear-gradient(90deg, #0317c9, transparent);
+}
+
+
+/* ================================================================ title csss =============================================================================== */
+/* Edit CSS */
+/* ===== Edit CSS ===== */
+.cv-form label {
+  text-transform: normal;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: .04em;
+  color: #495057;
+  margin-bottom: .4rem;
+}
+
+.cv-form .text-required {
+  color: #dc3545;
+}
+
+/* Cột ảnh đại diện: căn giữa toàn bộ nội dung */
+.avatar-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.avatar-col label {
+  width: 100%;
+  max-width: 210px;
+}
+
+/* Khung ảnh đại diện */
+.avatar-upload-box {
+  width: 100%;
+  max-width: 210px;
+  aspect-ratio: 3 / 4;
+  /* border: 2px dashed #ced4da;
+        border-radius: 10px; */
+  background-color: #f1f3f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  margin: 0 auto .75rem auto;
+  position: relative;
+}
+
+.avatar-upload-box img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+  border-radius: 8px;
+}
+
+.avatar-upload-box .avatar-placeholder-icon {
+  font-size: 2.5rem;
+  color: #adb5bd;
+}
+
+.avatar-upload-wrapper {
+  width: 100%;
+  max-width: 210px;
+  margin: 0 auto;
+}
+
+
+.avatar-hint {
+  margin-left: auto;
+  margin-right: auto;
+  font-size: .75rem;
+  color: #868e96;
+  margin-top:3px;
+  max-width: 210px;
+}

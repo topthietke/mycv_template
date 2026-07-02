@@ -160,21 +160,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         const formData = new FormData(form);
         let data = get_data_udpate(formData);        
-        // formData.append('_method', 'PUT');
         const apiUrl = `${API_URL.candidate}/${candidateId}`;
         try {
             const response = await fetch(apiUrl, {
                 method: 'PUT',
-                body: JSON.stringify(data),
+                body: formData,
                 credentials: 'include', // gửi kèm cookie auth (CheckAuthToken)
                 headers: {
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
                 },
             });
             
             const result = await response.json().catch(() => ({}));
+            console.log(result);
+            
             if (response.status === 422) {
                 // Lỗi validate từ Laravel Form Request
                 showFormErrors(form, result.errors || {});
