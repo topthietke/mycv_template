@@ -29,7 +29,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('check.login')->group(function () {
     Route::get('/logout', [LoginController::class, 'logout'])->name('logout');
     Route::get('/home', [HomeController::class, 'index'])->name('home');
-    Route::get('/edit/{candidate_id}', [HomeController::class, 'edit'])->name('edit');
+    Route::get('/edit/{candidate_id}', [HomeController::class, 'edit'])->name('edit');    
 });
 
 

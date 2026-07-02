@@ -18,8 +18,7 @@
     $sizeClass = $size ? "form-select-{$size}" : '';
     $errors    = $errors ?? session()->get('errors', new \Illuminate\Support\MessageBag);
     $errorMsg  = $error ?? ($errors->first($name) ?: null);
-    $oldValue  = old($name, $selected);
-
+    $oldValue  = old($name, $selected);    
     // Normalize options thành [['value'=>, 'label'=>]]
     $normalized = [];
     foreach ($options as $key => $val) {

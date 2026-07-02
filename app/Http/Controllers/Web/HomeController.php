@@ -18,8 +18,7 @@ class HomeController extends Controller
         $url      = config('app.url') . '/api/candidate/' .  $candidate_id;
         $response = $this->data_get($url);
         $data     = json_decode($response, true);
-        $candidate = $data['data'];
-        $candidate['birthday'] = !empty($candidate['birthday']) ? Carbon::parse($candidate['birthday'])->format('d/m/Y') : '';
+        $candidate = $data['data'];        
         return $candidate;
     }
     public function get_data_categories($candidate_id) {
@@ -34,6 +33,7 @@ class HomeController extends Controller
         $candidate_id   = Auth::user()->id;
         $candidate = $this->get_data_candidate($candidate_id);
         $categories = $this->get_data_categories($candidate_id);        
+        $candidate['birthday'] = !empty($candidate['birthday']) ? Carbon::parse($candidate['birthday'])->format('d/m/Y') : '';
         $data = [
             "candidate" => $candidate,
             "categories" => $categories,
@@ -41,8 +41,8 @@ class HomeController extends Controller
         return view('pages.home.index', $data);
     }
 
-    public function edit(int| string $candidate_id) {        
-        $candidate = $this->get_data_candidate($candidate_id);
+    public function edit(int| string $candidate_id) {
+        $candidate = $this->get_data_candidate($candidate_id);        
         $categories = $this->get_data_categories($candidate_id);        
         $data = [
             "candidate" => $candidate,

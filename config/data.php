@@ -78,13 +78,13 @@
             "page_10" => 10
         ],
         "index" => [
-            "title" => "Thông tin cá nhân",
-            "home_title" => "Trang chủ",
-            "career_title" => "Mục tiêu nghề nghiệp",
-            "educations_title" => "Quá trình đào tạo",
-            "skills_title" => "Công nghệ",
-            "activities_title" => "Hoạt động",
-            "languages_title" => "Ngoại ngữ",
+            "title"             => "Thông tin cá nhân",
+            "home_title"        => "Trang chủ",
+            "career_title"      => "Mục tiêu nghề nghiệp",
+            "educations_title"  => "Quá trình đào tạo",
+            "skills_title"      => "Công nghệ",
+            "activities_title"  => "Hoạt động",
+            "languages_title"   => "Ngoại ngữ",
             "experiences_title" => "Kinh nghiệm làm việc",                        
         ],
         "edit" => [

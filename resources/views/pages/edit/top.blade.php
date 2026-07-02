@@ -14,15 +14,15 @@
     <div class="step-line"></div>
     <div class="step-line-active" id="progress-line" style="width: 0%;"></div>
     <div class="step-indicator">
-        <div class="step active" id="indicator-1">
+        <div class="step active" id="candidate">
             <div class="icon"><i class="fas fa-user"></i></div>
             <p>Thông tin cá nhân</p>
         </div>
-        <div class="step" id="indicator-2">
+        <div class="step" id="categories">
             <div class="icon"><i class="fas fa-list"></i></div>
             <p>Chọn danh mục</p>
         </div>
-        <div class="step" id="indicator-3">
+        <div class="step" id="contents">
             <div class="icon"><i class="fas fa-file-alt"></i></div>
             <p>Nhập nội dung</p>
         </div>
