@@ -495,3 +495,27 @@ body {
   background-color: #1cb0c2;
   color: #fff;
 }
+
+/* =============================================================== Categories CSS =============================================================================== */
+.category-item {
+  position: relative;
+}
+
+.category-card {
+  display: flex;
+  align-items: center;
+  /* các style khác của bạn... */
+}
+
+.remove-category-icon {
+  position: absolute;
+  top: 15%;
+  right: 5%;
+  cursor: pointer;
+  z-index: 2;
+  color: #dc3545;
+}
+
+.remove-category-icon:hover {
+  color: #a71d2a;
+}

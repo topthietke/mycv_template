@@ -1,11 +1,12 @@
-<form id="categoryForm" class="step-form">
+
+<form id="categoryForm" class="step-form" data-user-id="{{ $candidate['id'] }}" method="POST">
     @csrf
     <div class="row">
         <div class="col-lg-6 col-md-6">
             <h5 class="fw-bold">Bước 2: Đăng ký danh mục của cá nhân</h5>
         </div>
         <div class="col-lg-6 col-md-6 text-end">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#categoryModal">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#editCategoriesModal">
                 <i class="fa fa-plus-circle mr-2 text-primary fa-lg"></i>
             </a>
         </div>
@@ -25,16 +26,15 @@
                         <i class="fas fa-bullseye text-primary"></i>
                     </div>
                     <div class="category-info text-start">
-                        <h6>{{ $cat['name'] }}</h6>
+                        <span>{{ $cat['name'] }}</span>
                     </div>
                 </label>
                 <i class="fa fa-times fa-sm text-danger remove-category-icon" title="click để xoá danh mục tương ứng"
                     id="rm_icon_{{ $cat['id'] }}" data-id="{{ $cat['id'] }}"></i>
             </div>
         @endforeach
-    </div>
-
-    <div id="category_list" class="text-center m-0 mt-2"></div>
+        <div id="category_list" class="col-md-4 text-center m-0 mt-2"></div>
+    </div>    
 
     <div class="dot mb-3 mt-0 pt-0"></div>
     <div class="row mt-3">
@@ -47,27 +47,6 @@
 </form>
 
 <style>
-    .category-item {
-        position: relative;
-    }
 
-    .category-card {
-        display: flex;
-        align-items: center;
-        /* các style khác của bạn... */
-    }
-
-    .remove-category-icon {
-        position: absolute;
-        top: 15%;
-        right: 5%;
-        cursor: pointer;
-        z-index: 2;
-        color: #dc3545;
-    }
-
-    .remove-category-icon:hover {
-        color: #a71d2a;
-    }
 </style>
 

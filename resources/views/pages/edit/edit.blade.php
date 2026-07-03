@@ -26,6 +26,7 @@
             =============================== --}}
             @include('pages.edit.content_form')
             {{-- ================================ =============================== --}}
+            @include('pages.edit.modal_add_categories')
             
             @include('message_success')
 
