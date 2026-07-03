@@ -3,7 +3,13 @@
 namespace App\Repository;
 use App\Models\CandidateContent;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
+
 class ContentsRepository {
+    use HasFactory, Notifiable, HasApiTokens, SoftDeletes;
     private $contents;
     public function __construct(CandidateContent $contents)
     {

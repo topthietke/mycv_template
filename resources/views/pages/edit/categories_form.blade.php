@@ -15,19 +15,59 @@
     {{-- ====================================== Tiêu đề + icon thêm danh muc =======================================
     --}}
 
-    <div id="category_list" class="text-center my-3 py-2">
-        <h6>Không có danh mục nào! Vui lòng thêm mới danh mục</h6>
+    <div class="row mt-4">
+        @foreach ($categories as $cat)
+            <div class="col-md-4 mb-3 category-item" data-id="{{ $cat['id'] }}">
+                <label class="category-card" for="cat_{{ $cat['id'] }}">
+                    <input type="checkbox" name="categories[]" value="{{ $cat['id'] }}" id="cat_{{ $cat['id'] }}"
+                        class="hidden-checkbox">
+                    <div class="category-icon">
+                        <i class="fas fa-bullseye text-primary"></i>
+                    </div>
+                    <div class="category-info text-start">
+                        <h6>{{ $cat['name'] }}</h6>
+                    </div>
+                </label>
+                <i class="fa fa-times fa-sm text-danger remove-category-icon" title="click để xoá danh mục tương ứng"
+                    id="rm_icon_{{ $cat['id'] }}" data-id="{{ $cat['id'] }}"></i>
+            </div>
+        @endforeach
     </div>
-    <div class="dot my-3"></div>
+
+    <div id="category_list" class="text-center m-0 mt-2"></div>
+
+    <div class="dot mb-3 mt-0 pt-0"></div>
     <div class="row mt-3">
         <div class="col-lg-12 d-flex justify-content-end">
-            {{-- <button type="button" class="btn btn-primary" id="category_form_submit" data-step="3"> Tiếp theo <i
-                    class="fas fa-arrow-right ms-2"></i>
-            </button> --}}
-            {{-- <button type="button" class="btn btn-back-step" id="category_form_back" data-step="1">Quay lại</button> --}}
-            <x-button type="submit" class="btn btn-next" id="category_form_submit" data-step="3"> 
+            <x-button type="submit" class="btn btn-next" id="category_form_submit" data-step="3">
                 Tiếp theo <i class="fas fa-arrow-right ms-2"></i>
             </x-button>
         </div>
     </div>
 </form>
+
+<style>
+    .category-item {
+        position: relative;
+    }
+
+    .category-card {
+        display: flex;
+        align-items: center;
+        /* các style khác của bạn... */
+    }
+
+    .remove-category-icon {
+        position: absolute;
+        top: 15%;
+        right: 5%;
+        cursor: pointer;
+        z-index: 2;
+        color: #dc3545;
+    }
+
+    .remove-category-icon:hover {
+        color: #a71d2a;
+    }
+</style>
+

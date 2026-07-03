@@ -1,9 +1,13 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 class CandidateContent extends BaseModel
 {
+     use HasFactory, Notifiable, HasApiTokens, SoftDeletes;
     protected $table = 'candidate_contents';
     protected $fillable = [
         "id",

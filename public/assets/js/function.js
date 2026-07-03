@@ -1,7 +1,7 @@
 
 export function msg_success(message = 'Thành công') {
     new bootstrap.Modal(document.getElementById('successModal')).show();
-    success_message.textContent = message || 'Cập nhật thông tin thành công!';
+    success_message.textContent = message || 'Cập nhật thông tin thành công!';    
 }
 
 export function msg_error(message = 'Không thành công') {

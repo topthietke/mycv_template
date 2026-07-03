@@ -151,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const errors_message = document.getElementById('errors_message');
         const candidateId = form.dataset.id;
         if (!candidateId) {
-            msg_error('Không tìm thấy ứng viên!');            
+            msg_error('Không tìm thấy ứng viên!');
             return;
         }
 
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const result = await response.json().catch(() => ({}));
             if (response.ok) {
                 msg_success(result.message || 'Cập nhật thông tin thành công!');
-                setTimeout(function () {                    
+                setTimeout(function () {
                     goToStep('categories');
                 }, 1000);
             } else {
@@ -195,12 +195,61 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
         } catch (error) {
-            msg_error(error.message || 'Có lỗi xảy ra, vui lòng thử lại.');            
+            msg_error(error.message || 'Có lỗi xảy ra, vui lòng thử lại.');
         } finally {
             setSubmitLoading(form, false);
         }
     }
     // ----------------------------------------------------------------------
+    function getCookie(name) {
+        const value = `; ${document.cookie}`;
+        const parts = value.split(`; ${name}=`);
+        if (parts.length === 2) return parts.pop().split(';').shift();
+        return null;
+    }
+
+    function deleteSelectedCategories(categoryId) {
+        const apiUrl = `${API_URL.categories}/${categoryId}`;
+        $.ajax({
+            url: apiUrl,
+            type: 'DELETE',
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+                'Authorization': `Bearer ${getCookie('auth_token')}` // đổi 'auth_token' đúng tên cookie bạn đang set
+            },
+            success: function (response) {
+                console.log(response);
+                return;
+                const $card = $(`.category-card[data-id="${categoryId}"]`);
+                $card.fadeOut(300, function () {
+                    $(this).remove();
+                });
+                msg_success('Xoá danh mục thành công!');
+            },
+            error: function (xhr) {
+                const message = xhr.responseJSON?.message || 'Có lỗi xảy ra, vui lòng thử lại.';
+                msg_error(message);
+            }
+        });
+    }
+
+    // ----------------------------------------------------------------------
+    // Xoá danh mục:
+    const removeIcons = document.querySelectorAll('.remove-category-icon');
+    removeIcons.forEach(function (icon) {
+        icon.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            const categoryId = this.getAttribute('data-id');
+            const checkbox = document.getElementById('cat_' + categoryId);
+            if (checkbox) {
+                checkbox.checked = false;
+            }
+            this.closest('.category-item').remove();
+            deleteSelectedCategories(categoryId);
+        });
+    });
+
 });
 
 (function () {
@@ -230,3 +279,4 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 })();
+

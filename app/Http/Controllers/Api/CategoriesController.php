@@ -72,8 +72,8 @@ class CategoriesController extends Controller {
         }
     }
 
-    public function destroy($id): JsonResponse
-    {
+    
+    public function destroy($id): JsonResponse {
         try {
             $result = $this->cat_service->delete($id);
             return response()->json($result, $result['code'] ?? 200);

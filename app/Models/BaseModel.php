@@ -271,7 +271,7 @@ abstract class BaseModel extends Model implements BaseModelInterface {
      */
     public static function getWithRelations(array $relations, array $columns = ['*']): Collection
     {
-        return static::select($columns)->with($relations)->get();
+        return static::select($columns)->with($relations)->whereNull('deleted_at')->get();
     }
 
     /**

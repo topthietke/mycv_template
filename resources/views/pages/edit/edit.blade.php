@@ -26,6 +26,7 @@
             =============================== --}}
             @include('pages.edit.content_form')
             {{-- ================================ =============================== --}}
+            
             @include('message_success')
 
             @include('message_errors')

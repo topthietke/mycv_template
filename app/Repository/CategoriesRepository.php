@@ -2,13 +2,20 @@
 
 namespace App\Repository;
 
+use App\Models\CandidateContent;
 use App\Models\Category;
 use Illuminate\Support\Facades\Auth;
 
 class CategoriesRepository {
     private $categories;
-    public function __construct(Category $categories) {
+    private $candidateContent;
+
+    public function __construct(
+        Category $categories,
+        CandidateContent $candidateContent        
+    ) {
         $this->categories = $categories;
+        $this->candidateContent = $candidateContent;
     }
     public function whereByConditions($params){
         return $this->categories->findByConditions($params);
@@ -102,8 +109,34 @@ class CategoriesRepository {
         }
     }
 
+    private function content_delete($category_id){
+        try {
+            $deleted = $this->candidateContent->deleteByCollumn('category_id', $category_id);            
+            if ($deleted) {
+                return [
+                    'code' => 200,
+                    'message' => 'Xóa nội dung theo danh mục thành công',
+                    'data' => true
+                ];
+            } else {
+                return [
+                    'code' => 201,
+                    'message' => 'Xóa nội dung theo danh mục không thành công',
+                    'data' => null
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'code' => 500,
+                'message' => $e->getMessage(),
+                'data' => null
+            ];
+        }    
+    }
+
     public function delete($id) {
         try {
+            $this->content_delete($id);
             $record = $this->categories->find($id);
             if (!$record) {
                 return [
