@@ -64,8 +64,7 @@ class ContentsController extends Controller
 
     public function update(Request $request, $id): JsonResponse
     {
-        try {
-            dd($request->all());
+        try {            
             $result = $this->content_service->update($request->all(), $id);
             return response()->json($result, $result['code'] ?? 200);
         } catch (\Exception $e) {
@@ -108,7 +107,7 @@ class ContentsController extends Controller
         }
     }
 
-    public function update_multiple_data(Request $request): JsonResponse {        
+    public function update_multiple_data(Request $request): JsonResponse {
         return response()->json($this->content_service->update_multiple_data($request->all()), 201);
     }
 

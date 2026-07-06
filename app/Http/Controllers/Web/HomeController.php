@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
 use App\Helpers\Helpers;
+use App\Models\Category;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Auth;
 
@@ -22,11 +23,8 @@ class HomeController extends Controller
         return $candidate;
     }
     public function get_data_categories($candidate_id) {
-        $url      = config('app.url') . '/api/categories';
-        $response = $this->data_get($url);
-        $data     = json_decode($response, true);
-        $categories = $data['data'];
-        return $categories;
+        $categories = Category::where('candidate_id', $candidate_id)->get();        
+        return $categories;        
     }
     public function index()
     {        

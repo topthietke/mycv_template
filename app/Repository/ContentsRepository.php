@@ -41,7 +41,6 @@ class ContentsRepository {
         }
         return $data;
     }
-
     public function edit($id) {
         try {
             $model = $this->contents->findById($id);
@@ -67,15 +66,12 @@ class ContentsRepository {
         }
         return $data;
     }
-
     public function create($data) {
         return $this->contents->createRecord($data);
     }
-
     public function create_multiple($data) {
         return $this->contents->insert($data);
     }
-
     public function update($params, $id) {
         $record = $this->contents->findById($id);
         if (empty($record)) {
@@ -105,7 +101,6 @@ class ContentsRepository {
             ];
         }
     }
-
     public function delete($id) {
         try {
             $record = $this->contents->find($id);
@@ -142,7 +137,6 @@ class ContentsRepository {
             ];
         }
     }
-
     public function deleteByCollumn(string $column, mixed $value) {
         try {
             return $this->contents->deleteByCollumn($column, $value);
@@ -152,5 +146,9 @@ class ContentsRepository {
                 'message' => $e->getMessage(),
             ];
         }
+    }
+    public function whereByCollumn(array $params) {
+        $model = $this->contents->findByConditions($params);
+        return $model;
     }
 }

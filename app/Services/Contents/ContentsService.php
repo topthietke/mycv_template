@@ -2,6 +2,7 @@
 
 namespace App\Services\Contents;
 
+use App\Models\CandidateContent;
 use App\Repository\ContentsRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -53,9 +54,28 @@ class ContentsService {
     }
 
     public function update_multiple_data(array $data)
-    {
-        foreach ($data as $value) {
-            # code...
+    {        
+        $dem = 0;
+        foreach ($data as $value) {            
+            $params = [
+                "content" => $value['content'],
+                "updated_by" => Auth::user()->id ?? null,
+                "updated_at" => now()
+            ];            
+            $update = CandidateContent::where('category_id', $value['category_id'])->update($params);
+            if($update > 0) $dem += 1;
         }
+        if($dem > 0) {
+            return [
+                'code' => 200,
+                'message' => 'Cập nhật nội dung thành công',            
+            ];
+        } else  {
+            return [
+                'code' => 500,
+                'message' => 'Cập nhật nội dung không thành công',                        
+            ];
+        }
+
     }
 }
