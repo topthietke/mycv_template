@@ -22,7 +22,7 @@ class HomeController extends Controller
         return $candidate;
     }
     public function get_data_categories($candidate_id) {
-        $url      = config('app.url') . '/api/categories';        
+        $url      = config('app.url') . '/api/categories';
         $response = $this->data_get($url);
         $data     = json_decode($response, true);
         $categories = $data['data'];

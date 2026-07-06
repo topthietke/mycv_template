@@ -800,7 +800,7 @@ document
         // 2. Duyệt qua từng section để kiểm tra và lấy dữ liệu
         sections.forEach((section) => {
             const categoryId = section.getAttribute("data-category-id");
-            const textarea = section.querySelector("textarea.experiences");
+            const textarea   = section.querySelector("textarea.experiences");
 
             // Lấy nội dung từ CKEditor instance nếu có, ngược lại lấy từ value gốc
             const content = textarea.ckeditorInstance

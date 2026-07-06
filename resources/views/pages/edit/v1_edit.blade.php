@@ -7,19 +7,10 @@
 <head>
     @include('head')
     <title>{{ $title }}</title>
-    <style>
-        .edit_slanted_bar {
-            background: #000;
-            color: #fff;
-            font-weight: 700;
-            padding: 10px 55px 10px 20px;
-            display: inline-block;
-            clip-path: polygon(0 0, calc(100% - 35px) 0, 100% 100%, 0 100%);
-            border-top-left-radius: 8px;
-        }
-        .edit_dot { height: 2px; background: linear-gradient(90deg, #000, transparent); }
-    </style>
     <link rel="stylesheet" href="{{ asset('/assets/css/style.css') }}">
+
+
+
 </head>
 
 <body>
@@ -44,8 +35,9 @@
         </div>
     </div>
 
-    @include('script')    
-    <script type="module" src="/assets/js/edit.js"></script>    
+    @include('script')
+    <script type="module" src="/assets/js/edit.js"></script>  
+
 </body>
 
 </html>

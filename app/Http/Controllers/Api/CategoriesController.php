@@ -57,7 +57,6 @@ class CategoriesController extends Controller {
             ], 500);
         }
     }
-
     public function update(UpdateCategoriesRequest $request, $id): JsonResponse
     {
         try {
@@ -70,9 +69,7 @@ class CategoriesController extends Controller {
                 'error' => $e->getMessage()
             ], 500);
         }
-    }
-
-    
+    }    
     public function destroy($id): JsonResponse {
         try {
             $result = $this->cat_service->delete($id);
@@ -85,7 +82,6 @@ class CategoriesController extends Controller {
             ], 500);
         }
     }
-
     public function update_pages(Request $request): JsonResponse  {        
         try {
             $params = $request->all();            
@@ -99,4 +95,18 @@ class CategoriesController extends Controller {
             ], 500);
         }
     }
+    public function get_data_by_candidate_id(Request $request): JsonResponse {
+        try {            
+            $candidate_id = $request->candidate_id;            
+            $result = $this->cat_service->get_data_by_candidate_id($candidate_id);
+            return response()->json($result, $result['code'] ?? 200);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Có lỗi xảy ra khi tải chi tiết danh mục.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
 }

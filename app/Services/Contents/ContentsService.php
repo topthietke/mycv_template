@@ -51,4 +51,11 @@ class ContentsService {
     {
         return $this->content_repository->deleteByCollumn($column, $value);
     }
+
+    public function update_multiple_data(array $data)
+    {
+        foreach ($data as $value) {
+            # code...
+        }
+    }
 }

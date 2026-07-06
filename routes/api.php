@@ -19,16 +19,18 @@ Route::post('/forgot-password', [LoginController::class, 'forgotPassword']);
 
 Route::resource('/candidate', CandidateController::class);
 
+Route::resource('/categories', CategoriesController::class);
 Route::group(['prefix' => 'categories'], function () {
     Route::post('create-multiple', [CategoriesController::class, 'create_multiple']);
     Route::post('update-pages', [CategoriesController::class, 'update_pages']);
+    Route::post('/get-data-by-candidate-id', [CategoriesController::class, 'get_data_by_candidate_id']);
 });
-Route::resource('/categories', CategoriesController::class);
-Route::resource('/contents', ContentsController::class);
 
 Route::prefix('contents')->group(function () {
     Route::post('/create-multiple', [ContentsController::class, 'create_multiple']);
+    Route::post('/update-multiple-data', [ContentsController::class, 'update_multiple_data']);
 });
+Route::resource('/contents', ContentsController::class);
 
 Route::get('/send-test-mail', [Controller::class, 'test_send_mail']);
 Route::get('/send-mail-information', [Controller::class, 'send_account_info_mail']);

@@ -17,7 +17,7 @@ class CategoriesRepository {
         $this->categories = $categories;
         $this->candidateContent = $candidateContent;
     }
-    public function whereByConditions($params){
+    public function whereByConditions(array $params){
         return $this->categories->findByConditions($params);
     }
     public function index($params) {

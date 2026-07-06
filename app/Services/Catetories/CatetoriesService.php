@@ -113,4 +113,15 @@ class CatetoriesService {
         }
         
     }
+
+    public function get_data_by_candidate_id(int | string $candidate_id){
+        $condition = [
+            "candidate_id" => $candidate_id,            
+        ];
+
+        $model = $this->categoriesRepo->whereByConditions($condition)->toArray();
+        dd($model);
+        return true;
+    }
+    
 }

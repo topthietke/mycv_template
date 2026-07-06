@@ -8,5 +8,5 @@ export const API_URL = {
     contents                  : `${API_BASE_URL}/contents`,
     login                     : `${API_BASE_URL}/login`,
     categories                : `${API_BASE_URL}/categories`,
-    
+    update_multiple_data      : `${API_BASE_URL}/contents/update-multiple-data`,
 };

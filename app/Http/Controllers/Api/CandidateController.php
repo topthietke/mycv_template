@@ -38,9 +38,7 @@ class CandidateController extends Controller {
             ], 500);
         }
     }
-    /**
-     * Lấy danh sách ứng viên.
-     */
+    
     public function index(Request $request): JsonResponse {        
         try {
             $data = $this->can_service->index($request->all());

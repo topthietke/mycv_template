@@ -426,3 +426,94 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })();
 
+// ------------------------------------------------------------------------------------------------------------
+
+document.getElementById('categoryForm').addEventListener('submit', function (e) {
+    e.preventDefault(); // Nếu bạn muốn submit AJAX, giữ dòng này. Nếu submit form bình thường thì bỏ đi.
+    const form = this;
+    // 1. Lấy toàn bộ textarea có trong form và log ra console
+    const textareas = form.querySelectorAll('textarea');
+    // 2. Cập nhật lại content theo data-category-id
+    const categoriesData = [];
+
+    textareas.forEach(function (textarea) {
+        // Tìm div cha gần nhất có attribute data-category-id
+        const wrapper = textarea.closest('[data-category-id]');
+        if (!wrapper) return;
+
+        const categoryId = wrapper.getAttribute('data-category-id');
+
+        // Nếu textarea này đang được CKEditor quản lý -> đồng bộ dữ liệu CKEditor về textarea trước
+        if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[textarea.id]) {
+            const editorInstance = CKEDITOR.instances[textarea.id];
+            editorInstance.updateElement(); // đẩy nội dung editor xuống textarea gốc
+        }
+
+        // Lấy nội dung mới nhất (sau khi đã sync từ CKEditor nếu có)
+        const content = textarea.value;
+
+        // Cập nhật lại value của textarea (đảm bảo luôn ở trạng thái mới nhất)
+        textarea.value = content;
+
+        // Lưu vào object theo category id, để tiện dùng khi gửi API
+        // categoriesData[categoryId] = content;
+
+        categoriesData.push({
+            category_id: categoryId,
+            content    : content
+        });
+
+        // console.log(`Category ID: ${categoryId} -> Content:`, content);
+    });
+
+    
+    const apiUrl = `${API_URL.update_multiple_data}`;    
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const candidateId = document.getElementById('candidateForm')?.dataset.id;
+
+    if (!candidateId) {
+        msg_error('Không tìm thấy thông tin ứng viên. Vui lòng kiểm tra lại.');
+        return;
+    }
+
+    const payload = categoriesData;
+
+    // Bắt đầu trạng thái loading
+    if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Đang lưu...';
+    }
+
+    fetch(apiUrl, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+        },
+        body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(result => {
+        if (result.success) {
+            msg_success(result.message || 'Cập nhật chi tiết danh mục thành công!');
+            goToStep('contents'); // Chuyển sang bước tiếp theo
+        } else {
+            msg_error(result.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        msg_error('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+    })
+    .finally(() => {
+        // Kết thúc trạng thái loading
+        if (submitBtn) {
+            submitBtn.disabled = false;
+            if (submitBtn.dataset.originalHtml) {
+                submitBtn.innerHTML = submitBtn.dataset.originalHtml;
+            }
+        }
+    });
+});

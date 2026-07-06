@@ -7,11 +7,11 @@
     @csrf
     <div class="row">
         <div class="col-lg-12">
-            <h5 class="mb-2 fw-bold">{{ $candidate_title }}</h5>
+            <h6 class="mb-2 fw-bold">{{ $candidate_title }}</h6>
         </div>
     </div>
 
-    <div class="dot my-4"></div>
+    <div class="dot my-2"></div>
     {{-- ================================ Bắt đầu phần ảnh đại diện ============================= --}}
     <div class="row">
         {{-- ================================ Cột trái: Ảnh đại diện =============================== --}}

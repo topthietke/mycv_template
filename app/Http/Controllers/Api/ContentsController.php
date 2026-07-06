@@ -65,6 +65,7 @@ class ContentsController extends Controller
     public function update(Request $request, $id): JsonResponse
     {
         try {
+            dd($request->all());
             $result = $this->content_service->update($request->all(), $id);
             return response()->json($result, $result['code'] ?? 200);
         } catch (\Exception $e) {
@@ -97,7 +98,7 @@ class ContentsController extends Controller
                 'success' => true,
                 'message' => 'Tạo nhiều nội dung thành công!',
                 'data' => $contents
-            ], 201);
+            ], 200);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
@@ -106,4 +107,9 @@ class ContentsController extends Controller
             ], 500);
         }
     }
+
+    public function update_multiple_data(Request $request): JsonResponse {        
+        return response()->json($this->content_service->update_multiple_data($request->all()), 201);
+    }
+
 }
