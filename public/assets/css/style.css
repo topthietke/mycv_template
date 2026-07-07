@@ -1,331 +1,331 @@
 :root {
-  --primary-color: #545ceb;
-  --primary-light: #f0f2ff;
-  --text-main: #333333;
-  --text-muted: #6c757d;
-  --border-color: #dee2e6;
-  --bg-body: #cccc;
-  --bg-card: #ffffff;
-  --bg-section: #f8f9fa;
+    --primary-color: #545ceb;
+    --primary-light: #f0f2ff;
+    --text-main: #333333;
+    --text-muted: #6c757d;
+    --border-color: #dee2e6;
+    --bg-body: #cccc;
+    --bg-card: #ffffff;
+    --bg-section: #f8f9fa;
 }
 
 body {
-  background-color: var(--bg-body);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  color: var(--text-main);
+    background-color: var(--bg-body);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color: var(--text-main);
 }
 
 .bg-secondary {
-  background-color: var(--bg-body) !important;
+    background-color: var(--bg-body) !important;
 }
 
 .container {
-  max-width: 900px;
-  margin-top: 40px;
-  margin-bottom: 40px;
+    max-width: 900px;
+    margin-top: 40px;
+    margin-bottom: 40px;
 }
 
 .form-container {
-  background-color: var(--bg-card);
-  border-radius: 12px;
-  padding: 40px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-  width: 1024px;
+    background-color: var(--bg-card);
+    border-radius: 12px;
+    padding: 40px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
+    width: 1024px;
 }
 
 /* Nút quay lại góc trên phải */
 .back-login-link {
-  text-decoration: none;
-  color: var(--primary-color);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-bottom: 30px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 30px;
 }
 
 .back-login-link:hover {
-  color: #4046b3;
+    color: #4046b3;
 }
 
 /* Thanh tiến trình (Step Indicator) */
 .step-indicator-wrapper {
-  position: relative;
-  margin-bottom: 50px;
-  padding: 0 40px;
+    position: relative;
+    margin-bottom: 50px;
+    padding: 0 40px;
 }
 
 .step-line {
-  position: absolute;
-  top: 20px;
-  left: 60px;
-  right: 60px;
-  height: 3px;
-  background-color: #e9ecef;
-  z-index: 1;
+    position: absolute;
+    top: 20px;
+    left: 60px;
+    right: 60px;
+    height: 3px;
+    background-color: #e9ecef;
+    z-index: 1;
 }
 
 .step-line-active {
-  position: absolute;
-  top: 20px;
-  left: 60px;
-  height: 3px;
-  background-color: var(--primary-color);
-  z-index: 2;
-  transition: width 0.3s ease;
+    position: absolute;
+    top: 20px;
+    left: 60px;
+    height: 3px;
+    background-color: var(--primary-color);
+    z-index: 2;
+    transition: width 0.3s ease;
 }
 
 .step-indicator {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  z-index: 3;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    z-index: 3;
 }
 
 .step {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  background: var(--bg-card);
-  width: 150px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: var(--bg-card);
+    width: 150px;
 }
 
 .step .icon {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background-color: var(--bg-card);
-  border: 2px solid var(--border-color);
-  color: var(--text-muted);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  margin-bottom: 10px;
-  transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background-color: var(--bg-card);
+    border: 2px solid var(--border-color);
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    margin-bottom: 10px;
+    transition: all 0.3s ease;
 }
 
 .step p {
-  font-size: 14px;
-  color: var(--text-muted);
-  margin: 0;
-  font-weight: 500;
+    font-size: 14px;
+    color: var(--text-muted);
+    margin: 0;
+    font-weight: 500;
 }
 
 /* Trạng thái đang Active */
 .step.active .icon {
-  border-color: var(--primary-color);
-  color: var(--primary-color);
-  box-shadow: 0 0 0 4px var(--primary-light);
-  border-width: 1px;
+    border-color: var(--primary-color);
+    color: var(--primary-color);
+    box-shadow: 0 0 0 4px var(--primary-light);
+    border-width: 1px;
 }
 
 .step.active p {
-  color: var(--primary-color);
-  font-weight: 600;
+    color: var(--primary-color);
+    font-weight: 600;
 }
 
 /* Trạng thái đã hoàn thành (Completed) */
 .step.completed .icon {
-  border-color: var(--primary-color);
-  color: var(--text-muted);
-  border-color: var(--text-muted);
+    border-color: var(--primary-color);
+    color: var(--text-muted);
+    border-color: var(--text-muted);
 }
 
 /* Custom Inputs */
 .form-label {
-  font-weight: 500;
-  font-size: 17px;
-  color: #495057;
-  margin-bottom: 6px;
+    font-weight: 500;
+    font-size: 17px;
+    color: #495057;
+    margin-bottom: 6px;
 }
 
 .form-control,
 .form-select {
-  border: 1px solid var(--border-color);
-  border-radius: 6px;
-  padding: 10px 14px;
-  font-size: 15px;
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-size: 15px;
 }
 
 .form-control:focus,
 .form-select:focus {
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgba(84, 92, 235, 0.1);
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(84, 92, 235, 0.1);
 }
 
 /* Thẻ chọn danh mục (Step 2) */
 .category-card {
-  display: flex;
-  align-items: flex-start;
-  padding: 20px;
-  border: 1px solid var(--border-color);
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  height: 100%;
+    display: flex;
+    align-items: flex-start;
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    height: 100%;
 }
 
 .hidden-checkbox {
-  display: none;
+    display: none;
 }
 
 /* CSS :has() giúp chọn label khi checkbox bên trong được check */
 .category-card:has(.hidden-checkbox:checked) {
-  border-color: var(--primary-color);
-  background-color: var(--primary-light);
+    border-color: var(--primary-color);
+    background-color: var(--primary-light);
 }
 
 .category-card:has(.hidden-checkbox:checked) .category-icon {
-  color: var(--primary-color);
+    color: var(--primary-color);
 }
 
 .category-icon {
-  font-size: 24px;
-  color: #adb5bd;
-  margin-right: 16px;
-  margin-top: 2px;
-  transition: color 0.2s ease;
+    font-size: 24px;
+    color: #adb5bd;
+    margin-right: 16px;
+    margin-top: 2px;
+    transition: color 0.2s ease;
 }
 
 .category-info h6 {
-  font-weight: 600;
-  margin-bottom: 4px;
-  color: var(--text-main);
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: var(--text-main);
 }
 
 .category-info p {
-  margin: 0;
-  font-size: 13px;
-  color: var(--text-muted);
+    margin: 0;
+    font-size: 13px;
+    color: var(--text-muted);
 }
 
 /* Sections (Step 3) */
 .form-section {
-  background-color: var(--bg-section);
-  border: 1px solid var(--border-color);
-  border-radius: 12px;
-  padding: 24px;
-  margin-bottom: 24px;
+    background-color: var(--bg-section);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 24px;
+    margin-bottom: 24px;
 }
 
 .section-title {
-  color: var(--primary-color);
-  font-size: 18px;
-  font-weight: 600;
-  margin-bottom: 16px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+    color: var(--primary-color);
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 /* Buttons */
 .btn-next,
 .btn-submit {
-  background-color: var(--primary-color);
-  color: white;
-  padding: 10px 24px;
-  border-radius: 6px;
-  font-weight: 500;
-  border: none;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 500;
+    border: none;
 }
 
 .btn-next:hover,
 .btn-submit:hover {
-  background-color: #4046b3;
-  color: white;
+    background-color: #4046b3;
+    color: white;
 }
 
 .btn-back-step,
 .btn-back {
-  background-color: white;
-  color: var(--text-muted);
-  border: 1px solid var(--border-color);
-  padding: 10px 24px;
-  border-radius: 6px;
-  font-weight: 500;
+    background-color: white;
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 10px 24px;
+    border-radius: 6px;
+    font-weight: 500;
 }
 
 .btn-back-step:hover,
 .btn-back:hover {
-  background-color: #f8f9fa;
+    background-color: #f8f9fa;
 }
 
 /* Validation / Utilities */
 .text-asterisk {
-  color: #dc3545;
+    color: #dc3545;
 }
 
 .error-message {
-  color: #dc3545;
-  font-size: 12px;
-  margin-top: 4px;
-  display: none;
+    color: #dc3545;
+    font-size: 12px;
+    margin-top: 4px;
+    display: none;
 }
 
 /* Chuyển tab */
 .step-form {
-  display: none;
+    display: none;
 }
 
 .step-form.active {
-  display: block;
-  animation: fadeIn 0.4s;
+    display: block;
+    animation: fadeIn 0.4s;
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* ========================================= Custom CSS cho trang đăng ký tài khoản ứng viên ============================================================ */
 .label-back-login {
-  text-decoration: none;
-  color: var(--primary-color);
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
+    text-decoration: none;
+    color: var(--primary-color);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 8px;
 }
 
 
 .remove-category-btn,
 .remove-input-btn {
-  padding: 8.5px 14px;
+    padding: 8.5px 14px;
 }
 
 #addCategoryFieldBtn {
-  border: 1px dashed var(--text-muted);
+    border: 1px dashed var(--text-muted);
 }
 
 /* =========================================================== Login CSS ============================================================================= */
 .card-custom {
-  border: none;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-  background: #ffffff;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    background: #ffffff;
 
-  width: 500px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 20px;
-  padding-top: 10px;
+    width: 500px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+    padding-top: 10px;
 }
 
 /* ================================================================ title csss =============================================================================== */
 .dot,
 ._dot {
-  height: 1px;
-  background: linear-gradient(90deg, #0317c9, transparent);
+    height: 1px;
+    background: linear-gradient(90deg, #0317c9, transparent);
 }
 
 
@@ -333,189 +333,243 @@ body {
 /* Edit CSS */
 /* ===== Edit CSS ===== */
 .cv-form label {
-  text-transform: normal;
-  font-weight: 700;
-  font-size: 14px;
-  letter-spacing: .04em;
-  color: #495057;
-  margin-bottom: .4rem;
+    text-transform: normal;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: .04em;
+    color: #495057;
+    margin-bottom: .4rem;
 }
 
 .cv-form .text-required {
-  color: #dc3545;
+    color: #dc3545;
 }
 
 /* Cột ảnh đại diện: căn giữa toàn bộ nội dung */
 .avatar-col {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
 }
 
 .avatar-col label {
-  width: 100%;
-  max-width: 210px;
+    width: 100%;
+    max-width: 210px;
 }
 
 /* Khung ảnh đại diện */
 .avatar-upload-box {
-  width: 100%;
-  max-width: 210px;
-  aspect-ratio: 3 / 4;
-  /* border: 2px dashed #ced4da;
+    width: 100%;
+    max-width: 210px;
+    aspect-ratio: 3 / 4;
+    /* border: 2px dashed #ced4da;
         border-radius: 10px; */
-  background-color: #f1f3f5;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  margin: 0 auto .75rem auto;
-  position: relative;
+    background-color: #f1f3f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    margin: 0 auto .75rem auto;
+    position: relative;
 }
 
 .avatar-upload-box img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: none;
-  border-radius: 8px;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: none;
+    border-radius: 8px;
 }
 
 .avatar-upload-box .avatar-placeholder-icon {
-  font-size: 2.5rem;
-  color: #adb5bd;
+    font-size: 2.5rem;
+    color: #adb5bd;
 }
 
 .avatar-upload-wrapper {
-  width: 100%;
-  max-width: 210px;
-  margin: 0 auto;
+    width: 100%;
+    max-width: 210px;
+    margin: 0 auto;
 }
 
 
 .avatar-hint {
-  margin-left: auto;
-  margin-right: auto;
-  font-size: .75rem;
-  color: #868e96;
-  margin-top: 3px;
-  max-width: 210px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: .75rem;
+    color: #868e96;
+    margin-top: 3px;
+    max-width: 210px;
 }
 
 /* ========================================================= Modal CSS -========================================================= */
 /* Thông báo lỗi: */
 #errorsModal .modal-content {
-  /* background-color: #2f2f3a; */
-  color: #000;
-  border-radius: 10px;
-  border: none;
+    /* background-color: #2f2f3a; */
+    color: #000;
+    border-radius: 10px;
+    border: none;
 }
 
 .errors-alert {
-  padding: 4px 4px 8px;
+    padding: 4px 4px 8px;
 }
 
 .errors-alert__source {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 18px;
-  color: #000;
-  margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+    color: #000;
+    margin-bottom: 14px;
 }
 
 .errors-alert__message {
-  margin-bottom: 18px;
-  font-size: 0.95rem;
+    margin-bottom: 18px;
+    font-size: 0.95rem;
 }
 
 .errors-alert__actions {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .btn-ok {
-  background-color: #22c3d6;
-  border: none;
-  color: #fff;
-  padding: 6px 20px;
-  border-radius: 6px;
-  font-weight: 600;
+    background-color: #22c3d6;
+    border: none;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 6px;
+    font-weight: 600;
 }
 
 .btn-ok:hover {
-  background-color: #1cb0c2;
-  color: #fff;
+    background-color: #1cb0c2;
+    color: #fff;
 }
 
 /* ========================================================= Modal CSS -========================================================= */
 /* Thông báo lỗi: */
 
 #successModal .modal-content {
-  /* background-color: #2f2f3a; */
-  color: #000;
-  border-radius: 10px;
-  border: none;
+    /* background-color: #2f2f3a; */
+    color: #000;
+    border-radius: 10px;
+    border: none;
 }
 
 .success-alert {
-  padding: 4px 4px 8px;
+    padding: 4px 4px 8px;
 }
 
 .success-alert__source {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 18px;
-  color: #000;
-  margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+    color: #000;
+    margin-bottom: 14px;
 }
 
 .success-alert__message {
-  margin-bottom: 18px;
-  font-size: 0.95rem;
+    margin-bottom: 18px;
+    font-size: 0.95rem;
 }
 
 .success-alert__actions {
-  display: flex;
-  justify-content: flex-end;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .btn-ok {
-  background-color: #22c3d6;
-  border: none;
-  color: #fff;
-  padding: 6px 20px;
-  border-radius: 6px;
-  font-weight: 600;
+    background-color: #22c3d6;
+    border: none;
+    color: #fff;
+    padding: 6px 20px;
+    border-radius: 6px;
+    font-weight: 600;
 }
 
 .btn-ok:hover {
-  background-color: #1cb0c2;
-  color: #fff;
+    background-color: #1cb0c2;
+    color: #fff;
 }
 
 /* =============================================================== Categories CSS =============================================================================== */
 .category-item {
-  position: relative;
+    position: relative;
 }
 
 .category-card {
-  display: flex;
-  align-items: center;
-  /* các style khác của bạn... */
+    display: flex;
+    align-items: center;
+    /* các style khác của bạn... */
 }
 
 .remove-category-icon {
-  position: absolute;
-  top: 15%;
-  right: 5%;
-  cursor: pointer;
-  z-index: 2;
-  color: #dc3545;
+    position: absolute;
+    top: 15%;
+    right: 5%;
+    cursor: pointer;
+    z-index: 2;
+    color: #dc3545;
 }
 
 .remove-category-icon:hover {
-  color: #a71d2a;
+    color: #a71d2a;
+}
+
+/* --------------------------------------------------------------------------------------------------------------------- */
+.edit_slanted_bar {
+    background: #000;
+    color: #fff;
+    font-weight: 700;
+    padding: 10px 100px 10px 30px;
+    display: inline-block;
+    clip-path: polygon(0 0, calc(100% - 35px) 0, 100% 100%, 0 100%);
+    border-top-left-radius: 8px;
+}
+
+.edit_slanted_bar {
+    position: relative;
+    text-align: center;
+    /* nếu bạn có hiệu ứng slanted (cắt góc) thì giữ nguyên clip-path ở đây */
+}
+
+.edit_dot {
+    height: 2px;
+    background: linear-gradient(90deg, #000, transparent);
+}
+
+.edit_slanted_bar .fa-times {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    background: #fff;
+    color: #dc3545;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    cursor: pointer;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+}
+
+.form-editor {
+    margin-bottom: 20px;
+}
+
+.cke_editable {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+}
+
+.cke_notification_warning,
+.cke_notifications_area {
+    display: none !important;
 }

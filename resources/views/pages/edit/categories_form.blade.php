@@ -12,15 +12,21 @@
     </div>
     <div class="dot my-2"></div>
 
-    {{-- ====================================== Tiêu đề + icon thêm danh muc ======================================= --}}
+    {{-- ====================================== Tiêu đề + icon thêm danh muc =======================================
+    --}}
 
     <div class="row mt-2 form-editor">
         @foreach ($categories as $cat)
             <div class="mt-3" data-category-id="{{ $cat['id'] }}">
-                <div class="edit_slanted_bar" style="border-bottom: 1px solid #000;">{{ $cat['name'] }}</div>
-                <div class="edit_dot"></div> 
+                <div class="edit_slanted_bar" style="border-bottom: 1px solid #000;">
+                    <i class="fa fa-times fa-sm text-danger remove-category-icon" data-id="{{ $cat['id'] }}"></i>
+                    {{ $cat['name'] }}
+                </div>
+                <div class="edit_dot"></div>
                 @foreach ($cat['contents'] as $item)
-                    <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4" data-category-id="{{ $cat['id'] }}" placeholder="Vui lòng nhập nội dung cho danh mục {{ $cat['name'] }}...">{!! $item['content'] !!}</textarea>                    
+                    <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4"
+                        data-category-id="{{ $cat['id'] }}"
+                        placeholder="Vui lòng nhập nội dung cho danh mục {{ $cat['name'] }}...">{!! $item['content'] !!}</textarea>
                 @endforeach
             </div>
         @endforeach
@@ -37,14 +43,6 @@
     </div>
 </form>
 
-<style>
-    .form-editor { margin-bottom: 20px; }
-    .cke_editable { font-family: Arial, sans-serif; font-size: 14px; }
-    .cke_notification_warning,
-    .cke_notifications_area {
-        display: none !important;
-    }
-</style>
+
 <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
 <script src="/assets/js/custom_ckeditor.js"></script>
-

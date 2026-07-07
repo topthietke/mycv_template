@@ -517,3 +517,6 @@ document.getElementById('categoryForm').addEventListener('submit', function (e) 
         }
     });
 });
+
+
+// ------------------------------------------------------------------------------------------------------------
