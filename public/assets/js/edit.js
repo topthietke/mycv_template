@@ -441,8 +441,8 @@ document.getElementById('categoryForm').addEventListener('submit', function (e) 
         if (!wrapper) return;
 
         const categoryId = wrapper.getAttribute('data-category-id');
-        const pageSelect = wrapper.querySelector('select.pages');
-        const pages = pageSelect ? pageSelect.value : null;
+
+        const page = document.getElementById(`page_` + categoryId);
 
         // Nếu textarea này đang được CKEditor quản lý -> đồng bộ dữ liệu CKEditor về textarea trước
         if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[textarea.id]) {
@@ -460,17 +460,12 @@ document.getElementById('categoryForm').addEventListener('submit', function (e) 
         // categoriesData[categoryId] = content;
 
         categoriesData.push({
-            category_id: categoryId,
-            content    : content,
-            pages      : pages
-        });
-
-        // console.log(`Category ID: ${categoryId} -> Content:`, content);
+            category_id : categoryId,
+            content     : content,
+            pages       : page.value
+        });       
     });
 
-    console.log(categoriesData);
-    return;
-    
     const apiUrl = `${API_URL.update_multiple_data}`;    
     const submitBtn = form.querySelector('button[type="submit"]');
     const candidateId = document.getElementById('candidateForm')?.dataset.id;

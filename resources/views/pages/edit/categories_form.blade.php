@@ -32,15 +32,12 @@
                         <div class="edit_dot"></div>
                     </div>
                     <div class="col-lg-1 col-md-1">
-                        <x-select name="page_{{ $cat['id'] }}" id="page_{{ $cat['id'] }}" class="form-select pages border-0 border-bottom rounded-0" :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
+                        <x-select name="page_{{ $cat['id'] }}" v class="form-select pages border-0 border-bottom rounded-0" :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
                     </div>
                 </div>
 
-
                 @foreach ($cat['contents'] as $item)
-                    <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4"
-                        data-category-id="{{ $cat['id'] }}"
-                        placeholder="Vui lòng nhập nội dung cho danh mục {{ $cat['name'] }}...">{!! $item['content'] !!}</textarea>
+                    <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4" data-category-id="{{ $cat['id'] }}"  placeholder="Vui lòng nhập nội dung cho danh mục {{ $cat['name'] }}...">{!! $item['content'] !!}</textarea>
                 @endforeach
             </div>
         @endforeach

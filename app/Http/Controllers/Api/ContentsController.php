@@ -107,7 +107,7 @@ class ContentsController extends Controller
         }
     }
 
-    public function update_multiple_data(Request $request): JsonResponse {
+    public function update_multiple_data(Request $request): JsonResponse {        
         return response()->json($this->content_service->update_multiple_data($request->all()), 201);
     }
 

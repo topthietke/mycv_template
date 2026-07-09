@@ -3,7 +3,6 @@
 namespace App\Services\Contents;
 
 use App\Models\CandidateContent;
-use App\Models\Category;
 use App\Repository\ContentsRepository;
 use Illuminate\Support\Facades\Auth;
 
@@ -54,22 +53,17 @@ class ContentsService {
         return $this->content_repository->deleteByCollumn($column, $value);
     }
 
-    public function update_multiple_data(array $data) {       
-        
+    public function update_multiple_data(array $data)
+    {        
         $dem = 0;
-        foreach ($data as $value) {
-            $data_categories = [
+        foreach ($data as $value) {            
+            $params = [
+                "content"    => $value['content'] ?? null,
                 "pages"      => $value['pages'] ?? null,
                 "updated_by" => Auth::user()->id ?? null,
                 "updated_at" => now()
-            ];
-            $update = Category::where('id', $value['category_id'])->update($data_categories);            
-            $data_content    = [
-                "content"    => $value['content'] ?? null,                
-                "updated_by" => Auth::user()->id ?? null,
-                "updated_at" => now()
             ];          
-            $update = CandidateContent::where('category_id', $value['category_id'])->update($data_content);            
+            $update = CandidateContent::where('category_id', $value['category_id'])->update($params);            
             if($update > 0) $dem += 1;
         }
         if($dem > 0) {
