@@ -10,7 +10,7 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 
 class CategoriesContentsRequest extends BaseRequest
 {
-    public function rules(): array {
+    public function rules(): array {        
         return [
             // Bảng categories
             'candidate_id' => ['nullable', 'integer', 'exists:candidates,id'],

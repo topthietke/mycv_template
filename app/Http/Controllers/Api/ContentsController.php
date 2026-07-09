@@ -138,7 +138,7 @@ class ContentsController extends Controller
                 "created_at"   => Carbon::now()
             ];
             $categories = $this->cat_services->create($data_categories);
-            if (!empty($model->id)) {
+            if (!empty($categories['id'])) {
                 $data_content = [
                     "candidate_id" => $params['candidate_id'] ?? '',
                     "category_id"  => $categories['id'],
@@ -162,9 +162,5 @@ class ContentsController extends Controller
             ], 500);
         }
 
-
-
-
-        return response()->json($this->content_service->create_multiple_data($request->all()), 201);
     }
 }
