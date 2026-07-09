@@ -29,6 +29,7 @@ Route::group(['prefix' => 'categories'], function () {
 Route::prefix('contents')->group(function () {
     Route::post('/create-multiple', [ContentsController::class, 'create_multiple']);
     Route::post('/update-multiple-data', [ContentsController::class, 'update_multiple_data']);
+    Route::post('/create-multiple-data', [ContentsController::class, 'create_multiple_data']);
 });
 Route::resource('/contents', ContentsController::class);
 
