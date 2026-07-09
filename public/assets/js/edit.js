@@ -1,6 +1,39 @@
 import { API_URL } from "/assets/js/variableApi.js";
 import { msg_success, msg_error } from "/assets/js/function.js";
 
+function getCookie(name) {
+    const value = `; ${document.cookie}`;
+    const parts = value.split(`; ${name}=`);
+    if (parts.length === 2) return parts.pop().split(';').shift();
+    return null;
+}
+
+function deleteSelectedCategories(categoryId) {
+    const apiUrl = `${API_URL.categories}/${categoryId}`;    
+    $.ajax({
+        url: apiUrl,
+        type: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            'Authorization': `Bearer ${getCookie('auth_token')}` // đổi 'auth_token' đúng tên cookie bạn đang set
+        },
+        success: function (response) {
+            msg_success(response.message || 'Xoá danh mục thành công!');
+            // Remove the element from the DOM
+            const elementToRemove = document.querySelector(`div[data-category-id="${categoryId}"]`);
+            if (elementToRemove) {
+                elementToRemove.remove();
+            }
+        },
+        error: function (xhr) {
+            const message = xhr.responseJSON?.message || 'Có lỗi xảy ra, vui lòng thử lại.';
+            msg_error(message);
+        }
+    });
+}
+
+window.removeCategoryContent = deleteSelectedCategories;
+
 document.addEventListener('DOMContentLoaded', function () {
     const categoryFields  = document.getElementById("category_fields");
     const categoryList    = document.getElementById("category_list");
@@ -165,19 +198,19 @@ document.addEventListener('DOMContentLoaded', function () {
         setSubmitLoading(form, true);
 
         const formData = new FormData(form);
-        let data = get_data_udpate(formData);
-        // formData.append('_method', 'PUT');
+        // Laravel không nhận diện được method PUT từ FormData qua fetch, cần thêm _method
+        formData.append('_method', 'PUT');
+
         const apiUrl = `${API_URL.candidate}/${candidateId}`;
         try {
             const response = await fetch(apiUrl, {
-                method: 'PUT',
-                body: JSON.stringify(data),
+                method: 'POST', // Luôn là POST khi dùng FormData với _method
+                body: formData,
                 credentials: 'include', // gửi kèm cookie auth (CheckAuthToken)
                 headers: {
                     'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                },
+                }, // Không set Content-Type, trình duyệt sẽ tự thêm với boundary
             });
 
             const result = await response.json().catch(() => ({}));
@@ -189,15 +222,12 @@ document.addEventListener('DOMContentLoaded', function () {
             } else {
                 if (response.status === 422) {
                     // Lỗi validate từ Laravel Form Request
-                    msg_error(result.message || 'Cập nhật thông tin thất bại!');
+                    showFormErrors(form, result.errors || {});
+                    msg_error(result.message || 'Dữ liệu không hợp lệ. Vui lòng kiểm tra lại.');
                     return;
                 }
-
-                if (!response.ok) {
-                    throw new Error(result.message || 'Cập nhật thông tin thất bại.');
-                    new bootstrap.Modal(document.getElementById('errorsModal')).show();
-                    errors_message.textContent = result.message || 'Cập nhật thông tin thất bại!';
-                }
+                // Các lỗi khác
+                throw new Error(result.message || 'Cập nhật thông tin thất bại.');
             }
 
         } catch (error) {
@@ -207,51 +237,21 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     // ----------------------------------------------------------------------
-    function getCookie(name) {
-        const value = `; ${document.cookie}`;
-        const parts = value.split(`; ${name}=`);
-        if (parts.length === 2) return parts.pop().split(';').shift();
-        return null;
-    }
-
-    function deleteSelectedCategories(categoryId) {
-        const apiUrl = `${API_URL.categories}/${categoryId}`;
-        $.ajax({
-            url: apiUrl,
-            type: 'DELETE',
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-                'Authorization': `Bearer ${getCookie('auth_token')}` // đổi 'auth_token' đúng tên cookie bạn đang set
-            },
-            success: function (response) {
-                console.log(response);
-                return;
-                const $card = $(`.category-card[data-id="${categoryId}"]`);
-                $card.fadeOut(300, function () {
-                    $(this).remove();
-                });
-                msg_success('Xoá danh mục thành công!');
-            },
-            error: function (xhr) {
-                const message = xhr.responseJSON?.message || 'Có lỗi xảy ra, vui lòng thử lại.';
-                msg_error(message);
-            }
-        });
-    }
 
     // ----------------------------------------------------------------------
+    
     // Xoá danh mục:
     const removeIcons = document.querySelectorAll('.remove-category-icon');
-    removeIcons.forEach(function (icon) {
+    removeIcons.forEach(function (icon) {      
         icon.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
             const categoryId = this.getAttribute('data-id');
-            const checkbox = document.getElementById('cat_' + categoryId);
-            if (checkbox) {
-                checkbox.checked = false;
-            }
-            this.closest('.category-item').remove();
+            // const checkbox = document.getElementById('cat_' + categoryId);
+            // if (checkbox) {
+            //     checkbox.checked = false;
+            // }
+            this.closest('[data-category-id]').remove();
             deleteSelectedCategories(categoryId);
         });
     });
@@ -260,9 +260,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // -----------------------------------------------------------------------------------
     // Thêm mới danh mục: 
     saveCategoryBtn.addEventListener("click", async function () {
-        let candidate_id = sessionStorage.getItem("candidate_id");
-        console.log(candidate_id);
-        return;
+        let candidate_id = document.getElementById('candidateForm')?.dataset.id;
         // Thu thập tất cả các giá trị từ các input có name="categories_name[]"
         const inputs = categoriesForm.querySelectorAll(
             'input[name="categories_name[]"]',
@@ -426,6 +424,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 })();
 
+
 // ------------------------------------------------------------------------------------------------------------
 
 document.getElementById('categoryForm').addEventListener('submit', function (e) {
@@ -442,6 +441,8 @@ document.getElementById('categoryForm').addEventListener('submit', function (e) 
         if (!wrapper) return;
 
         const categoryId = wrapper.getAttribute('data-category-id');
+        const pageSelect = wrapper.querySelector('select.pages');
+        const pages = pageSelect ? pageSelect.value : null;
 
         // Nếu textarea này đang được CKEditor quản lý -> đồng bộ dữ liệu CKEditor về textarea trước
         if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[textarea.id]) {
@@ -460,12 +461,15 @@ document.getElementById('categoryForm').addEventListener('submit', function (e) 
 
         categoriesData.push({
             category_id: categoryId,
-            content    : content
+            content    : content,
+            pages      : pages
         });
 
         // console.log(`Category ID: ${categoryId} -> Content:`, content);
     });
 
+    console.log(categoriesData);
+    return;
     
     const apiUrl = `${API_URL.update_multiple_data}`;    
     const submitBtn = form.querySelector('button[type="submit"]');

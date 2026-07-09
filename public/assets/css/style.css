@@ -525,7 +525,7 @@ body {
     background: #000;
     color: #fff;
     font-weight: 700;
-    padding: 10px 100px 10px 30px;
+    padding: 10px 100px 10px 40px;
     display: inline-block;
     clip-path: polygon(0 0, calc(100% - 35px) 0, 100% 100%, 0 100%);
     border-top-left-radius: 8px;
@@ -544,8 +544,8 @@ body {
 
 .edit_slanted_bar .fa-times {
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 4px;
+    left: 4px;
     background: #fff;
     color: #dc3545;
     border-radius: 50%;

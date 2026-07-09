@@ -1,11 +1,6 @@
 <?php 
     return [
-        "api_url" => env('API_URL'),
-        "gender"  => [            
-            "0"   => "Nữ",
-            "1"   => "Nam",
-            "2"   => "Khác"
-        ],
+        "api_url" => env('API_URL'),        
         "activities_title"  => "Hoạt động",
         "company_name"      => "Tên công ty",
         "description"       => "Mô tả",
@@ -46,36 +41,41 @@
             "4" => "languages",
             "5" => "experiences"
         ],
-        "msgErrors" => [
-            "name" => [
+        "msgErrors"        => [
+            "name"         => [
                 "required" => "Vui lòng nhập họ và tên."
             ],
-            "jobs_title" => [
+            "jobs_title"   => [
                 "required" => "Vui lòng nhập vị trí ứng tuyển."
             ],
             "day_of_birth" => [
                 "required" => "Vui lòng nhập ngày sinh."
             ],
-            "email"=> [
+            "email"        => [
                 "required" => "Vui lòng nhập email.",
-                "email" => "Vui lòng nhập email hợp lệ."
+                "email"    => "Vui lòng nhập email hợp lệ."
             ],
-            "phone" => [
+            "phone"        => [
                 "required" => "Vui lòng nhập số điện thoại.",
-                "phone" => "Vui lòng nhập số điện thoại hợp lệ."
+                "phone"    => "Vui lòng nhập số điện thoại hợp lệ."
             ]
         ],
+        "gender"  => [            
+            "0"   => "Nữ",
+            "1"   => "Nam",
+            "2"   => "Khác"
+        ],
         "page" => [
-            "page_1" => 1,
-            "page_2" => 2,
-            "page_3" => 3,
-            "page_4" => 4,
-            "page_5" => 5,
-            "page_6" => 6,
-            "page_7" => 7,
-            "page_8" => 8,
-            "page_9" => 9,
-            "page_10" => 10
+            "1"  => 1,
+            "2"  => 2,
+            "3"  => 3,
+            "4"  => 4,
+            "5"  => 5,
+            "6"  => 6,
+            "7"  => 7,
+            "8"  => 8,
+            "9"  => 9,
+            "10" => 10
         ],
         "index" => [
             "title"             => "Thông tin cá nhân",
@@ -88,7 +88,8 @@
             "experiences_title" => "Kinh nghiệm làm việc",                        
         ],
         "edit" => [
-            "title" => "Chỉnh sửa thông tin"
+            "title"         => "Chỉnh sửa thông tin", 
+            "content_title" => "Quản lý danh mục và nội dung"
         ],
         "login" => [
             "title" => "Đăng nhập"

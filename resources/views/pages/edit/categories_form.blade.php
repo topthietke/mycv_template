@@ -1,8 +1,13 @@
+<?php 
+    $page = config('data.page');
+    $title = config('data.edit.content_title') ?? 'Thông tin cá nhân';    
+?>
+
 <form id="categoryForm" class="step-form" data-user-id="{{ $candidate['id'] }}" method="POST">
     @csrf
     <div class="row">
         <div class="col-lg-6 col-md-6">
-            <h6 class="fw-bold">Quản lý danh mục và nội dung</h6>
+            <h6 class="fw-bold">{{ $title }}</h6>
         </div>
         <div class="col-lg-6 col-md-6 text-end">
             <a href="#" data-bs-toggle="modal" data-bs-target="#editCategoriesModal">
@@ -16,13 +21,22 @@
     --}}
 
     <div class="row mt-2 form-editor">
-        @foreach ($categories as $cat)
+        @foreach ($categories as $cat)            
             <div class="mt-3" data-category-id="{{ $cat['id'] }}">
-                <div class="edit_slanted_bar" style="border-bottom: 1px solid #000;">
-                    <i class="fa fa-times fa-sm text-danger remove-category-icon" data-id="{{ $cat['id'] }}"></i>
-                    {{ $cat['name'] }}
+                <div class="row">
+                    <div class="col-lg-11 col-md-11">
+                        <div class="edit_slanted_bar" style="border-bottom: 1px solid #000;">
+                            <i class="fa fa-times fa-sm text-danger remove-category-icon" data-id="{{ $cat['id'] }}"></i>
+                            {{ $cat['name'] }}
+                        </div>
+                        <div class="edit_dot"></div>
+                    </div>
+                    <div class="col-lg-1 col-md-1">
+                        <x-select name="page_{{ $cat['id'] }}" id="page_{{ $cat['id'] }}" class="form-select pages border-0 border-bottom rounded-0" :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
+                    </div>
                 </div>
-                <div class="edit_dot"></div>
+
+
                 @foreach ($cat['contents'] as $item)
                     <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4"
                         data-category-id="{{ $cat['id'] }}"
@@ -30,6 +44,7 @@
                 @endforeach
             </div>
         @endforeach
+
         <div id="category_list" class="col-md-4 text-center m-0 mt-2"></div>
     </div>
 
@@ -37,7 +52,8 @@
     <div class="row mt-3">
         <div class="col-lg-12 d-flex justify-content-end">
             <x-button type="submit" class="btn btn-next" id="category_form_submit" data-step="3">
-                Tiếp theo <i class="fas fa-arrow-right ms-2"></i>
+                <i class="fas fa-save ms-2"></i>
+                Lưu lại
             </x-button>
         </div>
     </div>

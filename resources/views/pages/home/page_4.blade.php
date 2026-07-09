@@ -1,6 +1,6 @@
 <?php 
     $allow_page   = config('data.page');
-    $allow_page_4 = $allow_page['page_4'];
+    $allow_page_4 = $allow_page['4'];
 ?>
 
 @if (!empty($categories))

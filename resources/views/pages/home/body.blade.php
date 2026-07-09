@@ -1,7 +1,7 @@
 <!-- BODY -->
 <?php 
     $allow_page = config('data.page');
-    $allow_page_1 = $allow_page['page_1'];    
+    $allow_page_1 = $allow_page['1'];    
 ?>
 @if (!empty($categories))
     <div class="cv-body">

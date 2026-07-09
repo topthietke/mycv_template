@@ -1,7 +1,7 @@
 <!-- BODY -->
 <?php 
     $allow_page   = config('data.page');
-    $allow_page_3 = $allow_page['page_3'];    
+    $allow_page_3 = $allow_page['3'];    
 ?>
 @if (!empty($categories))
     <div class="cv-page" id="cv-page-3" style="margin-top: 30px;">

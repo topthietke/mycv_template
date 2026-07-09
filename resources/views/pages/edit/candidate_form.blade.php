@@ -132,7 +132,7 @@
     <div class="d-flex justify-content-end my-3">
         <x-button type="submit" class="btn btn-next">  
             <i class="fas fa-save"></i>
-            Cập nhật
+            Lưu lại
         </x-button>
     </div>
 </form>
