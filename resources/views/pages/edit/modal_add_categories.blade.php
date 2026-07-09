@@ -1,13 +1,12 @@
-<!-- Modal -->
 <?php 
     $page = config('data.page');
 ?>
 <div class="modal fade" id="editCategoriesModal" tabindex="-1" aria-labelledby="categoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-dialog modal-dialog-centered modal-xl">
         <div class="modal-content">
             <div class="modal-header">
                 <h6 class="modal-title fw-bold" id="categoryModalLabel">Thêm danh mục mới</h6>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                <x-button class="btn-close" data-bs-dismiss="modal" aria-label="Đóng" />
             </div>
             <div class="modal-body">
                 <form id="categories_form" method="POST">
@@ -22,31 +21,14 @@
                     </div>
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
-                            <textarea class="form-control experiences" name="category_details" rows="4"  placeholder="Vui lòng nhập nội dung...."></textarea>
+                            <x-textarea id="modal_category_details" name="category_details" class="experiences" rows="4" placeholder="Vui lòng nhập nội dung...." />
                         </div>
                     </div>
-
-                    {{-- <div id="category_fields">
-                        <div class="category-field-group mb-3 d-flex align-items-end gap-2">
-                            <div class="flex-grow-1">
-                                <x-input name="categories_name[]" type="text" label="Tên danh mục"
-                                    placeholder="Nhập tên danh mục" />
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="row">
-                        <div class="col-lg-12 col-md-12 text-center">
-                            <button type="button" class="btn btn-outline-secondary w-100" id="addCategoryFieldBtn">
-                                <i class="fa fa-plus"></i>
-                            </button>
-                        </div>
-                    </div> --}}
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-                <button type="button" class="btn btn-primary" id="saveCategoryBtn">Thêm mới</button>
+                <x-button class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</x-button>
+                <x-button class="btn btn-primary" id="saveCategoryBtn">Thêm mới</x-button>
             </div>
         </div>
     </div>
@@ -60,5 +42,4 @@
         height: 40px;
     }
 </style>
-
 <script src="/assets/js/custom_ckeditor.js"></script>

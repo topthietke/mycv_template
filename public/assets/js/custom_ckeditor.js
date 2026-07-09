@@ -1,13 +1,3 @@
-/**
- * ============================================================
- *  KHỞI TẠO CKEDITOR 4 VỚI ĐẦY ĐỦ CHỨC NĂNG
- * ============================================================
- * - Tự động tìm textarea bên trong class ".form-editor"
- * - Cấu hình full toolbar (định dạng chữ, bảng, ảnh, link,
- *   source code, tìm kiếm & thay thế, bảng, chèn media...)
- * - Upload ảnh (adapter đơn giản, bạn thay endpoint thật của bạn)
- * ============================================================
- */
 
 (function () {
     // 1. Tìm tất cả các textarea cần khởi tạo CKEditor
@@ -41,7 +31,7 @@
     ];
 
     // 3. Lặp qua từng textarea và khởi tạo CKEditor
-    textareas.forEach(function(textarea) {
+    textareas.forEach(function (textarea) {
         // Nếu textarea chưa có id, tự gán id để CKEditor replace được
         if (!textarea.id) {
             textarea.id = 'editor_' + Math.random().toString(36).substr(2, 9);
@@ -97,3 +87,30 @@
     }
 })();
 
+
+// --------------------------------------------------------------------------
+
+(function () {
+    var modalEl = document.getElementById('editCategoriesModal');
+    var textareaId = 'modal_category_details';
+    if (modalEl) {
+        modalEl.addEventListener('shown.bs.modal', function () {
+            if (typeof CKEDITOR === 'undefined') {
+                console.error('CKEDITOR chưa được nạp. Hãy đảm bảo custom_ckeditor.js / ckeditor.js đã load trước khi mở modal.');
+                return;
+            }
+            // Tránh lỗi "editor instance already exists" nếu mở modal nhiều lần
+            if (CKEDITOR.instances[textareaId]) {
+                CKEDITOR.instances[textareaId].destroy(true);
+            }
+            CKEDITOR.replace(textareaId);
+        });
+        modalEl.addEventListener('hidden.bs.modal', function () {
+            if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[textareaId]) {
+                CKEDITOR.instances[textareaId].destroy(true);
+                document.getElementById(textareaId).value = '';
+            }
+        });
+    }
+
+})();

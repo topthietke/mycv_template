@@ -6,6 +6,7 @@
 
 <head>
     @include('head')
+    <script src="/assets/js/custom_ckeditor.js"></script>
     <title>{{ $title }}</title>
     <style>
 

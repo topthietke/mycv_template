@@ -56,6 +56,4 @@
     </div>
 </form>
 
-
-{{-- <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script> --}}
 <script src="/assets/js/custom_ckeditor.js"></script>

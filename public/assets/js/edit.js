@@ -9,7 +9,7 @@ function getCookie(name) {
 }
 
 function deleteSelectedCategories(categoryId) {
-    const apiUrl = `${API_URL.categories}/${categoryId}`;    
+    const apiUrl = `${API_URL.categories}/${categoryId}`;
     $.ajax({
         url: apiUrl,
         type: 'DELETE',
@@ -35,11 +35,11 @@ function deleteSelectedCategories(categoryId) {
 window.removeCategoryContent = deleteSelectedCategories;
 
 document.addEventListener('DOMContentLoaded', function () {
-    const categoryFields  = document.getElementById("category_fields");
-    const categoryList    = document.getElementById("category_list");
-    const addBtn          = document.getElementById("addCategoryFieldBtn");
+    const categoryFields = document.getElementById("category_fields");
+    const categoryList = document.getElementById("category_list");
+    const addBtn = document.getElementById("addCategoryFieldBtn");
     const saveCategoryBtn = document.getElementById("saveCategoryBtn");
-    const categoriesForm  = document.getElementById("categories_form");
+    const categoriesForm = document.getElementById("categories_form");
 
     // Click hiển thị form
     // ----------------------------------------------------------------------
@@ -239,10 +239,10 @@ document.addEventListener('DOMContentLoaded', function () {
     // ----------------------------------------------------------------------
 
     // ----------------------------------------------------------------------
-    
+
     // Xoá danh mục:
     const removeIcons = document.querySelectorAll('.remove-category-icon');
-    removeIcons.forEach(function (icon) {      
+    removeIcons.forEach(function (icon) {
         icon.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
@@ -255,144 +255,238 @@ document.addEventListener('DOMContentLoaded', function () {
             deleteSelectedCategories(categoryId);
         });
     });
-
-
     // -----------------------------------------------------------------------------------
-    // Thêm mới danh mục: 
-    saveCategoryBtn.addEventListener("click", async function () {
-        let candidate_id = document.getElementById('candidateForm')?.dataset.id;
-        // Thu thập tất cả các giá trị từ các input có name="categories_name[]"
-        const inputs = categoriesForm.querySelectorAll(
-            'input[name="categories_name[]"]',
-        );
-        const categories = Array.from(inputs)
-            .map((input) => input.value.trim())
-            .filter((val) => val !== "");
+    // Thêm mới danh mục:
+    if (saveCategoryBtn) {
+        saveCategoryBtn.addEventListener("click", async function () {
+            let candidate_id = document.getElementById('candidateForm')?.dataset.id;
+            // Thu thập tất cả các giá trị từ các input có name="categories_name[]"
+            const inputs = categoriesForm.querySelectorAll(
+                'input[name="categories_name[]"]',
+            );
+            const categories = Array.from(inputs)
+                .map((input) => input.value.trim())
+                .filter((val) => val !== "");
 
-        // Kiểm tra nếu người dùng chưa nhập gì
-        if (categories.length === 0) {
-            msg_error("Vui lòng nhập ít nhất một tên danh mục!");
-            return;
-        }
-
-        // Lấy Token CSRF từ Blade template (nếu có dùng Laravel)
-        const csrfToken = categoriesForm.querySelector('input[name="_token"]',)?.value;
-        // Chuẩn bị dữ liệu gửi đi
-        const payload = {
-            name: categories,
-            candidate_id: candidate_id, // Gửi kèm candidate_id nếu API cần liên kết
-        };
-
-        // Vô hiệu hóa nút bấm tránh gửi trùng lặp (Double click)
-        saveCategoryBtn.disabled = true;
-        saveCategoryBtn.innerText = "Đang lưu...";
-
-        try {
-            const response = await fetch(API_URL.create_multiple_categories, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                    "X-CSRF-TOKEN": csrfToken,
-                },
-                body: JSON.stringify(payload),
-            });
-            let html = '<div class="row mt-2">';
-            let data = null;
-            const result = await response.json();
-            if (response.ok) {
-                msg_success("Thêm danh mục thành công!");
-
-                // Mẹo xử lý: Nếu API trả về danh sách kèm ID từ Database (ví dụ result.data) thì ta dùng,
-                // nếu không có thì ta tự tạo ID tạm thời bằng timestamp để không trùng lặp các thuộc tính `for` và `id`
-                const listCategories =
-                    result.data ||
-                    categories.map((name, index) => ({
-                        id: "new_" + index + "_" + Date.now(),
-                        name: name,
-                    }));
-
-                // 1. Khởi tạo chuỗi HTML chứa cấu trúc các danh mục mới
-                let htmlContent = '<div class="row mt-2">';
-                listCategories.forEach((cat) => {
-                    htmlContent += `
-                        <div class="col-md-6 mb-3" data-id="${cat.id}">
-                            <label class="category-card" for="cat_${cat.id}">
-                                <input type="checkbox" name="categories[]" value="${cat.id}" id="cat_${cat.id}" class="hidden-checkbox">
-                                <div class="category-icon"><i class="fas fa-bullseye text-primary"></i></div>
-                                <div class="category-info text-start">
-                                    <h6>${cat.name}</h6>
-                                    <p>Danh mục cá nhân tự thêm</p>
-                                </div>
-                            </label>
-                        </div>`;
-                });
-                htmlContent += "</div>";
-
-                // 2. Kiểm tra nếu giao diện đang hiện thông báo trống thì xóa trắng trước khi chèn
-                // if (categoryList.innerHTML.includes('Không có dữ liệu') ||
-                //     categoryList.innerHTML.includes('Không có danh mục nào! Vui lòng thêm mới danh mục trước khi thực hiện')) {
-                //     categoryList.innerHTML = '';
-                //     categoryList.classList.remove('text-center'); // Bỏ căn giữa text để hiển thị lưới thẻ đều nhau
-                // }
-                categoryList.innerHTML = "";
-                // 3. Append (chèn) dữ liệu vào thẻ #category_list ở file chính
-                categoryList.insertAdjacentHTML("beforeend", htmlContent);
-
-                // 4. Reset form trong modal và xóa các ô input phụ do nút (+) tạo ra (chỉ giữ lại 1 ô trống ban đầu)
-                categoriesForm.reset();
-                const extraGroups = categoryFields.querySelectorAll(
-                    ".category-field-group",
-                );
-                extraGroups.forEach((group, index) => {
-                    if (index > 0) group.remove();
-                });
-                // 5. Ẩn modal sau khi lưu thành công
-                categoryModal.hide();
-            } else {
-                msg_error("Có lỗi xảy ra: " + (result.message || "Vui lòng thử lại."));
+            // Kiểm tra nếu người dùng chưa nhập gì
+            if (categories.length === 0) {
+                msg_error("Vui lòng nhập ít nhất một tên danh mục!");
+                return;
             }
-        } catch (error) {
-            console.error("Error post data:", error);
-            msg_error("Không thể kết nối đến máy chủ API!");
-        } finally {
-            // Mở lại trạng thái nút bấm
-            saveCategoryBtn.disabled = false;
-            saveCategoryBtn.innerText = "Thêm mới";
-        }
-    });
 
-    addBtn.addEventListener("click", function () {
-        // Tạo một div wrapper mới
-        const newGroup = document.createElement("div");
-        newGroup.className =
-            "category-field-group mb-3 d-flex align-items-end gap-2";
+            // Lấy Token CSRF từ Blade template (nếu có dùng Laravel)
+            const csrfToken = categoriesForm.querySelector('input[name="_token"]',)?.value;
+            // Chuẩn bị dữ liệu gửi đi
+            const payload = {
+                name: categories,
+                candidate_id: candidate_id, // Gửi kèm candidate_id nếu API cần liên kết
+            };
 
-        // // Đoạn HTML cấu trúc input thuần (thay cho x-input) và nút xóa
-        newGroup.innerHTML = `
-            <div class="flex-grow-1">
-                <label class="form-label fw-bold">Tên danh mục</label>
-                <input name="categories_name[]" type="text" class="form-control" placeholder="Nhập tên danh mục">
-            </div>
-            <button type="button" class="btn btn-danger remove-category-btn">
-                <i class="fa fa-trash"></i>
-            </button>
-        `;
+            // Vô hiệu hóa nút bấm tránh gửi trùng lặp (Double click)
+            saveCategoryBtn.disabled = true;
+            saveCategoryBtn.innerText = "Đang lưu...";
 
-        // Thêm nhóm input mới vào container
-        categoryFields.appendChild(newGroup);
-    });
+            try {
+                const response = await fetch(API_URL.create_multiple_categories, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Accept: "application/json",
+                        "X-CSRF-TOKEN": csrfToken,
+                    },
+                    body: JSON.stringify(payload),
+                });
+                let html = '<div class="row mt-2">';
+                let data = null;
+                const result = await response.json();
+                if (response.ok) {
+                    msg_success("Thêm danh mục thành công!");
 
-    categoryFields.addEventListener("click", function (e) {
-        // Kiểm tra xem user có click vào nút xóa hoặc icon bên trong nút xóa không
-        const removeBtn = e.target.closest(".remove-category-btn");
+                    // Mẹo xử lý: Nếu API trả về danh sách kèm ID từ Database (ví dụ result.data) thì ta dùng,
+                    // nếu không có thì ta tự tạo ID tạm thời bằng timestamp để không trùng lặp các thuộc tính `for` và `id`
+                    const listCategories =
+                        result.data ||
+                        categories.map((name, index) => ({
+                            id: "new_" + index + "_" + Date.now(),
+                            name: name,
+                        }));
 
-        if (removeBtn) {
-            // Tìm đến group cha gần nhất và xóa nó
-            const fieldGroup = removeBtn.closest(".category-field-group");
-            fieldGroup.remove();
-        }
-    });
+                    // 1. Khởi tạo chuỗi HTML chứa cấu trúc các danh mục mới
+                    let htmlContent = '<div class="row mt-2">';
+                    listCategories.forEach((cat) => {
+                        htmlContent += `
+                            <div class="col-md-6 mb-3" data-id="${cat.id}">
+                                <label class="category-card" for="cat_${cat.id}">
+                                    <input type="checkbox" name="categories[]" value="${cat.id}" id="cat_${cat.id}" class="hidden-checkbox">
+                                    <div class="category-icon"><i class="fas fa-bullseye text-primary"></i></div>
+                                    <div class="category-info text-start">
+                                        <h6>${cat.name}</h6>
+                                        <p>Danh mục cá nhân tự thêm</p>
+                                    </div>
+                                </label>
+                            </div>`;
+                    });
+                    htmlContent += "</div>";
+
+                    // 2. Kiểm tra nếu giao diện đang hiện thông báo trống thì xóa trắng trước khi chèn
+                    // if (categoryList.innerHTML.includes('Không có dữ liệu') ||
+                    //     categoryList.innerHTML.includes('Không có danh mục nào! Vui lòng thêm mới danh mục trước khi thực hiện')) {
+                    //     categoryList.innerHTML = '';
+                    //     categoryList.classList.remove('text-center'); // Bỏ căn giữa text để hiển thị lưới thẻ đều nhau
+                    // }
+                    categoryList.innerHTML = "";
+                    // 3. Append (chèn) dữ liệu vào thẻ #category_list ở file chính
+                    categoryList.insertAdjacentHTML("beforeend", htmlContent);
+
+                    // 4. Reset form trong modal và xóa các ô input phụ do nút (+) tạo ra (chỉ giữ lại 1 ô trống ban đầu)
+                    categoriesForm.reset();
+                    const extraGroups = categoryFields.querySelectorAll(
+                        ".category-field-group",
+                    );
+                    extraGroups.forEach((group, index) => {
+                        if (index > 0) group.remove();
+                    });
+                    // 5. Ẩn modal sau khi lưu thành công
+                    categoryModal.hide();
+                } else {
+                    msg_error("Có lỗi xảy ra: " + (result.message || "Vui lòng thử lại."));
+                }
+            } catch (error) {
+                console.error("Error post data:", error);
+                msg_error("Không thể kết nối đến máy chủ API!");
+            } finally {
+                // Mở lại trạng thái nút bấm
+                saveCategoryBtn.disabled = false;
+                saveCategoryBtn.innerText = "Thêm mới";
+            }
+        });
+    }
+    if (addBtn) {
+        addBtn.addEventListener("click", function () {
+            // Tạo một div wrapper mới
+            const newGroup = document.createElement("div");
+            newGroup.className =
+                "category-field-group mb-3 d-flex align-items-end gap-2";
+
+            // // Đoạn HTML cấu trúc input thuần (thay cho x-input) và nút xóa
+            newGroup.innerHTML = `
+                <div class="flex-grow-1">
+                    <label class="form-label fw-bold">Tên danh mục</label>
+                    <input name="categories_name[]" type="text" class="form-control" placeholder="Nhập tên danh mục">
+                </div>
+                <button type="button" class="btn btn-danger remove-category-btn">
+                    <i class="fa fa-trash"></i>
+                </button>
+            `;
+
+            // Thêm nhóm input mới vào container
+            categoryFields.appendChild(newGroup);
+        });
+    }
+    if (categoryFields) {
+        categoryFields.addEventListener("click", function (e) {
+            // Kiểm tra xem user có click vào nút xóa hoặc icon bên trong nút xóa không
+            const removeBtn = e.target.closest(".remove-category-btn");
+
+            if (removeBtn) {
+                // Tìm đến group cha gần nhất và xóa nó
+                const fieldGroup = removeBtn.closest(".category-field-group");
+                fieldGroup.remove();
+            }
+        });
+    }
+    const categoryFormForSubmit = document.getElementById('categoryForm');
+    if (categoryFormForSubmit) {
+        categoryFormForSubmit.addEventListener('submit', function (e) {
+            e.preventDefault(); // Nếu bạn muốn submit AJAX, giữ dòng này. Nếu submit form bình thường thì bỏ đi.
+            const form = this;
+            // 1. Lấy toàn bộ textarea có trong form và log ra console
+            const textareas = form.querySelectorAll('textarea');
+            // 2. Cập nhật lại content theo data-category-id
+            const categoriesData = [];
+
+            textareas.forEach(function (textarea) {
+                // Tìm div cha gần nhất có attribute data-category-id
+                const wrapper = textarea.closest('[data-category-id]');
+                if (!wrapper) return;
+
+                const categoryId = wrapper.getAttribute('data-category-id');
+
+                const page = document.getElementById(`page_` + categoryId);
+
+                // Nếu textarea này đang được CKEditor quản lý -> đồng bộ dữ liệu CKEditor về textarea trước
+                if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[textarea.id]) {
+                    const editorInstance = CKEDITOR.instances[textarea.id];
+                    editorInstance.updateElement(); // đẩy nội dung editor xuống textarea gốc
+                }
+
+                // Lấy nội dung mới nhất (sau khi đã sync từ CKEditor nếu có)
+                const content = textarea.value;
+
+                // Cập nhật lại value của textarea (đảm bảo luôn ở trạng thái mới nhất)
+                textarea.value = content;
+
+                // Lưu vào object theo category id, để tiện dùng khi gửi API
+                // categoriesData[categoryId] = content;
+
+                categoriesData.push({
+                    category_id: categoryId,
+                    content: content,
+                    pages: page.value
+                });
+            });
+
+            const apiUrl = `${API_URL.update_multiple_data}`;
+            const submitBtn = form.querySelector('button[type="submit"]');
+            const candidateId = document.getElementById('candidateForm')?.dataset.id;
+
+            if (!candidateId) {
+                msg_error('Không tìm thấy thông tin ứng viên. Vui lòng kiểm tra lại.');
+                return;
+            }
+
+            const payload = categoriesData;
+
+            // Bắt đầu trạng thái loading
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.dataset.originalHtml = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Đang lưu...';
+            }
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
+                },
+                body: JSON.stringify(payload)
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        msg_success(result.message || 'Cập nhật chi tiết danh mục thành công!');
+                        goToStep('contents'); // Chuyển sang bước tiếp theo
+                    } else {
+                        msg_error(result.message || 'Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    msg_error('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
+                })
+                .finally(() => {
+                    // Kết thúc trạng thái loading
+                    if (submitBtn) {
+                        submitBtn.disabled = false;
+                        if (submitBtn.dataset.originalHtml) {
+                            submitBtn.innerHTML = submitBtn.dataset.originalHtml;
+                        }
+                    }
+                });
+        });
+    }
 
 });
 
@@ -427,95 +521,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 // ------------------------------------------------------------------------------------------------------------
 
-document.getElementById('categoryForm').addEventListener('submit', function (e) {
-    e.preventDefault(); // Nếu bạn muốn submit AJAX, giữ dòng này. Nếu submit form bình thường thì bỏ đi.
-    const form = this;
-    // 1. Lấy toàn bộ textarea có trong form và log ra console
-    const textareas = form.querySelectorAll('textarea');
-    // 2. Cập nhật lại content theo data-category-id
-    const categoriesData = [];
 
-    textareas.forEach(function (textarea) {
-        // Tìm div cha gần nhất có attribute data-category-id
-        const wrapper = textarea.closest('[data-category-id]');
-        if (!wrapper) return;
-
-        const categoryId = wrapper.getAttribute('data-category-id');
-
-        const page = document.getElementById(`page_` + categoryId);
-
-        // Nếu textarea này đang được CKEditor quản lý -> đồng bộ dữ liệu CKEditor về textarea trước
-        if (typeof CKEDITOR !== 'undefined' && CKEDITOR.instances[textarea.id]) {
-            const editorInstance = CKEDITOR.instances[textarea.id];
-            editorInstance.updateElement(); // đẩy nội dung editor xuống textarea gốc
-        }
-
-        // Lấy nội dung mới nhất (sau khi đã sync từ CKEditor nếu có)
-        const content = textarea.value;
-
-        // Cập nhật lại value của textarea (đảm bảo luôn ở trạng thái mới nhất)
-        textarea.value = content;
-
-        // Lưu vào object theo category id, để tiện dùng khi gửi API
-        // categoriesData[categoryId] = content;
-
-        categoriesData.push({
-            category_id : categoryId,
-            content     : content,
-            pages       : page.value
-        });       
-    });
-
-    const apiUrl = `${API_URL.update_multiple_data}`;    
-    const submitBtn = form.querySelector('button[type="submit"]');
-    const candidateId = document.getElementById('candidateForm')?.dataset.id;
-
-    if (!candidateId) {
-        msg_error('Không tìm thấy thông tin ứng viên. Vui lòng kiểm tra lại.');
-        return;
-    }
-
-    const payload = categoriesData;
-
-    // Bắt đầu trạng thái loading
-    if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.dataset.originalHtml = submitBtn.innerHTML;
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin me-2"></i> Đang lưu...';
-    }
-
-    fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
-        },
-        body: JSON.stringify(payload)
-    })
-    .then(response => response.json())
-    .then(result => {
-        if (result.success) {
-            msg_success(result.message || 'Cập nhật chi tiết danh mục thành công!');
-            goToStep('contents'); // Chuyển sang bước tiếp theo
-        } else {
-            msg_error(result.message || 'Có lỗi xảy ra, vui lòng thử lại.');
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        msg_error('Không thể kết nối đến máy chủ. Vui lòng thử lại sau.');
-    })
-    .finally(() => {
-        // Kết thúc trạng thái loading
-        if (submitBtn) {
-            submitBtn.disabled = false;
-            if (submitBtn.dataset.originalHtml) {
-                submitBtn.innerHTML = submitBtn.dataset.originalHtml;
-            }
-        }
-    });
-});
 
 
 // ------------------------------------------------------------------------------------------------------------
