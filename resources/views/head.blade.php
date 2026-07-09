@@ -4,3 +4,5 @@
     <link  href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/inter-ui/4.1.1/inter.min.css" integrity="sha512-sKm1yZUWI/+DDMju+xd5GBXqNF2pnI9F3obEZP9boHbobmxCvaByoyeyvjc+lhiH5KtInOvxUJazjaS1WFnAsg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>

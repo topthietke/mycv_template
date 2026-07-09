@@ -37,6 +37,10 @@
 
     @include('script')
     <script type="module" src="/assets/js/edit.js"></script>
+
+    
+    {{-- <script src="/assets/js/custom_ckeditor.js"></script> --}}
 </body>
 
 </html>
+

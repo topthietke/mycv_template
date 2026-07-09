@@ -32,7 +32,7 @@
                         <div class="edit_dot"></div>
                     </div>
                     <div class="col-lg-1 col-md-1">
-                        <x-select name="page_{{ $cat['id'] }}" v class="form-select pages border-0 border-bottom rounded-0" :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
+                        <x-select name="page_{{ $cat['id'] }}" class="form-select pages border-0 border-bottom rounded-0" :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
                     </div>
                 </div>
 
@@ -57,5 +57,5 @@
 </form>
 
 
-<script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script>
+{{-- <script src="https://cdn.ckeditor.com/4.22.1/full/ckeditor.js"></script> --}}
 <script src="/assets/js/custom_ckeditor.js"></script>
