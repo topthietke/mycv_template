@@ -62,7 +62,7 @@
             </div>
         </div>
     </div>
-    <div class="qa-item">
+    <div class="qa-item">   
 
     </div>
 </div>
@@ -71,7 +71,7 @@
 <style>
     .fab-wrap {
         position: absolute;
-        right:2%;
+        right: 28%;
         top: 5%;
         transform: translate(-50%, -50%);
         width: 56px;
@@ -82,8 +82,8 @@
     /* --- Quick Actions Panel --- */
     .quick-actions {
         position: absolute;
-        right: 0;
-        top: 18%;
+        right: 10%;
+        top: 13%;
         transform: translate(-50%, -42%) scale(.85);
         width: 82%;
         max-width: 300px;
