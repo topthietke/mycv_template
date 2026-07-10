@@ -270,9 +270,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // ----------------------------------------------------------------------
 
     // Xoá danh mục:
-    const removeIcons = document.querySelectorAll('.remove-category-icon');
-    console.log(1111111, categoriesForm);
-    return;
+    const removeIcons = document.querySelectorAll('.remove-category-icon');    
     removeIcons.forEach(function (icon) {
         icon.addEventListener('click', function (e) {
             e.preventDefault();
@@ -625,4 +623,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
     // ------------------------------------------------------------------------------------------------------------
+
+    // Hiển thị modal delete
+
 });

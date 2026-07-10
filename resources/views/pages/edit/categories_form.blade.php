@@ -1,6 +1,6 @@
 <?php 
     $page = config('data.page');
-    $title = config('data.edit.content_title') ?? 'Thông tin cá nhân';    
+$title = config('data.edit.content_title') ?? 'Thông tin cá nhân';    
 ?>
 
 <form id="categoryForm" class="step-form" data-user-id="{{ $candidate['id'] }}" method="POST">
@@ -21,23 +21,28 @@
     --}}
 
     <div class="row mt-2 form-editor">
-        @foreach ($categories as $cat)            
+        {{-- data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" --}}
+        @foreach ($categories as $cat)
             <div class="mt-3" data-category-id="{{ $cat['id'] }}">
                 <div class="row">
                     <div class="col-lg-11 col-md-11">
                         <div class="edit_slanted_bar" style="border-bottom: 1px solid #000;">
-                            <i class="fa fa-times fa-sm text-danger " data-id="{{ $cat['id'] }}" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" ></i>
+                            <i class="fa fa-times fa-sm text-danger " data-id="{{ $cat['id'] }}"
+                                onclick="showModalDelete({{ $cat['id'] }})"></i>
                             {{ $cat['name'] }}
                         </div>
                         <div class="edit_dot"></div>
                     </div>
                     <div class="col-lg-1 col-md-1">
-                        <x-select name="page_{{ $cat['id'] }}" class="form-select pages border-0 border-bottom rounded-0" :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
+                        <x-select name="page_{{ $cat['id'] }}" class="form-select pages border-0 border-bottom rounded-0"
+                            :options="$page" :selected="$cat->pages ?? null " placeholder="__ Chọn __" />
                     </div>
                 </div>
 
                 @foreach ($cat['contents'] as $item)
-                    <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4" data-category-id="{{ $cat['id'] }}"  placeholder="Vui lòng nhập nội dung cho danh mục {{ $cat['name'] }}...">{!! $item['content'] !!}</textarea>
+                    <textarea class="form-control experiences" name="category_details[{{ $cat['id'] }}]" rows="4"
+                        data-category-id="{{ $cat['id'] }}"
+                        placeholder="Vui lòng nhập nội dung cho danh mục {{ $cat['name'] }}...">{!! $item['content'] !!}</textarea>
                 @endforeach
             </div>
         @endforeach
@@ -57,3 +62,27 @@
 </form>
 
 <script src="/assets/js/custom_ckeditor.js"></script>
+<script>
+    function showModalDelete(cat_id) {
+        const modalElement = document.getElementById('confirmDeleteModal');
+        const deleteModal = new bootstrap.Modal(modalElement);
+
+        // Lắng nghe sự kiện click trên tất cả các nút xóa
+        const deleteButtons = document.querySelectorAll('.btn-delete');
+
+        deleteButtons.forEach(function (button) {
+            button.addEventListener('click', function () {
+                // Lấy ID
+                const itemId = this.getAttribute('data-id');
+                console.log('ID cần xóa:', itemId);
+
+                // Xử lý gán ID vào form trong modal ở đây...
+
+                // Gọi hàm show modal
+                deleteModal.show();
+            });
+        });
+    }
+
+
+</script>
