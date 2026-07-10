@@ -65,24 +65,20 @@ $title = config('data.edit.content_title') ?? 'Thông tin cá nhân';
 <script>
     function showModalDelete(cat_id) {
         const modalElement = document.getElementById('confirmDeleteModal');
+        if (!modalElement) return;
+
+        // Tìm nút "Đồng ý" trong modal
+        const confirmButton = modalElement.querySelector('.remove-category-icon');
+        if (confirmButton) {
+            // Gán giá trị cat_id vào thuộc tính data-categories-id
+            confirmButton.setAttribute('data-categories-id', cat_id);
+        }
+
         const deleteModal = new bootstrap.Modal(modalElement);
-
-        // Lắng nghe sự kiện click trên tất cả các nút xóa
-        const deleteButtons = document.querySelectorAll('.btn-delete');
-
-        deleteButtons.forEach(function (button) {
-            button.addEventListener('click', function () {
-                // Lấy ID
-                const itemId = this.getAttribute('data-id');
-                console.log('ID cần xóa:', itemId);
-
-                // Xử lý gán ID vào form trong modal ở đây...
-
-                // Gọi hàm show modal
-                deleteModal.show();
-            });
-        });
+        deleteModal.show();
     }
 
 
 </script>
+
+{{-- <script src=""></script> --}}

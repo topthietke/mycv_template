@@ -270,18 +270,21 @@ document.addEventListener('DOMContentLoaded', function () {
     // ----------------------------------------------------------------------
 
     // Xoá danh mục:
-    const removeIcons = document.querySelectorAll('.remove-category-icon');    
-    removeIcons.forEach(function (icon) {
-        icon.addEventListener('click', function (e) {
+    const confirmDeleteButton = document.querySelector('#confirmDeleteModal .remove-category-icon');
+    if (confirmDeleteButton) {
+        confirmDeleteButton.addEventListener('click', function (e) {
             e.preventDefault();
-            e.stopPropagation();
-            // const categoryId = this.getAttribute('data-id');
-            const categoryId = categoriesForm.getAttribute('data-id');
-            console.log(categoryId);
-            return;
-            deleteSelectedCategories(categoryId);
+            const categoryId = this.getAttribute('data-categories-id');
+            if (categoryId) {
+                deleteSelectedCategories(categoryId);
+                // Ẩn modal sau khi click
+                const modalInstance = bootstrap.Modal.getInstance(document.getElementById('confirmDeleteModal'));
+                modalInstance.hide();
+            } else {
+                console.error('Không tìm thấy category ID để xoá.');
+            }
         });
-    });
+    }
     // -----------------------------------------------------------------------------------
     // Thêm mới danh mục:
     if (saveCategoryBtn) {
@@ -625,5 +628,19 @@ document.addEventListener('DOMContentLoaded', function () {
     // ------------------------------------------------------------------------------------------------------------
 
     // Hiển thị modal delete
+    function showModalDelete(cat_id) {
+        const modalElement = document.getElementById('confirmDeleteModal');
+        if (!modalElement) return;
+
+        // Tìm nút "Đồng ý" trong modal
+        const confirmButton = modalElement.querySelector('.remove-category-icon');
+        if (confirmButton) {
+            // Gán giá trị cat_id vào thuộc tính data-categories-id
+            confirmButton.setAttribute('data-categories-id', cat_id);
+        }
+
+        const deleteModal = new bootstrap.Modal(modalElement);
+        deleteModal.show();
+    }
 
 });

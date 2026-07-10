@@ -17,30 +17,3 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Lấy element của modal
-        const confirmDeleteModal = document.getElementById('confirmDeleteModal');
-
-        // Lắng nghe sự kiện trước khi modal hiện lên
-        if (confirmDeleteModal) {
-            confirmDeleteModal.addEventListener('show.bs.modal', function (event) {
-                // event.relatedTarget chính là phần tử (thẻ <i>) đã kích hoạt modal
-                const button = event.relatedTarget;
-
-                // Lấy giá trị từ thuộc tính data-id
-                const categoryId = button.getAttribute('data-id');
-                
-                // Tìm thẻ input ẩn trong modal và gán giá trị ID vào đó
-                const inputCategoryId = confirmDeleteModal.querySelector('#modal_category_id');
-                if (inputCategoryId) {
-                    inputCategoryId.value = categoryId;
-                }
-
-                // (Tùy chọn) Nếu bạn muốn thay đổi trực tiếp action URL của form thay vì dùng input ẩn
-                // const deleteForm = confirmDeleteModal.querySelector('#deleteForm');
-                // deleteForm.action = '/categories/delete/' + categoryId;
-            });
-        }
-    });
-</script>
