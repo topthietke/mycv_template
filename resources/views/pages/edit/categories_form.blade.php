@@ -26,7 +26,7 @@
                 <div class="row">
                     <div class="col-lg-11 col-md-11">
                         <div class="edit_slanted_bar" style="border-bottom: 1px solid #000;">
-                            <i class="fa fa-times fa-sm text-danger remove-category-icon" data-id="{{ $cat['id'] }}"></i>
+                            <i class="fa fa-times fa-sm text-danger " data-id="{{ $cat['id'] }}" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" ></i>
                             {{ $cat['name'] }}
                         </div>
                         <div class="edit_dot"></div>

@@ -29,6 +29,8 @@
             {{-- ================================ =============================== --}}
             @include('pages.edit.modal_add_categories')
 
+            @include('pages.edit.modal_delete_categories')
+            
             @include('message_success')
 
             @include('message_errors')

@@ -32,6 +32,35 @@ function deleteSelectedCategories(categoryId) {
     });
 }
 
+(function () {
+    const avatarInput = document.getElementById('avatarInput');
+    const previewImg = document.getElementById('avatarPreviewImg');
+    const placeholderIcon = document.getElementById('avatarPlaceholderIcon');
+
+    if (avatarInput) {
+        avatarInput.addEventListener('change', function (e) {
+            const file = e.target.files && e.target.files[0];
+            if (!file) return;
+
+            // Giới hạn 2MB theo hint hiển thị
+            if (file.size > 2 * 1024 * 1024) {
+                msg_error('Dung lượng ảnh vượt quá 2MB, vui lòng chọn ảnh khác.');
+                avatarInput.value = '';
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function (ev) {
+                previewImg.src = ev.target.result;
+                previewImg.style.display = 'block';
+                if (placeholderIcon) placeholderIcon.style.display = 'none';
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+})();
+
+
 window.removeCategoryContent = deleteSelectedCategories;
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -242,16 +271,16 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Xoá danh mục:
     const removeIcons = document.querySelectorAll('.remove-category-icon');
+    console.log(1111111, categoriesForm);
+    return;
     removeIcons.forEach(function (icon) {
         icon.addEventListener('click', function (e) {
             e.preventDefault();
             e.stopPropagation();
-            const categoryId = this.getAttribute('data-id');
-            // const checkbox = document.getElementById('cat_' + categoryId);
-            // if (checkbox) {
-            //     checkbox.checked = false;
-            // }
-            this.closest('[data-category-id]').remove();
+            // const categoryId = this.getAttribute('data-id');
+            const categoryId = categoriesForm.getAttribute('data-id');
+            console.log(categoryId);
+            return;
             deleteSelectedCategories(categoryId);
         });
     });
@@ -391,7 +420,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (removeBtn) {
                 // Tìm đến group cha gần nhất và xóa nó
                 const fieldGroup = removeBtn.closest(".category-field-group");
-                fieldGroup.remove();
+                if (fieldGroup) {
+                    fieldGroup.remove();
+                }
             }
         });
     }
@@ -488,40 +519,110 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-});
-
-(function () {
-    const avatarInput = document.getElementById('avatarInput');
-    const previewImg = document.getElementById('avatarPreviewImg');
-    const placeholderIcon = document.getElementById('avatarPlaceholderIcon');
-
-    if (avatarInput) {
-        avatarInput.addEventListener('change', function (e) {
-            const file = e.target.files && e.target.files[0];
-            if (!file) return;
-
-            // Giới hạn 2MB theo hint hiển thị
-            if (file.size > 2 * 1024 * 1024) {
-                msg_error('Dung lượng ảnh vượt quá 2MB, vui lòng chọn ảnh khác.');
-                avatarInput.value = '';
-                return;
+    // ------------------------------------------------------------------------------------------------------------
+    // Khởi tạo CKEditor cho modal khi nó được hiển thị
+    const modal_categories = document.getElementById('editCategoriesModal');
+    if (modal_categories) {
+        modal_categories.addEventListener('shown.bs.modal', function () {
+            // `initializeCKEditor` is from custom_ckeditor.js
+            if (typeof initializeCKEditor === 'function' && !CKEDITOR.instances.modal_category_details) {
+                initializeCKEditor('modal_category_details');
             }
-
-            const reader = new FileReader();
-            reader.onload = function (ev) {
-                previewImg.src = ev.target.result;
-                previewImg.style.display = 'block';
-                if (placeholderIcon) placeholderIcon.style.display = 'none';
-            };
-            reader.readAsDataURL(file);
         });
     }
-})();
 
 
-// ------------------------------------------------------------------------------------------------------------
+    const categories_form = document.getElementById('categories_form');
+    if (categories_form) {
+        categories_form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const saveBtn = categories_form.querySelector('#saveCategoriesContentsBtn');
+            await handleSaveCategory(categories_form, saveBtn);
+        });
+    };
+
+    function getCategoryDetailsContent() {
+        const editorId = 'modal_category_details';
+
+        // CKEditor 4
+        if (window.CKEDITOR?.instances?.[editorId]) {
+            return window.CKEDITOR.instances[editorId].getData();
+        }
+
+        // CKEditor 5 (nếu custom_ckeditor.js lưu instance vào window.editors)
+        if (window.editors?.[editorId]) {
+            return window.editors[editorId].getData();
+        }
+
+        // Fallback: lấy trực tiếp value của textarea
+        return document.getElementById(editorId)?.value ?? '';
+    }
+
+    async function handleSaveCategory(form, saveBtn) {
+        const candidateId = form.dataset.usersId; // data-users-id="{{ Auth::user()->id ?? null }}"
+        const categoriesName = form.querySelector('.categories_name')?.value.trim();
+        const pages = form.querySelector('.pages')?.value;
+        const content = getCategoryDetailsContent();
+
+        if (!categoriesName) {
+            alert('Vui lòng nhập tên danh mục');
+            return;
+        }
+
+        if (!pages) {
+            alert('Vui lòng chọn trang');
+            return;
+        }
+
+        const payload = {
+            candidate_id: candidateId,
+            categories_name: categoriesName,
+            pages: pages,
+            content: content,
+        };
 
 
+        const originalBtnText = saveBtn.textContent;
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Đang lưu...';
+        
+        let apiUrl = `${API_URL.create_multiple_data}`;
 
+        try {
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
 
-// ------------------------------------------------------------------------------------------------------------
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.message || `Lỗi HTTP: ${response.status}`);
+            }
+
+            const data = await response.json();
+            // Đóng modal sau khi thêm thành công
+            // const modalEl = document.getElementById('editCategoriesModal');
+            const modalInstance = bootstrap.Modal.getInstance(modal_categories);
+            form.reset();
+            msg_success('Thêm danh mục thành công!');
+            modalInstance?.hide();
+
+            // Lắng nghe sự kiện khi modal đã ẩn hoàn toàn rồi tải lại trang
+            modal_categories.addEventListener('hidden.bs.modal', function () {
+                location.reload();
+            }, { once: true }); // { once: true } để sự kiện chỉ chạy 1 lần
+
+        } catch (error) {
+            console.error('Lỗi khi thêm danh mục:', error);
+            alert(`Có lỗi xảy ra: ${error.message}`);
+        } finally {
+            saveBtn.disabled = false;
+            saveBtn.textContent = originalBtnText;
+        }
+    }
+    // ------------------------------------------------------------------------------------------------------------
+});

@@ -148,12 +148,17 @@ class ContentsController extends Controller
                 ];
                 $this->content_service->create($data_content);
                 $dem += 1;
-                
+                return response()->json([
+                    'code' => 200,
+                    'message' => "Thêm mới dạnh mục thành công"
+                ], 200);
+            } else {
+                return response()->json([
+                    'code' => 403,
+                    'message' => "Thêm mới không thành công thành công"
+                ]);
             }
-            return response()->json([
-                'code' => 200,
-                'message' => "Thêm mới thành công"
-            ], 200);
+            
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

@@ -509,7 +509,7 @@ body {
     /* các style khác của bạn... */
 }
 
-.remove-category-icon {
+/* .remove-category-icon {
     position: absolute;
     top: 15%;
     right: 5%;
@@ -520,7 +520,7 @@ body {
 
 .remove-category-icon:hover {
     color: #a71d2a;
-}
+} */
 
 /* --------------------------------------------------------------------------------------------------------------------- */
 .edit_slanted_bar {
