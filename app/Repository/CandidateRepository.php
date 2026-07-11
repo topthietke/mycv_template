@@ -78,23 +78,24 @@ class CandidateRepository {
         }
 
         $updateData = [
-            'fullname'          => $params['fullname'] ?? $record->fullname,
-            'position'          => $params['position'] ?? $record->position,
-            'birthday'          => $params['birthday'] ?? $record->birthday,
-            'gender'            => $params['gender'] ?? $record->gender,
-            'email'             => $params['email'] ?? $record->email,
-            'phone'             => $params['phone'] ?? $record->phone,
-            'identity_card'     => $params['identity_card'] ?? $record->identity_card,
-            'identity_date'     => $params['identity_date'] ?? $record->identity_date,
-            'identity_place'    => $params['identity_place'] ?? $record->identity_place,
-            'home_town'         => $params['home_town'] ?? $record->home_town,
-            'current_address'   => $params['current_address'] ?? $record->current_address,
-            'expected_salary'   => $params['expected_salary'] ?? $record->expected_salary,
-            'facebook_url'      => $params['facebook_url'] ?? $record->facebook_url,
-            'git_url'           => $params['git_url'] ?? $record->git_url,
-            'website_url'       => $params['website_url'] ?? $record->website_url,
-            'updated_by'        => Auth::id(),
-        ];
+            'fullname'        => $params['fullname'] ?? $record->fullname,
+            'position'        => $params['position'] ?? $record->position,
+            'birthday'        => $params['birthday'] ?? $record->birthday,
+            'gender'          => $params['gender'] ?? $record->gender,
+            'email'           => $params['email'] ?? $record->email,
+            'phone'           => $params['phone'] ?? $record->phone,
+            'identity_card'   => $params['identity_card'] ?? $record->identity_card,
+            'identity_date'   => $params['identity_date'] ?? $record->identity_date,
+            'identity_place'  => $params['identity_place'] ?? $record->identity_place,
+            'home_town'       => $params['home_town'] ?? $record->home_town,
+            'current_address' => $params['current_address'] ?? $record->current_address,
+            'expected_salary' => $params['expected_salary'] ?? $record->expected_salary,
+            'facebook_url'    => $params['facebook_url'] ?? $record->facebook_url,
+            'git_url'         => $params['git_url'] ?? $record->git_url,
+            'website_url'     => $params['website_url'] ?? $record->website_url,
+            'avatar'          => $params['avatar'] ?? $record->avatar,
+            'updated_by'      => Auth::id(),
+        ];        
         if (isset($params['avatar'])) {
             $updateData['avatar'] = $params['avatar'];
         }
