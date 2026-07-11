@@ -95,7 +95,8 @@ class CandidateRepository {
             'website_url'     => $params['website_url'] ?? $record->website_url,
             'avatar'          => $params['avatar'] ?? $record->avatar,
             'updated_by'      => Auth::id(),
-        ];        
+        ];
+                
         if (isset($params['avatar'])) {
             $updateData['avatar'] = $params['avatar'];
         }
