@@ -11,23 +11,23 @@
         </div>
         <div class="cv-header__divider"></div>
         <div class="cv-header__contacts">
-            <span>
+            <span class="cv-section__content">
                 <i class="fa fa-gift text-danger"></i>
                 {{ $candidate['birthday'] ?? ''}}
             </span>
-            <span>
+            <span class="cv-section__content">
                 <i class="fa fa-phone text-primary" aria-hidden="true"></i>
                 {{ $candidate['phone'] ?? ''}}
             </span>
-            <span>
+            <span class="cv-section__content">
                 <i class="fa fa-address-card" aria-hidden="true"></i>
                 {{ $candidate['email'] ?? ''}}
             </span>
-            <span>
+            <span class="cv-section__content">
                 <i class="fa fa-map-marker text-dark" aria-hidden="true"></i>
                 {{ $candidate['current_address'] ?? ''}}
             </span>
-            <span>
+            <span class="cv-section__content">
                 @if (!empty($candidate['website_url']))
                     <i class="fa fa-globe text-primary" aria-hidden="true"></i>
                     <a href="{{ 'http://' . $candidate['website_url'] ?? ''}}" target="_blank">
@@ -35,7 +35,7 @@
                     </a>
                 @endif
             </span>
-            <span>
+            <span class="cv-section__content">
                 @if (!empty($candidate['git_url']))
                     <i class="fa-brands fa-git fa-lg text-danger"></i>
                     <a href="{{ 'http://' . $candidate['git_url'] ?? ''}}" target="_blank">

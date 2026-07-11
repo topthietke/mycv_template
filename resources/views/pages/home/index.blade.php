@@ -26,7 +26,8 @@
     <!------------------------------------------------------------------------------------------------------------------------- -->
     <!-- ══════ Script Language ═══════ -->
     @include('script')
-    {{--<script src="/assets/js/main.js"></script> --}}
+    
+    <script src="/assets/js/home.js"></script>
 </body>
 
 </html>
