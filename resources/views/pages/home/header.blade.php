@@ -11,10 +11,10 @@
         </div>
         <div class="cv-header__divider"></div>
         <div class="cv-header__contacts">
-            <span class="cv-section__content">
+            {{-- <span class="cv-section__content">
                 <i class="fa fa-gift text-danger"></i>
                 {{ $candidate['birthday'] ?? ''}}
-            </span>
+            </span> --}}
             <span class="cv-section__content">
                 <i class="fa fa-phone text-primary" aria-hidden="true"></i>
                 {{ $candidate['phone'] ?? ''}}

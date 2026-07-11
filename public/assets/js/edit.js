@@ -64,11 +64,11 @@ function deleteSelectedCategories(categoryId) {
 window.removeCategoryContent = deleteSelectedCategories;
 
 document.addEventListener('DOMContentLoaded', function () {
-    const categoryFields = document.getElementById("category_fields");
-    const categoryList = document.getElementById("category_list");
-    const addBtn = document.getElementById("addCategoryFieldBtn");
+    const categoryFields  = document.getElementById("category_fields");
+    const categoryList    = document.getElementById("category_list");
+    const addBtn          = document.getElementById("addCategoryFieldBtn");
     const saveCategoryBtn = document.getElementById("saveCategoryBtn");
-    const categoriesForm = document.getElementById("categories_form");
+    const categoriesForm  = document.getElementById("categories_form");
 
     // Click hiển thị form
     // ----------------------------------------------------------------------
@@ -428,8 +428,9 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     const categoryFormForSubmit = document.getElementById('categoryForm');
-    if (categoryFormForSubmit) {
-        categoryFormForSubmit.addEventListener('submit', function (e) {
+
+    if (categoryFormForSubmit) {        
+        categoryFormForSubmit.addEventListener('submit', function (e) {            
             e.preventDefault(); // Nếu bạn muốn submit AJAX, giữ dòng này. Nếu submit form bình thường thì bỏ đi.
             const form = this;
             // 1. Lấy toàn bộ textarea có trong form và log ra console
@@ -494,9 +495,8 @@ document.addEventListener('DOMContentLoaded', function () {
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content')
                 },
                 body: JSON.stringify(payload)
-            })
-                .then(response => response.json())
-                .then(result => {
+            })                
+                .then(result => {                    
                     if (result.success) {
                         msg_success(result.message || 'Cập nhật chi tiết danh mục thành công!');
                         goToStep('contents'); // Chuyển sang bước tiếp theo
